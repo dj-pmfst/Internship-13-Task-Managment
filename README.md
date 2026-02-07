@@ -1,6 +1,6 @@
 # Task Management Board
 
-### DUMP Internship – JavaScript #3 (Node.js)
+### DUMP Internship - JavaScript #3 (Node.js)
 
 ## Task
 
