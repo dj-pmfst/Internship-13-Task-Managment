@@ -1,0 +1,27 @@
+{
+  "name": "internship-13-task-managment",
+  "version": "1.0.0",
+  "description": "Build a **Task Management Board** inspired by **Trello / GitHub Projects** using **vanilla JavaScript** on the frontend and **Node.js** with **PostgreSQL** on the backend.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dj-pmfst/Internship-13-Task-Managment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "pg": "^8.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
