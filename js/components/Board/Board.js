@@ -2,8 +2,9 @@ import { columnTypes } from "../../enums/ColumnTypes.js";
 import { BoardColumn } from "./BoardColumn/BoardColumn.js";
 
 export class Board{
-    constructor(container){
+    constructor(boardEl){
         this.init(container);
+        this.boardEl=boardEl;
         this.boardContentEl = boardEl.querySelector(".board__content");
     }
 
