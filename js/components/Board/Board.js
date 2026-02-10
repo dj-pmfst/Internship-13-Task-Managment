@@ -4,6 +4,7 @@ import { BoardColumn } from "./BoardColumn/BoardColumn.js";
 export class Board{
     constructor(container){
         this.init(container);
+        this.boardContentEl = boardEl.querySelector(".board__content");
     }
 
     init(container){
@@ -13,21 +14,9 @@ export class Board{
         this.bindEvents();
     }
 
-    render(){
-        this.container.innerHTML=Board.markup();
-        this.boardContentEl=this.container.querySelector(".board__content");
-    }
-
-    static markup(){
-        return `
-            <h1 class="board__header">My Board</h1>
-            <div class="board__content"></div>
-        `;
-    }
-
     initColumns(){
-        this.columns=Object.values(columnTypes).map(type=>new BoardColumn(type));
-        this.columns.forEach(col=>this.boardContentEl.append(col.element));
+        const columnElements=this.boardContentEl.querySelectorAll(".board-column");
+        this.columns=Array.from(columnElements).map(column=>new BoardColumn(el));
     }
 
     bindEvents(){
@@ -35,6 +24,9 @@ export class Board{
             const columnTitle=e.detail.columnTitle;
 
             const targetColumn=this.columns.find(col=>col.title===columnTitle);
+
+            //logic for adding new card into target column
+            //targetColumn.addCard(newCard)
         });
 
     }
