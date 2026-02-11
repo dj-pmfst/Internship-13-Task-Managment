@@ -1,3 +1,5 @@
-const board=document.querySelector(".board");
+const board=document.querySelector(".lists-container");
+const alertDiv=document.querySelector(".alert-div");
+const popAdd=document.querySelector(".pop-add");
 
-export {board};
+export {board,alertDiv,popAdd};

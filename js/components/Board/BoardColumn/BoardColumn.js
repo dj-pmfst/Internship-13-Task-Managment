@@ -1,9 +1,8 @@
 export class BoardColumn{
     constructor(element){
         this.element=element;
-        this.title=this.element.querySelector(".board-column__title").textContent;
-        this.countEl=this.element.querySelector(".board-column__count");
-        this.cardsContainer=this.element.querySelector(".board-column__cards");
+        this.title=this.element.querySelector(".title").textContent;
+        this.countEl=this.element.querySelector(".counter");
         this.taskCount=0;
         this.init();
     }
@@ -12,8 +11,8 @@ export class BoardColumn{
         this.bindEvents();
     }
 
-    addCard(newCard){
-        this.cardsContainer.appendChild(newCard);
+    addTask(newTask){
+        this.cardsContainer.appendChild(newTask);
         this.updateCount();
     }
 
@@ -23,11 +22,10 @@ export class BoardColumn{
     }
 
     bindEvents(){
-        const addBtn=this.element.querySelector(".board-column__add-btn");
+        const addBtn=this.element.querySelector(".add");
 
         this._onButtonClick=()=>{
             const event=new CustomEvent("requestNewCard",{
-                bubbles: true,
                 detail: {columnTitle: this.title}
             });
 
