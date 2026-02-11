@@ -1,6 +1,5 @@
 import { UserCancelledError } from "../../error/error.js";
 import { popAdd } from "../AllComponents/mainElements.js";
-import { inputs } from "../AllComponents/mainElements.js";
 import { InputHelper } from "../../helpers/InputHelper.js";
 
 export class Popup{
@@ -18,10 +17,7 @@ export class Popup{
             if(existingTask){
                 editBtn.classList.remove("hidden");
 
-                Object.entries(inputs).forEach(([key,input])=>{
-                    input.value=existingTask[key];
-                });
-                
+                InputHelper.fillData(existingTask);
                 InputHelper.setInputsDisabled(true);
 
                 onEdit=()=>{
@@ -34,7 +30,7 @@ export class Popup{
 
             else{
                 editBtn.classList.add("hidden");
-                setInputsDisabled(false);
+                InputHelper.setInputsDisabled(false);
             }
 
             const cleanup=()=>{
@@ -49,7 +45,7 @@ export class Popup{
             }
 
             const onSave=()=>{
-                const taskData=Object.fromEntries(Object.entries(inputs).map(([key,input])=>[key,input.value]));
+                const taskData=InputHelper.getNewTaskData();
                 close();
                 resolve(taskData);
             }            

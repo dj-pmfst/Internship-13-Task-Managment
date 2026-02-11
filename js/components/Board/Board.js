@@ -32,9 +32,7 @@ export class Board{
             try{
                 const newTaskData=await Popup.open();
 
-                const savedTask=await Storage.createTask({
-                    ...newTaskData
-                });
+                const savedTask=await Storage.createTask(newTaskData);
 
                 const task=new Task(savedTask);
                 targetColumn.addTask(task);
