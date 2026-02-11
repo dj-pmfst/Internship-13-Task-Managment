@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>task management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        Task manager
+        <button class="mode-switch">switch icon here</button>
+    </div>
+    to do list <span><button class="archive">arhivirano</button></span>
+    <div class="lists-container">        
+        <div class="list">
+            <div class="title">
+                blocked
+                <span class="counter"></span>
+            </div>
+            <div class="add">
+                +
+            </div>
+        </div>
+        <div class="list">
+            <div class="title">
+                to do
+                <span class="counter"></span>
+            </div>
+            <div class="add">
+                +
+            </div>
+        </div>
+        <div class="list">
+            <div class="title">
+                in review
+                <span class="counter"></span>
+            </div>
+            <div class="add">
+                +
+            </div>
+        </div>
+        <div class="list">
+            <div class="title">
+              done
+              <span class="counter"></span>
+            </div>
+            <div class="add">
+                +
+            </div>
+        </div>
+        <div class="list">
+            <div class="title">
+                blocked
+                <span class="counter"></span>
+            </div>
+            <div class="add">
+                +
+            </div>
+        </div>
+    </div>
+    <div class="pop-add">
+        *pop up*
+        <div class="add-title">
+            Add title: <span id="title"></span>
+        </div>
+        <div class="add-description">
+            Add description: <span id="description"></span>
+        </div>
+        <div class="date">
+            Add start and end date:
+            <div id="start"></div>
+            <div id="end"></div>
+        </div>
+        <div class="time">
+            Add duration: <span id="duration"></span>
+        </div>
+        <div class="priority">*priorityy selector*</div>
+        <div class="type">*type selector*</div>
+        <div class="person">
+            Add person <span id="person"></span>
+        </div>
+        <button id="save">Save</button>
+        <button id="cancel">Cancel</button>
+        <button id="edit">Edit</button>
+    </div>
+    <div class="archived">
+        -query-
+    </div>
+    <script src="script.js"></script>
+</body>

@@ -1,0 +1,41 @@
+
+
+.header{
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    width: 100vw;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 2px solid red;
+}
+
+.lists-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.list{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid red;
+    height:auto;
+    width: 150px;
+}
+
+.title{
+    padding: 5px;
+    margin: 10px;
+    border: 2px solid blue;
+}
+
+.pop-add{
+    z-index: 1000;
+    border: 2px solid red;
+    max-width: 450px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
