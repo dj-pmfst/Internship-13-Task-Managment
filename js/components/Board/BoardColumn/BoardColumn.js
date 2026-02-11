@@ -25,7 +25,7 @@ export class BoardColumn{
         const addBtn=this.element.querySelector(".add");
 
         this._onButtonClick=()=>{
-            const event=new CustomEvent("requestNewCard",{
+            const event=new CustomEvent("requestNewTask",{
                 detail: {columnTitle: this.title}
             });
 
