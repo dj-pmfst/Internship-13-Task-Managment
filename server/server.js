@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import { initDb } from "./db/db.js";
+import { getTasks } from "./controllers/taskController.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +14,8 @@ const rootDir = path.resolve(__dirname, "");
 
 app.use(express.json());
 app.use(express.static(rootDir));
+
+app.get("/api/tasks", getTasks);
 
 const startServer = async () => {
     await initDb();
