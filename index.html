@@ -9,58 +9,64 @@
 <body>
     <div class="header">
         Task manager
-        <button class="mode-switch">switch icon here</button>
+        <button class="mode-switch"><img src="media/dark-mode-6682.svg"></button>
+        <!-- <button class="mode-switch"><img src="media/light-on-sun-black-outline-21617.svg"></button> sakrit/aktivirat priko js -->
     </div>
-    to do list <span><button class="archive">arhivirano</button></span>
+    <div class="subtitle">
+        <p>To do list</p> 
+        <button class="archive">Archived</button>
+    </div>
     <div class="lists-container">        
         <div class="list">
             <div class="title">
-                blocked
+                Blocked
                 <span class="counter"></span>
             </div>
+            <div class="task">
+                Example <span><button><img src="media/edit-black-pencil-28048.svg"></button></span>
+            </div>
             <div class="add">
-                +
+                <button>+</button>
             </div>
         </div>
         <div class="list">
             <div class="title">
-                to do
+                To do
                 <span class="counter"></span>
             </div>
             <div class="add">
-                +
+                <button>+</button>
             </div>
         </div>
         <div class="list">
             <div class="title">
-                in review
+                In progress
                 <span class="counter"></span>
             </div>
             <div class="add">
-                +
+                <button>+</button>
             </div>
         </div>
         <div class="list">
             <div class="title">
-              done
+                In review
+                <span class="counter"></span>
+            </div>
+            <div class="add">
+                <button>+</button>
+            </div>
+        </div>
+        <div class="list">
+            <div class="title">
+              Done
               <span class="counter"></span>
             </div>
             <div class="add">
-                +
-            </div>
-        </div>
-        <div class="list">
-            <div class="title">
-                blocked
-                <span class="counter"></span>
-            </div>
-            <div class="add">
-                +
+                <button>+</button>
             </div>
         </div>
     </div>
     <div class="pop-add">
-        *pop up*
         <div class="add-title">
             Add title: <span id="title"></span>
         </div>
@@ -80,12 +86,14 @@
         <div class="person">
             Add person <span id="person"></span>
         </div>
-        <button id="save">Save</button>
-        <button id="cancel">Cancel</button>
-        <button id="edit">Edit</button>
+        <div class="buttons">
+            <button id="save">Save</button>
+            <button id="cancel">Cancel</button>
+            <button id="edit">Edit</button>
+        </div>
     </div>
-    <div class="archived">
+    <!-- <div class="archived">
         -query-
-    </div>
+    </div> -->
     <script src="script.js"></script>
 </body>
