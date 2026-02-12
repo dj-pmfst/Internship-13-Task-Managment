@@ -1,31 +1,33 @@
 export class BoardColumn{
     constructor(element){
         this.element=element;
-        this.title=this.element.querySelector(".title").textContent;
+        this.title=this.element.querySelector(".title__text").textContent;
         this.countEl=this.element.querySelector(".counter");
         this.taskCount=0;
         this.init();
     }
 
     init(){
+        this.countEl.textContent=this.taskCount;
         this.bindEvents();
     }
 
     addTask(newTask){
 
         const taskEl=document.createElement("div");
+        taskEl.classList.add("task");
 
         taskEl.innerHTML=`
-            <h4>${newTask.title}</h4>
-            <p>${newTask.description}</p>
+            <h4 class="task__title">${newTask.title}</h4>
+            <p class="task__description">${newTask.description}</p>
             <div class="task__time-info">
                 <span> Duration: ${newTask.duration}h </span>
-                <strong> Start: ${newTask.startDate} </strong>
-                <strong> End: ${newTask.endDate} </string>            
+                <span> Start: ${newTask.startDate} </span>
+                <span> End: ${newTask.endDate} </span>            
             </div>
-            <span> Priority: ${newTask.priority}</span>
-            <span> Task type: ${newTask.type}</span>
-            <span> Asignee: ${newTask.asignee}</span>
+            <span class="task__priority"> Priority: ${newTask.priority}</span>
+            <span class="task__type"> Task type: ${newTask.type}</span>
+            <span class="task__asignee"> Asignee: ${newTask.asignee}</span>
         `
         
         this.element.appendChild(taskEl);
@@ -34,7 +36,7 @@ export class BoardColumn{
 
     updateCount(){
         this.taskCount++;
-        this.countEl.textContent=`${this.taskCount}`;
+        this.countEl.textContent=this.taskCount;
     }
 
     bindEvents(){
