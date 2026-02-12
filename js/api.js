@@ -5,7 +5,7 @@ export class Storage{
 
     static async createTask(taskData){
 
-        const response=await fetch(this.apiBase,{
+        const response=await fetch(Storage.apiBase,{
             method: "POST",
             headers:{
                 "Content-Type":"application/json"
@@ -18,7 +18,7 @@ export class Storage{
             data=await response.json();
         }
         catch{
-            throw new Error(this.invalidJSON);
+            throw new Error(Storage.invalidJSON);
         }
 
         if(!response.ok)
@@ -29,14 +29,14 @@ export class Storage{
     }
 
     static async getTasks(){
-        const response=await fetch(this.apiBase);
+        const response=await fetch(Storage.apiBase);
 
         let data;
         try{
             data=await response.json();
         }
         catch{
-            throw new Error(this.invalidJSON);
+            throw new Error(Storage.invalidJSON);
         }
         if(!response.ok)
             throw new Error(data.error || "Failed to get task");
