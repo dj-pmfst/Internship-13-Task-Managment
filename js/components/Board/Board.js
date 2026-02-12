@@ -31,6 +31,7 @@ export class Board{
 
             try{
                 const newTaskData=await Popup.open();
+                newTaskData.status=columnTitle;
 
                 const savedTask=await Storage.createTask(newTaskData);
 

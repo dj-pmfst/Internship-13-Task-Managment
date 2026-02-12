@@ -16,12 +16,14 @@ export class Popup{
 
             if(existingTask){
                 editBtn.classList.remove("hidden");
+                saveBtn.disabled=true;
 
                 InputHelper.fillData(existingTask);
                 InputHelper.setInputsDisabled(true);
 
                 onEdit=()=>{
                     InputHelper.setInputsDisabled(false);
+                    InputHelper.addInputEventListeners(existingTask,saveBtn);
                     editBtn.disabled=true;
                 }
 
@@ -30,6 +32,7 @@ export class Popup{
 
             else{
                 editBtn.classList.add("hidden");
+                saveBtn.disabled=false;
                 InputHelper.setInputsDisabled(false);
             }
 

@@ -12,7 +12,23 @@ export class BoardColumn{
     }
 
     addTask(newTask){
-        this.cardsContainer.appendChild(newTask);
+
+        const taskEl=document.createElement("div");
+
+        taskEl.innerHTML=`
+            <h4>${newTask.title}</h4>
+            <p>${newTask.description}</p>
+            <div class="task__time-info">
+                <span> Duration: ${newTask.duration}h </span>
+                <strong> Start: ${newTask.startDate} </strong>
+                <strong> End: ${newTask.endDate} </string>            
+            </div>
+            <span> Priority: ${newTask.priority}</span>
+            <span> Task type: ${newTask.type}</span>
+            <span> Asignee: ${newTask.asignee}</span>
+        `
+        
+        this.element.appendChild(taskEl);
         this.updateCount();
     }
 
