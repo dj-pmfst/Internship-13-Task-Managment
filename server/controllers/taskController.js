@@ -25,6 +25,32 @@ const getTasks = async (_req, res) => {
     }
 }
 
+const getArchivedTasks = async (_req, res) => {
+    try {
+        const result = await db.query(
+            `SELECT
+                id, 
+                title,
+                description,
+                assignee,
+                status,
+                priority, 
+                type,
+                est_start_date,
+                est_end_date,
+                est_duration,
+                archived,
+                archived_at
+            FROM tasks
+            WHERE archived = true
+            ORDER BY archived_at DESC`
+        );
+        res.json(result.rows);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to load tasks" });
+    }
+}
+
 const deleteTask = async (req, res) => {
     try {
         const result = await db.query(
@@ -56,4 +82,4 @@ const clearTasks = async (_req, res) => {
     }
 }
 
-export { getTasks, deleteTask, clearTasks };
+export { getTasks, getArchivedTasks, deleteTask, clearTasks };
