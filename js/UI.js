@@ -10,8 +10,4 @@ export class UI{
     init(){
         this.board=new Board(board);
     }
-
-    static displayAlert(){
-        
-    }
 }

@@ -5,6 +5,7 @@ import { Task } from "./Task/Task.js";
 import { Storage } from "../../api.js";
 import { UserCancelledError } from "../../error/error.js";
 import { ToastTypes } from "../../enums/ToastTypes.js";
+import { titleToStatusMap } from "../../helpers/Map.js";
 
 export class Board{
     constructor(boardEl){
@@ -31,7 +32,7 @@ export class Board{
 
             try{
                 const newTaskData=await Popup.open();
-                newTaskData.status=columnTitle;
+                newTaskData.status=titleToStatusMap[columnTitle];
 
                 const savedTask=await Storage.createTask(newTaskData);
 
@@ -49,6 +50,6 @@ export class Board{
             }
         };
 
-        this.boardContentEl.addEventListener("requestNewTask",this._onTaskRequest);
+        this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
     }
 }

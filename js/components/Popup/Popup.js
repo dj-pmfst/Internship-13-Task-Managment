@@ -3,7 +3,6 @@ import { popAdd } from "../AllComponents/mainElements.js";
 import { InputHelper } from "../../helpers/InputHelper.js";
 
 export class Popup{
-
     static open(existingTask=null){
         return new Promise((resolve,reject)=>{
             popAdd.classList.add("active");
