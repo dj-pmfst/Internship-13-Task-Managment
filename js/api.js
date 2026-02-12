@@ -28,7 +28,7 @@ export class Storage{
 
     }
 
-    static async getTask(){
+    static async getTasks(){
         const response=await fetch(this.apiBase);
 
         let data;

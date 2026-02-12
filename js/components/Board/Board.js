@@ -25,7 +25,7 @@ export class Board{
 
     async showAddedTasks(){
         try{
-            const taskList=await Storage.getTask();
+            const taskList=await Storage.getTasks();
 
             taskList.forEach(task=>{
                 const targetColumn= this.columns.find(col=>titleToStatusMap[col.title]===task.status);
