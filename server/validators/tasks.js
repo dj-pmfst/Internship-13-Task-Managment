@@ -32,10 +32,6 @@ const fieldValidators = {
         validate: (val) => allowedType.includes(val),
         error: "Invalid type value"
     },
-    archived: {
-        validate: (val) => typeof val === "boolean",
-        error: "archived must be boolean"
-    },
     est_start_date: {
         validate: (val) => isValidDate(val),
         error: "est_start_date must be a valid date"
@@ -51,6 +47,7 @@ const fieldValidators = {
 }
 
 const validateAndBuildData = (fields) => {
+    const attributes = [];
     const updates = [];
     const values = [];
 
@@ -63,11 +60,12 @@ const validateAndBuildData = (fields) => {
             return { error: validator.error };
         }
 
+        attributes.push(field);
         updates.push(`${field} = $${updates.length + 1}`);
         values.push(validator.transform ? validator.transform(value) : value);
     }
 
-    return { updates, values };
+    return { attributes, updates, values };
 };
 
 export { fieldValidators, validateAndBuildData}
