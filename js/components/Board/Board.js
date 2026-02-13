@@ -29,7 +29,7 @@ export class Board{
 
             taskList.forEach(task=>{
                 const targetColumn= this.columns.find(col=>titleToStatusMap[col.title]===task.status);
-
+                
                 targetColumn?.addTask(new Task(task));
             });
 
@@ -50,6 +50,7 @@ export class Board{
                 const newTaskData=await Popup.open();
                 newTaskData.status=titleToStatusMap[columnTitle];
 
+                console.log("newTask data: ",newTaskData);
                 const savedTask=await Storage.createTask(newTaskData);
 
                 const task=new Task(savedTask);

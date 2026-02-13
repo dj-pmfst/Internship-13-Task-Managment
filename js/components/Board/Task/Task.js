@@ -10,21 +10,21 @@ export class Task{
         this.render();
     }
     render(){
-        this.element.innerHTML=Task.markup();
+        this.element.innerHTML=this.markup();
     }
 
-    static markup(){
+    markup(){
         return `
-            <h4 class="task__title">${newTask.title}</h4>
-            <p class="task__description">${newTask.description}</p>
+            <h4 class="task__title">${this.title}</h4>
+            <p class="task__description">${this.description}</p>
             <div class="task__time-info">
-                <span> Duration: ${newTask.duration}h </span>
-                <span> Start: ${newTask.startDate} </span>
-                <span> End: ${newTask.endDate} </span>            
+                <span> Duration: ${this.duration}h </span>
+                <span> Start: ${this.startDate} </span>
+                <span> End: ${this.endDate} </span>            
             </div>
-            <span class="task__priority"> Priority: ${newTask.priority}</span>
-            <span class="task__type"> Task type: ${newTask.type}</span>
-            <span class="task__asignee"> Asignee: ${newTask.asignee}</span>
+            <span class="task__priority"> Priority: ${this.priority}</span>
+            <span class="task__type"> Task type: ${this.type}</span>
+            <span class="task__asignee"> Asignee: ${this.asignee}</span>
         `;
     }
 
@@ -45,7 +45,7 @@ export class Task{
         const timeLeft=end-now;
         const percentageLeft=timeLeft/totalDuration;
 
-        const treshold=Storage.tresholds[this.task.priority];
+        const treshold=Task.tresholds[this.priority];
 
         return percentageLeft<=treshold ? "task--warning" : "";
     }

@@ -7,9 +7,9 @@ export class Popup{
         return new Promise((resolve,reject)=>{
             popAdd.classList.add("active");
 
-            const saveBtn=popAdd.querySelector(".save");
-            const cancelBtn=popAdd.querySelector(".cancel");
-            const editBtn=popAdd.querySelector(".edit");
+            const saveBtn=popAdd.querySelector("#save");
+            const cancelBtn=popAdd.querySelector("#cancel");
+            const editBtn=popAdd.querySelector("#edit");
 
             let onEdit;
 

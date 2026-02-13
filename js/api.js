@@ -1,6 +1,6 @@
 export class Storage{
 
-    static apiBase="http://localhost:3000/api/tasks";
+    static apiBase="/api/tasks";
     static invalidJSON="Invalid JSON response";
 
     static async createTask(taskData){
@@ -18,11 +18,13 @@ export class Storage{
             data=await response.json();
         }
         catch{
-            throw new Error(Storage.invalidJSON);
+            console.warn(Storage.invalidJSON);
         }
 
-        if(!response.ok)
-            throw new Error(data.error || "Failed to create new task");
+        if(!response.ok){
+            const message=data?.error || `HTTP error ${response.status}`;
+            throw new Error(message);
+        }
 
         return data;
 
@@ -36,10 +38,12 @@ export class Storage{
             data=await response.json();
         }
         catch{
-            throw new Error(Storage.invalidJSON);
+            console.warn(Storage.invalidJSON);
         }
-        if(!response.ok)
-            throw new Error(data.error || "Failed to get task");
+        if(!response.ok){
+            const message=data?.error || `HTTP error ${response.status}`;
+            throw new Error(data.error || "Failed to get task");            
+        }
 
         return data;
     }
