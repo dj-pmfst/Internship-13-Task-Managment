@@ -1,5 +1,6 @@
 import "dotenv/config";
 import path from "path";
+import cors from "cors";
 import { fileURLToPath } from "url";
 import express from "express";
 import { initDb } from "./db/db.js";
@@ -11,6 +12,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 const rootDir = path.resolve(__dirname, "");
+
+app.use(cors({
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+  allowedHeaders: ["Content-Type"]
+}));
 
 app.use(express.json());
 app.use(express.static(rootDir));
