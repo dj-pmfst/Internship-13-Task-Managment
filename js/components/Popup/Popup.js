@@ -1,28 +1,65 @@
+import { UserCancelledError } from "../../error/error.js";
 import { popAdd } from "../AllComponents/mainElements.js";
+import { InputHelper } from "../../helpers/InputHelper.js";
 
 export class Popup{
-
-    static open(){
+    static open(existingTask=null){
         return new Promise((resolve,reject)=>{
-            popAdd.classList.remove(".idden");
+            popAdd.classList.add("active");
 
             const saveBtn=popAdd.querySelector(".save");
             const cancelBtn=popAdd.querySelector(".cancel");
+            const editBtn=popAdd.querySelector(".edit");
+
+            let onEdit;
+
+            if(existingTask){
+                editBtn.classList.remove("hidden");
+                saveBtn.disabled=true;
+
+                InputHelper.fillData(existingTask);
+                InputHelper.setInputsDisabled(true);
+
+                onEdit=()=>{
+                    InputHelper.setInputsDisabled(false);
+                    InputHelper.addInputEventListeners(existingTask,saveBtn);
+                    editBtn.disabled=true;
+                }
+
+                editBtn.addEventListener("click",onEdit);
+            }
+
+            else{
+                editBtn.classList.add("hidden");
+                saveBtn.disabled=false;
+                InputHelper.setInputsDisabled(false);
+            }
+
+            const cleanup=()=>{
+                saveBtn.removeEventListener("click",onSave);
+                cancelBtn.removeEventListener("click",onCancel);
+                editBtn.removeEventListener("click",onEdit);
+            }
+
+            const close=()=>{
+                popAdd.classList.remove("active");   
+                cleanup();
+            }
 
             const onSave=()=>{
-                const newTaskData={
-                    title: popAdd.querySelector("#title").value,
-                    description: popAdd.querySelector("#description").value,
-                    startDate: popAdd.querySelector("#start").value,
-                    endDate: popAdd.querySelector("#end").value,
-                    duration: popAdd.querySelector("#duration").value,
-                    priority: popAdd.querySelector("#priority").value,
-                    type: popAdd.querySelector("#type").value,
-                    asignee: popAdd.querySelector("#person").value
-                }   
-                
-            popAdd.classList.add("hidden");
+                const taskData=InputHelper.getNewTaskData();
+                close();
+                resolve(taskData);
+            }            
+
+            const onCancel=()=>{
+                close();
+                reject(new UserCancelledError());
             }
+
+            saveBtn.addEventListener("click",onSave);
+            cancelBtn.addEventListener("click",onCancel);
         });
     }
+
 }

@@ -11,7 +11,7 @@ export class UI{
         this.board=new Board(board);
     }
 
-    static displayAlert(){
-        
+    async loadTasks(){
+        await this.board.showAddedTasks();
     }
 }
