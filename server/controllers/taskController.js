@@ -25,4 +25,16 @@ const getTasks = async (_req, res) => {
     }
 }
 
-export { getTasks };
+const clearTasks = async (_req, res) => {
+    try {
+        await db.query(
+            `DELETE
+            FROM tasks`
+        )
+        res.json({ cleared: true })
+    } catch (error) {
+        res.status(500).json({ error: "Failed to clear tasks" });
+    }
+}
+
+export { getTasks, clearTasks };
