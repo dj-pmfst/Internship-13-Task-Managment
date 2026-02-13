@@ -39,10 +39,14 @@ export class InputHelper{
     }
 
     static clearInputs=()=>{
-        InputHelper.inputList.forEach(input=>input.value="");
+        InputHelper.inputList.forEach(input=>{
+
+            console.log("Tag name: ",input.tagName);
+            if(input.tagName.toLowerCase()==="select")
+                input.selectedIndex=0;
+
+            else input.value="";
+        });
     }
-
-   
-
 }
 
