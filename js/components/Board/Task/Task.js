@@ -13,12 +13,29 @@ export class Task{
     init(){
         this.element=document.createElement("div");        
         this.element.classList.add("task");
+
+        this.contentEl=document.createElement("div");
+        this.contentEl.classList.add("task__content");
+        this.element.append(this.contentEl);
+
         this.render();
+
+        const taskActionsSpan=document.createElement("span");
+        this.taskActionsBtn=document.createElement("button");
+        const btnImage=document.createElement("img");
+        btnImage.src="media/edit-black-pencil-28048.svg";
+
+        this.taskActionsBtn.classList.add("task__actions-button");
+
+        this.taskActionsBtn.appendChild(btnImage);
+        taskActionsSpan.appendChild(this.taskActionsBtn);
+        this.element.appendChild(taskActionsSpan);
+
         this.bindEvents();
     }
+
     render(){
-        this.element.innerHTML=this.markup();
-        this.taskActionsBtn=this.element.querySelector(".task__actions-button");
+        this.contentEl.innerHTML=this.markup();
     }
 
     markup(){
@@ -32,8 +49,7 @@ export class Task{
             </div>
             <span class="task__priority"> Priority: ${this.priority}</span>
             <span class="task__type"> Task type: ${this.type}</span>
-            <span class="task__asignee"> Asignee: ${this.asignee}</span>
-            <span><button class="task__actions-button"><img src="media/edit-black-pencil-28048.svg"></button></span>            
+            <span class="task__asignee"> Assignee: ${this.assignee}</span>        
         `;
     }
 

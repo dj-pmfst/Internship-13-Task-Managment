@@ -32,8 +32,6 @@ export class Board{
             taskList.forEach(task=>{
                 task.startDate=DateTimeHelper.toDateTimeLocal(task.startDate,true);
                 task.endDate=DateTimeHelper.toDateTimeLocal(task.endDate,true);
-
-                console.log(task.startDate);
             });
 
             taskList.forEach(task=>{
