@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import { initDb } from "./db/db.js";
-import { clearTasks, deleteTask, getTasks } from "./controllers/taskController.js";
+import { archiveTask, clearTasks, deleteTask, getArchivedTasks, getTasks } from "./controllers/taskController.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +16,8 @@ app.use(express.json());
 app.use(express.static(rootDir));
 
 app.get("/api/tasks", getTasks);
+app.get("/api/tasks/archived", getArchivedTasks);
+app.patch("/api/tasks/:id/archive", archiveTask);
 app.delete("/api/tasks/:id", deleteTask);
 app.delete("/api/tasks", clearTasks);
 
