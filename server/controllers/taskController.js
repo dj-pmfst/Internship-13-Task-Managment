@@ -53,20 +53,29 @@ const getArchivedTasks = async (_req, res) => {
 
 const archiveTask = async (req, res) => {
     try {
+        const { archived } = req.body;
+
+        if (typeof archived !== "boolean") {
+            return res.status(400).json({ error: "archived must be boolean" })
+        }
+        
         const result = await db.query(
             `UPDATE tasks
-            SET archived = true,
-                archived_at = NOW()
-            WHERE id = $1
-            RETURNING id`,
-            [req.params.id]
+            SET archived = $1,
+                archived_at = CASE
+                    WHEN $1 = true THEN NOW()
+                    ELSE NULL
+                END
+            WHERE id = $2
+            RETURNING id, archived, archived_at`,
+            [archived, req.params.id]
         );
 
         if (result.rowCount === 0) {
             return res.status(404).json({ error: "Task not found" });
         }
 
-        res.json({ archived: true })
+        res.json(result.rows)
     } catch (error) {
         res.status(500).json({ error: "Failed to archive task" });
     }
