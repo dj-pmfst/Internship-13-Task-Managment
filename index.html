@@ -1,11 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>task management</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="board"></div>
+    <div class="header">
+        Task manager
+        <button class="mode-switch"><img src="media/dark-mode-6682.svg"></button>
+        <!-- <button class="mode-switch"><img src="media/light-on-sun-black-outline-21617.svg"></button> sakrit/aktivirat priko js -->
+    </div>
+    <div class="subtitle">
+        <p>To do list</p> 
+        <button class="archive">Archived</button>
+    </div>
+    <div class="lists-container">        
+        <div class="list">
+            <div class="title">
+                Blocked
+                <span class="counter"></span>
+            </div>
+            <div class="task">
+                Example <span><button><img src="media/edit-black-pencil-28048.svg"></button></span>
+            </div>
+            <div class="add">
+                <button>+</button>
+            </div>
+        </div>
+        <div class="list">
+            <div class="title">
+                To do
+                <span class="counter"></span>
+            </div>
+            <div class="add">
+                <button>+</button>
+            </div>
+        </div>
+        <div class="list">
+            <div class="title">
+                In progress
+                <span class="counter"></span>
+            </div>
+            <div class="add">
+                <button>+</button>
+            </div>
+        </div>
+        <div class="list">
+            <div class="title">
+                In review
+                <span class="counter"></span>
+            </div>
+            <div class="add">
+                <button>+</button>
+            </div>
+        </div>
+        <div class="list">
+            <div class="title">
+              Done
+              <span class="counter"></span>
+            </div>
+            <div class="add">
+                <button>+</button>
+            </div>
+        </div>
+        <!-- <div class="archived">
+            <div class="tasks">
+                <div class="task-archived">
+                    Example <span><button class="unarchive-btn"><img src="media/upload-folder-11494.svg"></button><button class="delete-btn"><img src="media/trash-can-10416.svg"></button></span>
+                </div>
+                <div class="task-archived">
+                    Example <span><button class="unarchive-btn"><img src="media/upload-folder-11494.svg"></button><button class="delete-btn"><img src="media/trash-can-10416.svg"></button></span>
+                </div>                
+            </div>
+            <div class="filters">
+                <p>Filter</p>
+                Start date: <input type="datetime-local" class="date-input">
+                End date: <input type="datetime-local" class="date-input">
+                <button>Apply filter</button>
+            </div>
+        </div>
+    </div> -->
+    <div class="pop-add">
+        <div class="add-title">
+            Add title: <span id="title"><input></span>
+        </div>
+        <div class="add-description">
+            Add description: <span id="description"><input></span>
+        </div>
+        <div class="date">
+            Add start and end date:
+            <div id="start"><input type="datetime-local"></div>
+            <div id="end"><input type="datetime-local"></div>
+        </div>
+        <div class="time">
+            Add duration: <span id="duration"><input></span>
+        </div>
+        <div class="priority">
+            <select id="priority-select">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+        <div class="type">
+            <select id="type-select">
+                <option value="personal">Feature</option>
+                <option value="work" selected>Bugfix</option>
+                <option value="urgent">Improvement</option>
+            </select>
+        </div>
+        <div class="person">
+            Add person <span id="person"><input></span>
+        </div>
+        <div class="buttons">
+            <button id="save">Save</button>
+            <button id="cancel">Cancel</button>
+            <button id="edit">Edit</button>
+        </div>
+    </div>
+    <div class="pop-confirm">
+        <div class="confirm-message">
+            <p id="confirm-text">Are you sure you want to delete this task?</p>
+        </div>
+        <div class="buttons">
+            <button id="confirm-yes">Yes</button>
+            <button id="confirm-no">No</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
-</html>

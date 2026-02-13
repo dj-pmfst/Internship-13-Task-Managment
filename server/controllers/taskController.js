@@ -25,4 +25,35 @@ const getTasks = async (_req, res) => {
     }
 }
 
-export { getTasks };
+const deleteTask = async (req, res) => {
+    try {
+        const result = await db.query(
+            `DELETE
+            FROM tasks
+            WHERE id = $1 RETURNING id`,
+            [req.params.id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: "Task not found" });
+        }
+
+        res.json({ deleted: true })
+    } catch (error) {
+        res.status(500).json({ error: "Failed to delete task" });
+    }
+}
+
+const clearTasks = async (_req, res) => {
+    try {
+        await db.query(
+            `DELETE
+            FROM tasks`
+        )
+        res.json({ cleared: true })
+    } catch (error) {
+        res.status(500).json({ error: "Failed to clear tasks" });
+    }
+}
+
+export { getTasks, deleteTask, clearTasks };
