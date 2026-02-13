@@ -16,6 +16,7 @@ export class Popup{
             if(existingTask){
                 editBtn.classList.remove("hidden");
                 saveBtn.disabled=true;
+                editBtn.disabled=false;
 
                 InputHelper.fillData(existingTask);
                 InputHelper.setInputsDisabled(true);
@@ -43,18 +44,25 @@ export class Popup{
 
             const close=()=>{
                 popAdd.classList.remove("active");   
+
+                if(existingTask)
+                    InputHelper.clearInputs();
+                
                 cleanup();
             }
 
             const onSave=()=>{
                 const taskData=InputHelper.getNewTaskData();
                 close();
+                InputHelper.clearInputs();
                 resolve(taskData);
             }            
 
             const onCancel=()=>{
                 close();
-                reject(new UserCancelledError());
+
+                const userCancelledError= !existingTask ? new UserCancelledError(): new UserCancelledError("Task edit canceled");
+                reject(userCancelledError);
             }
 
             saveBtn.addEventListener("click",onSave);

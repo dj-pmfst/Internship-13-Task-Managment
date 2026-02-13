@@ -11,7 +11,7 @@ const inputs={
     duration:popAdd.querySelector("#duration-input"),
     priority:popAdd.querySelector(".priority select"),
     type:popAdd.querySelector(".type select"),
-    asignee:popAdd.querySelector(".person input")
+    asignee:popAdd.querySelector("#person-input")
 }
 
 export {board,alertDiv,popAdd,inputs};

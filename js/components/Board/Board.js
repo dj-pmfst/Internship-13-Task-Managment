@@ -6,6 +6,8 @@ import { Storage } from "../../api.js";
 import { UserCancelledError } from "../../error/error.js";
 import { ToastTypes } from "../../enums/ToastTypes.js";
 import { titleToStatusMap } from "../../helpers/Map.js";
+import { InputHelper } from "../../helpers/InputHelper.js";
+import { DateTimeHelper } from "../../helpers/DateTimeHelper.js";
 
 export class Board{
     constructor(boardEl){
@@ -26,6 +28,13 @@ export class Board{
     async showAddedTasks(){
         try{
             const taskList=await Storage.getTasks();
+
+            taskList.forEach(task=>{
+                task.startDate=DateTimeHelper.toDateTimeLocal(task.startDate,true);
+                task.endDate=DateTimeHelper.toDateTimeLocal(task.endDate,true);
+
+                console.log(task.startDate);
+            });
 
             taskList.forEach(task=>{
                 const targetColumn= this.columns.find(col=>titleToStatusMap[col.title]===task.status);
@@ -50,7 +59,7 @@ export class Board{
                 const newTaskData=await Popup.open();
                 newTaskData.status=titleToStatusMap[columnTitle];
 
-                console.log("newTask data: ",newTaskData);
+                console.log(newTaskData);
                 const savedTask=await Storage.createTask(newTaskData);
 
                 const task=new Task(savedTask);
@@ -67,6 +76,28 @@ export class Board{
             }
         };
 
+        this._onTaskActionsRequest= async (e)=>{
+            const task=e.detail.task;
+
+            console.log("task to update: ",task);
+
+            try{
+                const updatedData=await Popup.open(task);
+                
+                const updatedTask=await Storage.updateTask(task.id,updatedData);
+
+                Toast.show("Task successfuly updated",ToastTypes.SUCCESS);               
+            }
+
+            catch(error){
+                if(error instanceof UserCancelledError)
+                    Toast.show(error.message,ToastTypes.INFO);
+                else
+                    Toast.show(error.message,ToastTypes.DANGER);
+            }            
+        }
+
         this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
+        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);
     }
 }

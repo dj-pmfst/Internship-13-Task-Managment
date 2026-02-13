@@ -4,13 +4,21 @@ export class Task{
         this.init();
     }
 
+    static tresholds={
+        high: 0.3,
+        medium: 0.2,
+        low: 0.1
+    }
+
     init(){
         this.element=document.createElement("div");        
         this.element.classList.add("task");
         this.render();
+        this.bindEvents();
     }
     render(){
         this.element.innerHTML=this.markup();
+        this.taskActionsBtn=this.element.querySelector(".task__actions-button");
     }
 
     markup(){
@@ -25,13 +33,14 @@ export class Task{
             <span class="task__priority"> Priority: ${this.priority}</span>
             <span class="task__type"> Task type: ${this.type}</span>
             <span class="task__asignee"> Asignee: ${this.asignee}</span>
+            <span><button class="task__actions-button"><img src="media/edit-black-pencil-28048.svg"></button></span>            
         `;
     }
 
-    static tresholds={
-        high: 0.3,
-        medium: 0.2,
-        low: 0.1
+    updateTask(updatedTaskData){
+        Object.assign(this,updatedTaskData);
+        this.render();
+        this.updateTimeLeftClass();
     }
 
     getTimeLeftClass(){
@@ -59,5 +68,18 @@ export class Task{
         classes.forEach(cls=>this.element.classList.remove(cls));
 
         if(newClass) this.element.classList.add(newClass);
+    }
+
+    bindEvents(){
+
+        this._onButtonClick=()=>{
+            const event=new CustomEvent("requestTaskActions",{
+                bubbles: true,
+                detail: {task: this}
+            });
+
+            this.element.dispatchEvent(event);
+        }
+        this.taskActionsBtn.addEventListener("click",this._onButtonClick);
     }
 }
