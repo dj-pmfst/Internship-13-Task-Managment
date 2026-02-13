@@ -6,6 +6,11 @@ body{
     color: #211A1D;
 }
 
+input{
+    background-color: transparent;
+    border: none;
+}
+
 .header{
     display: flex;
     flex-direction: row;
@@ -79,7 +84,6 @@ body{
 .list{
     display: flex;
     flex-direction: column;
-    /* border: 2px solid #B370B0; */
     height:auto;
     width: 250px;
     background-color: #A9A9DB;
@@ -249,17 +253,192 @@ body{
     z-index: -1;
 }
 
-.archived {
-    background-color: #C3C3E6;
-    margin: 20px;
-    border-radius: 20px;
-    padding: 30px;
-    min-height: 200px;
-    font-size: 18px;
-}
-
 .buttons{
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.archived {
+    background-color: #C3C3E6;
+    margin: 20px;
+    border-radius: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    min-height: 200px;
+    font-size: 18px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%; 
+    gap: 40px;
+}
+
+.tasks {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
+.task-archived {
+    padding: 5px;
+    margin: 10px;
+    background-color: #CEC4E9;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px; 
+    border: 4px solid #9580C9;
+}
+
+.task-archived button{
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+.task-archived img{
+    width: 20px;    
+    opacity: 100%;
+}
+
+.filters {
+    padding: 5px;
+    margin: 10px;
+    background-color: #CEC4E9;
+    border: 4px solid #9580C9;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px;
+}
+
+.filters button {
+    background-color: #A9A9DB;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 25px;
+    font-family: "Fredoka", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.filters button:hover {
+    background-color: #9A9ACF;
+}
+
+.date-input{
+    background-color: #A9A9DB;
+    border-radius: 10px;
+    padding: 12px;
+    display: inline-block;
+    min-width: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.archived p{
+    font-size: 20px;
+    margin: 0;
+    font-weight: 500;
+    padding-bottom: 5px;
+}
+
+.pop-confirm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    background-color: #DAD2EE;
+    border: 5px solid #A897D8;
+    border-radius: 20px;
+    padding: 30px;
+    width: 400px;
+    max-width: 90vw;
+    height: auto;
+    display: none;
+}
+
+.pop-confirm.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.confirm-message {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: #211A1D;
+}
+
+.confirm-message p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.pop-confirm .buttons {
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.pop-confirm button {
+    background-color: #A9A9DB;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-family: "Fredoka", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    min-width: 100px;
+}
+
+.pop-confirm button:hover {
+    background-color: #9A9ACF;
+    transform: translateY(-2px);
+}
+
+.pop-confirm button:active {
+    transform: translateY(0);
+}
+
+#confirm-yes {
+    background-color: #A897D8;
+}
+
+#confirm-yes:hover {
+    background-color: #9580C9;
+}
+
+#confirm-no {
+    background-color: #CEC4E9;
+}
+
+#confirm-no:hover {
+    background-color: #BDB3DD;
+}
+
+.pop-confirm::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
 }

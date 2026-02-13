@@ -65,26 +65,54 @@
                 <button>+</button>
             </div>
         </div>
-    </div>
+        <!-- <div class="archived">
+            <div class="tasks">
+                <div class="task-archived">
+                    Example <span><button class="unarchive-btn"><img src="media/upload-folder-11494.svg"></button><button class="delete-btn"><img src="media/trash-can-10416.svg"></button></span>
+                </div>
+                <div class="task-archived">
+                    Example <span><button class="unarchive-btn"><img src="media/upload-folder-11494.svg"></button><button class="delete-btn"><img src="media/trash-can-10416.svg"></button></span>
+                </div>                
+            </div>
+            <div class="filters">
+                <p>Filter</p>
+                Start date: <input type="datetime-local" class="date-input">
+                End date: <input type="datetime-local" class="date-input">
+                <button>Apply filter</button>
+            </div>
+        </div>
+    </div> -->
     <div class="pop-add">
         <div class="add-title">
-            Add title: <span id="title"></span>
+            Add title: <span id="title"><input></span>
         </div>
         <div class="add-description">
-            Add description: <span id="description"></span>
+            Add description: <span id="description"><input></span>
         </div>
         <div class="date">
             Add start and end date:
-            <div id="start"></div>
-            <div id="end"></div>
+            <div id="start"><input type="datetime-local"></div>
+            <div id="end"><input type="datetime-local"></div>
         </div>
         <div class="time">
-            Add duration: <span id="duration"></span>
+            Add duration: <span id="duration"><input></input></span>
         </div>
-        <div class="priority">*priorityy selector*</div>
-        <div class="type">*type selector*</div>
+        <div class="priority">
+            <select id="priority-select">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+        <div class="type">
+            <select id="type-select">
+                <option value="personal">Feature</option>
+                <option value="work" selected>Bugfix</option>
+                <option value="urgent">Improvement</option>
+            </select>
+        </div>
         <div class="person">
-            Add person <span id="person"></span>
+            Add person <span id="person"><input></span>
         </div>
         <div class="buttons">
             <button id="save">Save</button>
@@ -92,8 +120,14 @@
             <button id="edit">Edit</button>
         </div>
     </div>
-    <!-- <div class="archived">
-        -query-
-    </div> -->
+    <div class="pop-confirm">
+        <div class="confirm-message">
+            <p id="confirm-text">Are you sure you want to delete this task?</p>
+        </div>
+        <div class="buttons">
+            <button id="confirm-yes">Yes</button>
+            <button id="confirm-no">No</button>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
