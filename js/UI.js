@@ -10,4 +10,8 @@ export class UI{
     init(){
         this.board=new Board(board);
     }
+
+    async loadTasks(){
+        await this.board.showAddedTasks();
+    }
 }

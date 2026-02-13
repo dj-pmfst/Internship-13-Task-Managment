@@ -1,5 +1,6 @@
 import { UI } from "./UI.js";
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded",async ()=>{
     const ui=new UI();
+    await ui.loadTasks();
 });

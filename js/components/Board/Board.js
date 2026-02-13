@@ -23,6 +23,22 @@ export class Board{
         this.columns=Array.from(columnElements).map(column=>new BoardColumn(column));
     }
 
+    async showAddedTasks(){
+        try{
+            const taskList=await Storage.getTasks();
+
+            taskList.forEach(task=>{
+                const targetColumn= this.columns.find(col=>titleToStatusMap[col.title]===task.status);
+
+                targetColumn?.addTask(new Task(task));
+            });
+
+        }
+        catch(error){
+            Toast.show(error.message,ToastTypes.DANGER);
+        }
+    }   
+
     bindEvents(){
 
         this._onTaskRequest=async (e)=>{
