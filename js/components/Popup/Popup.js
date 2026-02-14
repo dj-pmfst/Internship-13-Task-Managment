@@ -1,6 +1,10 @@
 import { UserCancelledError } from "../../error/error.js";
 import { popAdd } from "../AllComponents/mainElements.js";
 import { InputHelper } from "../../helpers/InputHelper.js";
+import { validateFrontendTaskData } from "../../validation/ValidateData.js";
+import { Toast } from "../Toast/Toast.js";
+import { ToastTypes } from "../../enums/ToastTypes.js";
+
 
 export class Popup{
     static open(existingTask=null){
@@ -52,7 +56,17 @@ export class Popup{
             }
 
             const onSave=()=>{
-                const taskData=InputHelper.getNewTaskData();
+                const taskData= !existingTask ? InputHelper.getNewTaskData() : InputHelper.getUpdatedTaskData(existingTask);
+
+                if(!taskData) return;
+                
+                const validationResult=validateFrontendTaskData(taskData);
+
+                if(validationResult.error!==null) {
+                    Toast.show(validationResult.error,ToastTypes.INFO);
+                    return;
+                }
+
                 close();
                 InputHelper.clearInputs();
                 resolve(taskData);
@@ -69,5 +83,6 @@ export class Popup{
             cancelBtn.addEventListener("click",onCancel);
         });
     }
+
 
 }

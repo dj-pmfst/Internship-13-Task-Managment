@@ -82,7 +82,6 @@ export class Board{
                 const newTaskData=await Popup.open();
                 newTaskData.status=titleToStatusMap[columnTitle];
 
-                console.log(newTaskData);
                 const savedTask=await Storage.createTask(newTaskData);
 
                 const task=new Task(savedTask);
@@ -106,6 +105,8 @@ export class Board{
                 const updatedData=await Popup.open(task);
                 
                 const updatedTask=await Storage.updateTask(task.id,updatedData);
+
+                task.updateTask(updatedTask);
 
                 Toast.show("Task successfuly updated",ToastTypes.SUCCESS);               
             }

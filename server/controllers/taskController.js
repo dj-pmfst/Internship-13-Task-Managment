@@ -12,9 +12,9 @@ const getTasks = async (_req, res) => {
                 status,
                 priority, 
                 type,
-                est_start_date AS "startDate",
-                est_end_date AS "endDate",
-                est_duration AS duration,
+                est_start_date,
+                est_end_date,
+                est_duration,
                 archived,
                 archived_at
             FROM tasks
@@ -55,8 +55,9 @@ const getArchivedTasks = async (_req, res) => {
 }
 
 const createTask = async (req, res) => {
-    const { title, description, assignee, status, priority, type, est_start_date, est_end_date, est_duration, archived } = req.body;
+    const { title, description, assignee, status, priority, type, startDate, endDate, duration, archived  } = req.body;
 
+    console.log("body: ",req.body);
     const { attributes, values, error } = validateAndBuildData({
             title,
             description,
@@ -64,18 +65,18 @@ const createTask = async (req, res) => {
             status,
             priority, 
             type,
-            est_start_date,
-            est_end_date,
-            est_duration,
+            startDate,
+            endDate,
+            duration,
             archived
     });
 
-    if (attributes.length === 0) {
-        return res.status(400).json({ error: "No data available" });
-    }
-
     if (error) {
         return res.status(400).json({ error });
+    }
+
+    if (attributes?.length === 0) {
+        return res.status(400).json({ error: "No data available" });
     }
 
     const placeholders = attributes.map((_, i) => `$${i + 1}`)
@@ -90,15 +91,17 @@ const createTask = async (req, res) => {
             values
         );
 
-        res.status(201).json(result.rows);
+        res.status(201).json(result.rows[0]);
     } catch (error) {
         res.status(500).json({ error: "Failed to create task" });
+        console.log(error);
     }
 };
 
 const updateTask = async (req, res) => {
-    const { title, description, assignee, status, priority, type, est_start_date, est_end_date, est_duration, archived } = req.body;
+    const { title, description, assignee, status, priority, type, startDate, endDate, duration, archived } = req.body;
 
+    console.log("bodyyy: ",req.body);
     const { updates, values, error } = validateAndBuildData({
             title,
             description,
@@ -106,18 +109,18 @@ const updateTask = async (req, res) => {
             status,
             priority, 
             type,
-            est_start_date,
-            est_end_date,
-            est_duration,
+            startDate,
+            endDate,
+            duration,
             archived
     });
 
-    if (updates.length === 0) {
-        return res.status(400).json({ error: "No fields to update" });
-    }
-
     if (error) {
         return res.status(400).json({ error });
+    }
+
+    if (updates?.length === 0) {
+        return res.status(400).json({ error: "No fields to update" });
     }
 
     values.push(req.params.id);
@@ -135,7 +138,7 @@ const updateTask = async (req, res) => {
         if (result.rowCount === 0) {
             return res.status(404).json({ error: "Task not found" });
         }
-        res.json(result.rows);
+        res.json(result.rows[0]);
     } catch (error) {
         res.status(500).json({ error: "Failed to update task" });
     }
