@@ -79,6 +79,7 @@ const createTask = async (req, res) => {
         return res.status(400).json({ error: "No data available" });
     }
 
+    console.log("attributes: ",attributes);
     const placeholders = attributes.map((_, i) => `$${i + 1}`)
 
     try {

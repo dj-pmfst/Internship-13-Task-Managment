@@ -50,17 +50,7 @@ export class Task{
         
         this.bindEvents(); 
         this.render();
-
-        const taskActionsSpan=document.createElement("span");
-        this.taskActionsBtn=document.createElement("button");
-        const btnImage=document.createElement("img");
-        btnImage.src="media/edit-black-pencil-28048.svg";
-
-        this.taskActionsBtn.classList.add("task__actions-button");
-
-        this.taskActionsBtn.appendChild(btnImage);
-        taskActionsSpan.appendChild(this.taskActionsBtn);
-        this.element.appendChild(taskActionsSpan);
+        this.element.appendChild(this.actionsSpan);        
     }
 
     render(){
@@ -78,13 +68,13 @@ export class Task{
             </div>
             <span class="task__priority"> Priority: ${task.priority}</span>
             <span class="task__type"> Task type: ${task.type}</span>
-            <span class="task__asignee"> Asignee: ${task.asignee}</span>
+            <span class="task__asignee"> Asignee: ${task.assignee}</span>
         `;
     }
 
     updateTask(updatedTaskData){
         this.propertyMapping(updatedTaskData);
-        Task.render(this);
+        this.render();
         this.updateTimeLeftClass();
     }
 

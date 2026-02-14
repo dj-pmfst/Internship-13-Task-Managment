@@ -62,7 +62,7 @@ const validateAndBuildData = (fields) => {
             return { error: validator.error };
         }
 
-        attributes.push(field);
+        attributes.push(fieldToDbColumn[field]);
         updates.push(`${fieldToDbColumn[field]} = $${updates.length + 1}`);
         values.push(validator.transform ? validator.transform(value) : value);
     }
