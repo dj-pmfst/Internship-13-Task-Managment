@@ -4,7 +4,7 @@ export class Task{
         this.init();
     }
 
-    static tresholds={
+    static thresholds={
         high: 0.3,
         medium: 0.2,
         low: 0.1
@@ -70,9 +70,9 @@ export class Task{
         const timeLeft=end-now;
         const percentageLeft=timeLeft/totalDuration;
 
-        const treshold=Task.tresholds[this.priority];
+        const threshold=Task.thresholds[this.priority];
 
-        return percentageLeft<=treshold ? "task--warning" : "";
+        return percentageLeft<=threshold ? "task--warning" : "";
     }
 
     updateTimeLeftClass(){
