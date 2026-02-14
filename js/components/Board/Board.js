@@ -50,11 +50,7 @@ export class Board{
         this.addOnTaskRequestListeners();
         this.addOnMoveRequestListener();
         this.addOnColumnDropListener();
-
-        this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
-        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);
-        this.boardEl.addEventListener("requestColumnMove",this._onMoveColumnRequest);
-        this.boardEl.addEventListener("columnDrop",this._onColumnDrop);
+        this.addOnTaskDropListener();
     }
 
     moveColumn(column,direction){
@@ -81,6 +77,7 @@ export class Board{
             try{
                 const newTaskData=await Popup.open();
                 newTaskData.status=titleToStatusMap[columnTitle];
+                newTaskData.position=targetColumn.taskList.length+1;
 
                 const savedTask=await Storage.createTask(newTaskData);
 
@@ -118,13 +115,18 @@ export class Board{
                     Toast.show(error.message,ToastTypes.DANGER);
             }            
         }
+
+        this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
+        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);        
     }
     
     addOnMoveRequestListener(){
         this._onMoveColumnRequest=(e)=>{
             const {column,direction}=e.detail;
             this.moveColumn(column,direction);
-        }       
+        }    
+        
+        this.boardEl.addEventListener("requestColumnMove",this._onMoveColumnRequest);        
     }
 
     addOnColumnDropListener(){
@@ -137,7 +139,7 @@ export class Board{
             const draggedEl=draggedColumn.element;
             const targetEl=targetColumn.element;
 
-            targetEl.classList.remove("drag-over");            
+            targetEl.classList.remove("drag-over");         
 
             if (!draggedColumn || draggedColumn === targetColumn) return;
 
@@ -153,5 +155,57 @@ export class Board{
             this.boardEl.insertBefore(draggedEl,targetNext);
             this.boardEl.insertBefore(targetEl,draggedNext);
         }
+
+        this.boardEl.addEventListener("columnDrop",this._onColumnDrop);        
+    }
+
+    addOnTaskDropListener(){
+        this._onTaskDrop=async (e)=>{
+            const {draggedTaskId,targetColumn,sourceColumnTitle,afterElement }=e.detail;
+
+            const sourceColumn=this.columns.find(c=>c.title===sourceColumnTitle);
+            const draggedTaskIndex=sourceColumn.taskList.findIndex(t=>t.id===draggedTaskId);
+
+            const draggedTask=sourceColumn.taskList.splice(draggedTaskIndex,1)[0];
+
+            const targetEl=targetColumn.element;
+            targetEl.classList.remove("drag-over"); 
+                        
+            try{
+                const statusPayload= {status:titleToStatusMap[targetColumn.title]};
+                const updatedTaskData=await Storage.updateTask(draggedTaskId,statusPayload);
+
+                draggedTask.updateTask(updatedTaskData);
+                const insertIndex= afterElement 
+                    ? targetColumn.taskList.findIndex(t=>t.element===afterElement) 
+                    : targetColumn.taskList.length;
+
+                targetColumn.taskList.splice(insertIndex,0,draggedTask);
+
+                this.updateTaskPositions(sourceColumn.taskList);
+                this.updateTaskPositions(targetColumn.taskList);
+
+                Toast.show("Task successfuly updated",ToastTypes.SUCCESS);                 
+            }
+            catch(error){
+                Toast.show(error.message,ToastTypes.DANGER);
+            }    
+
+        }
+
+       this.boardEl.addEventListener("taskDrop",this._onTaskDrop);        
+    }
+
+    updateTaskPositions(taskList){
+        taskList.forEach((task,index)=>{
+            task.position=index+1;
+
+            try{
+                Storage.updateTask(task.id,{position: task.position});
+            }
+            catch(error){
+                Toast.show(error.message,ToastTypes.DANGER);
+            }               
+        });
     }
 }

@@ -1,3 +1,4 @@
+import { DragType } from "../../../enums/DragType.js";
 import { DateTimeHelper } from "../../../helpers/DateTimeHelper.js";
 
 export class Task{
@@ -24,6 +25,8 @@ export class Task{
 
         this.archived = data.archived;
         this.archivedAt = data.archived_at;
+
+        this.position=data.position;
     }
 
     static thresholds={
@@ -50,7 +53,8 @@ export class Task{
         
         this.bindEvents(); 
         this.render();
-        this.element.appendChild(this.actionsSpan);        
+        this.element.appendChild(this.actionsSpan); 
+        this.element.draggable=true;       
     }
 
     render(){
@@ -132,7 +136,24 @@ export class Task{
             });
             this.element.dispatchEvent(event);
         }
+
+        this._onDragStart=(e)=>{
+            e.dataTransfer.effectAllowed="move";
+            e.currentTarget.classList.add("dragging");
+
+            const columnEl=e.currentTarget.closest(".list");
+            const sourceColumnTitle=columnEl.querySelector(".title__text").textContent;
+
+            const dragData={
+                data: this.id,
+                dragType: DragType.TASK,
+                sourceColumnTitle
+            }
+            e.dataTransfer.setData("text/plain",JSON.stringify(dragData)); 
+        }
+
         this.taskActionsBtn.addEventListener("click", this._onButtonClick);
+        this.element.addEventListener("dragstart",this._onDragStart);
     }
     
     destroy(){

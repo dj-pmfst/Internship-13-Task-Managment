@@ -45,7 +45,12 @@ const fieldValidators = {
     duration: {
         validate: (val) => Number.isInteger(val) && val > 0,
         error: "est_duration must be a positive integer"
+    },
+    position: {
+        validate: (val)=> Number.isInteger(val) && val>0,
+        error: "position must be a positive integer"
     }
+
 }
 
 const validateAndBuildData = (fields) => {

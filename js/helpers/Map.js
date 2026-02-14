@@ -27,6 +27,7 @@ export const fieldToDbColumn = {
     startDate: "est_start_date",
     endDate: "est_end_date",
     duration: "est_duration",
-    archived: "archived"
+    archived: "archived",
+    position: "position"
 };
 

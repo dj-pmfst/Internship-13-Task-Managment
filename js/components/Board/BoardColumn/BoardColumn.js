@@ -1,3 +1,5 @@
+import { DragType } from "../../../enums/DragType.js";
+
 export class BoardColumn{
     constructor(element){
         this.element=element;
@@ -69,29 +71,80 @@ export class BoardColumn{
         }        
 
         this._onDragStart=(e)=>{
+
+            const fetchedDragDataString=e.dataTransfer.getData("text/plain");
+            let fetchDragData;
+
+            if(fetchedDragDataString){
+                fetchDragData=JSON.parse(fetchedDragDataString);
+                if(fetchDragData.dragType===DragType.TASK) return;                
+            }
+
             e.dataTransfer.effectAllowed="move";
-            e.dataTransfer.setData("text/plain", this.title); 
+
+            const dragData={
+                data: this.title,
+                dragType: DragType.COLUMN
+            }
+            e.dataTransfer.setData("text/plain",JSON.stringify(dragData)); 
+
         }
 
         this._onDragOver=(e)=>{
             e.preventDefault();
-            e.currentTarget.classList.add("drag-over");
-        }
 
-        this._onDragLeave=(e)=>{
-            e.currentTarget.classList.remove("drag-over");
+            document.querySelectorAll(".drag-over").forEach(el=>el.classList.remove("drag-over"));
+            e.currentTarget.classList.add("drag-over");
+
+            const dragDataStr=e.dataTransfer.getData("text/plain");
+            if (!dragDataStr) return;
+
+            const dragData = JSON.parse(dragDataStr);
+
+            console.log(dragData.dragType);
+
+            if(dragData.dragType===DragType.TASK){
+                const afterElement=this.getDragAfterElement(e.clientY);
+                const draggedElement=document.querySelector(".dragging");
+
+                if(afterElement===null)
+                    this.element.appendChild(draggedElement);
+
+                else
+                    this.element.insertBefore(draggedElement,afterElement);
+            }
         }
 
         this._onDrop=(e)=>{
 
-            const draggedColumnTitle=e.dataTransfer.getData("text/plain");
-            const event=new CustomEvent("columnDrop",{
-                bubbles: true,
-                detail: {
-                    targetColumn: this,
-                    draggedColumnTitle}
-            });
+            const dragDataStr=e.dataTransfer.getData("text/plain");
+            if (!dragDataStr) return;
 
+            const dragData = JSON.parse(dragDataStr);
+
+            let event;
+
+            if(dragData.dragType===DragType.COLUMN){
+                event=new CustomEvent("columnDrop",{
+                    bubbles: true,
+                    detail: {
+                        targetColumn: this,
+                        draggedColumnTitle: dragData.data
+                    }
+                });
+            }
+
+            else if(dragData.dragType===DragType.TASK){
+                event=new CustomEvent("taskDrop",{
+                    bubbles: true,
+                    detail: {
+                        targetColumn: this,
+                        draggedTaskId: dragData.data,
+                        sourceColumnTitle: dragData.sourceColumnTitle,
+                        afterElement: this.getDragAfterElement(e.clientY)
+                    }
+                });                   
+            }
             this.element.dispatchEvent(event);
         }
 
@@ -103,7 +156,6 @@ export class BoardColumn{
         this.element.addEventListener("dragstart",this._onDragStart);
         this.element.addEventListener("dragover",this._onDragOver);
         this.element.addEventListener("drop",this._onDrop);
-        this.element.addEventListener("dragleave",this._onDragLeave);
     }
 
     startTaskMonitor(interval){
@@ -117,6 +169,21 @@ export class BoardColumn{
         clearInterval(this._taskMonitorInterval);
     }
 
-    
+    getDragAfterElement(y){
+
+        const draggableElements = [...this.element.querySelectorAll('.task:not(.dragging)')];
+        return draggableElements.reduce((closest, child) => {
+
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+
+            if (offset < 0 && offset > closest.offset)
+                return { offset: offset, element: child };
+        
+            else return closest;
+
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+
+    }
 
 };
