@@ -8,21 +8,16 @@ export class Task{
     }
 
     propertyMapping(data){
-
         this.id=data.id;
-
         this.title=data.title;
         this.description=data.description;
         this.assignee=data.assignee;
-
         this.duration=data.est_duration;
         this.startDate=DateTimeHelper.toDateTimeLocal(data.est_start_date);
         this.endDate=DateTimeHelper.toDateTimeLocal(data.est_end_date);
-
         this.priority=data.priority;
         this.status=data.status;
         this.type=data.type;
-
         this.archived = data.archived;
         this.archivedAt = data.archived_at;
 
@@ -51,28 +46,26 @@ export class Task{
 
         this.taskActionsBtn = this.actionsSpan.querySelector('.edit-btn');
         
-        this.bindEvents(); 
         this.render();
         this.element.appendChild(this.actionsSpan); 
         this.element.draggable=true;       
+        this.bindEvents(); 
     }
 
     render(){
+        const previousContent = this.element.innerHTML;
         this.element.innerHTML = Task.markup(this);
+        this.element.appendChild(this.actionsSpan); 
+
+        const titleButton = this.element.querySelector('.task__title button');
+        if (titleButton && this._onTitleClick) {
+            titleButton.addEventListener("click", this._onTitleClick);
+        }
     }
 
     static markup(task){
         return `
-            <h4 class="task__title">${task.title}</h4>
-            <p class="task__description">${task.description}</p>
-            <div class="task__time-info">
-                <span> Duration: ${task.duration}h </span>
-                <span> Start: ${task.startDate} </span>
-                <span> End: ${task.endDate} </span>            
-            </div>
-            <span class="task__priority"> Priority: ${task.priority}</span>
-            <span class="task__type"> Task type: ${task.type}</span>
-            <span class="task__asignee"> Asignee: ${task.assignee}</span>
+            <div class="task__title"><button>${task.title}</button></div>
         `;
     }
 
@@ -83,28 +76,27 @@ export class Task{
     }
 
     getTimeLeftClass(){
-        const now= new Date();
-        const start=new Date(this.startDate);
-        const end=new Date(this.endDate);
+        const now = new Date();
+        const start = new Date(this.startDate);
+        const end = new Date(this.endDate);
 
-        if(now>=end) return "task--expired";
+        if(now >= end) return "task--expired";
 
-        const totalDuration=end-start;
-        const timeLeft=end-now;
-        const percentageLeft=timeLeft/totalDuration;
+        const totalDuration = end - start;
+        const timeLeft = end - now;
+        const percentageLeft = timeLeft / totalDuration;
+        const threshold = Task.thresholds[this.priority];
 
-        const threshold=Task.thresholds[this.priority];
-
-        return percentageLeft<=threshold ? "task--warning" : "";
+        return percentageLeft <= threshold ? "task--warning" : "";
     }
 
     updateTimeLeftClass(){
-        const classes = ["task--expired","task--warning"];
-        const newClass=this.getTimeLeftClass();
+        const classes = ["task--expired", "task--warning"];
+        const newClass = this.getTimeLeftClass();
 
         if(this.element.classList.contains(newClass)) return;
 
-        classes.forEach(cls=>this.element.classList.remove(cls));
+        classes.forEach(cls => this.element.classList.remove(cls));
 
         if(newClass) this.element.classList.add(newClass);
 
@@ -160,10 +152,26 @@ export class Task{
         this.taskActionsBtn.addEventListener("click", this._onButtonClick);
         this.element.addEventListener("dragstart",this._onDragStart);
         this.element.addEventListener("dragend",this._onDragEnd);
+
+        this._onTitleClick = () => {
+            const event = new CustomEvent("requestTaskDetails", {
+                bubbles: true,
+                detail: {task: this}
+            });
+            this.element.dispatchEvent(event);
+        }
+
+        const titleButton = this.element.querySelector('.task__title button');
+        if (titleButton) {
+            titleButton.addEventListener("click", this._onTitleClick);
+        }
     }
     
     destroy(){
         this.taskActionsBtn.removeEventListener("click", this._onButtonClick);
+        const titleButton = this.element.querySelector('.task__title button');
+        if (titleButton && this._onTitleClick) {
+            titleButton.removeEventListener("click", this._onTitleClick);
+        }
     }
-
-}    
+}

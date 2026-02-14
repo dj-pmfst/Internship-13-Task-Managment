@@ -1,0 +1,301 @@
+body {
+    background-color: #131A3E;
+    color: #eae8f2;
+}
+
+.header {
+    background-color: #27327C;
+}
+
+.header button img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.task button img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.task-archived button img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.add button img {
+    filter: brightness(0) invert(1) !important;
+    opacity: 1 !important;
+}
+
+.title__actions button img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.subtitle button {
+    background-color: #27327C;
+    color: #eae8f2;
+}
+
+.subtitle button:last-child {
+    background-color: #5A7FC4;
+}
+
+.lists-container {
+    background-color: #27327C;
+}
+
+.list {
+    background-color: #5A7FC4;
+}
+
+.title {
+    background-color: #303073;
+    border-color: #5A7FC4;
+}
+
+.task {
+    background-color: #303073;
+}
+
+.task__title button{
+    color: #eae8f2;
+}
+
+.task--expired{
+    background-color: rgb(192, 74, 74);
+}
+
+#deadline{
+    background-color: rgb(192, 74, 74);
+}
+
+.hover-info {
+    background-color: rgb(192, 74, 74);
+    border-color: rgb(142, 54, 54);
+    color: #eae8f2;
+}
+
+.add img {
+    border-color: #7C9FB6;
+}
+
+.pop-add {
+    background-color: #27327C;
+    border-color: #5A7FC4;
+}
+
+.add-title span,
+.add-description span,
+.person span {
+    background-color: #5A7FC4;
+    border-color: #5A7FC4;
+}
+
+.add-title span:focus,
+.add-description span:focus,
+.person span:focus {
+    border-color: #7C9FB6;
+}
+
+.date > div,
+.time span {
+    background-color: #5A7FC4;
+}
+
+.priority,
+.type {
+    background-color: #5A7FC4;
+}
+
+.priority select,
+.type select {
+    background-color: #5A7FC4;
+}
+
+.pop-add button {
+    background-color: #5A7FC4;
+    color: #eae8f2;
+}
+
+.pop-add button:hover {
+    background-color: #7C9FB6;
+}
+
+#save,
+#cancel {
+    background-color: #5A7FC4;
+}
+
+#save:hover,
+#cancel:hover {
+    background-color: #7C9FB6;
+}
+
+.archived {
+    background-color: #5A7FC4;
+}
+
+.task-archived {
+    background-color: #303073;
+    border-color: #131A3E;
+}
+
+
+.filters {
+    background-color: #303073;
+    border-color: #131A3E;
+}
+
+.filters button {
+    background-color: #5A7FC4;
+    color: #eae8f2;
+}
+
+.filters button:hover {
+    background-color: #7C9FB6;
+}
+
+.date-input {
+    background-color: #5A7FC4;
+}
+
+.pop-confirm {
+    background-color: #27327C;
+    border-color: #5A7FC4;
+    color: #eae8f2;
+}
+
+.pop-confirm button {
+    background-color: #5A7FC4;
+    color: #eae8f2;
+}
+
+.pop-confirm button:hover {
+    background-color: #7C9FB6;
+}
+
+.confirm-message{
+    color: #eae8f2;
+}
+
+#confirm-yes {
+    background-color: #5A7FC4;
+}
+
+#confirm-yes:hover {
+    background-color: #7C9FB6;
+}
+
+#confirm-no {
+    background-color: #303073;
+}
+
+#confirm-no:hover {
+    background-color: #5A7FC4;
+}
+
+input {
+    background-color: transparent;
+}
+
+input::placeholder {
+    color: #7C9FB6;
+    opacity: 0.7;
+}
+
+.mode-switch img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.light-mode-btn {
+    display: none;
+}
+
+.dark-mode-btn {
+    display: inline-block !important;
+}
+
+input {
+    background-color: transparent;
+    color: #eae8f2; 
+}
+
+input::placeholder {
+    color: #7C9FB6;
+    opacity: 0.7;
+}
+
+input[type="datetime-local"] {
+    color: #eae8f2;
+    color-scheme: dark; 
+}
+
+select {
+    color: #eae8f2;
+    background-color: #5A7FC4;
+}
+
+select option {
+    color: #eae8f2;
+    background-color: #5A7FC4;
+}
+
+.alertDiv {
+    color: white !important; 
+}
+
+.alert-success {
+    background-color: #4CAF50 !important;
+    color: white !important;
+}
+
+.alert-danger {
+    background-color: #f44336 !important;
+    color: white !important;
+}
+
+.alert-info {
+    background-color: #2196F3 !important;
+    color: white !important;
+}
+
+.alert-warning {
+    background-color: #ff9800 !important;
+    color: white !important;
+}
+
+.pop-details {
+    background-color: #27327C;
+    border-color: #5A7FC4;
+}
+
+.details-header {
+    border-bottom-color: #5A7FC4;
+}
+
+.details-header h2 {
+    color: #eae8f2;
+}
+
+.close-details {
+    color: #7C9FB6;
+}
+
+.close-details:hover {
+    color: #eae8f2;
+}
+
+.detail-label {
+    color: #eae8f2;
+}
+
+.detail-value {
+    background-color: #303073;
+    color: #eae8f2;
+}
+
+.pop-details button {
+    background-color: #5A7FC4;
+    color: #eae8f2;
+}
+
+.pop-details button:hover {
+    background-color: #7C9FB6;
+}
