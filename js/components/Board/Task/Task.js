@@ -10,7 +10,7 @@ export class Task{
         this.render();
     }
     render(){
-        this.element.innerHTML=Task.markup();
+        this.element.innerHTML=Task.markup(this);
     }
 
     static markup(){
@@ -25,6 +25,13 @@ export class Task{
             <span class="task__priority"> Priority: ${newTask.priority}</span>
             <span class="task__type"> Task type: ${newTask.type}</span>
             <span class="task__asignee"> Asignee: ${newTask.asignee}</span>
+            <span class="task__actions">
+            <button class="warning-btn" style="display: none;">
+                <img src="media/exclamation-mark-9765.svg">
+                <div class="hover-info">Deadline approaching!</div>
+            </button>
+            <button><img src="media/edit-black-pencil-28048.svg"></button>
+        </span>
         `;
     }
 
@@ -59,5 +66,24 @@ export class Task{
         classes.forEach(cls=>this.element.classList.remove(cls));
 
         if(newClass) this.element.classList.add(newClass);
+
+        this.showWarningPopup(newClass);
+    }
+
+    showWarningPopup(newClass){
+        const warningBtn = this.element.querySelector('.warning-btn');
+        const hoverInfo = warningBtn?.querySelector('.hover-info');
+        
+        if(!warningBtn) return;
+        
+        if(newClass === "task--expired"){
+            warningBtn.style.display = 'inline-block';
+            if(hoverInfo) hoverInfo.textContent = "Deadline expired!";
+        } else if(newClass === "task--warning"){
+            warningBtn.style.display = 'inline-block';
+            if(hoverInfo) hoverInfo.textContent = "Deadline approaching!";
+        } else {
+            warningBtn.style.display = 'none';
+        }
     }
 }
