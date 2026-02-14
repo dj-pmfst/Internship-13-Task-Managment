@@ -49,6 +49,7 @@ export class Board{
         this.addOnTaskRequestListeners();
         this.addOnMoveRequestListener();
         this.addOnColumnDropListener();
+        this.addOnTaskDropListener();
 
         this.boardEl.addEventListener("requestNewTask", this._onTaskRequest);
         this.boardEl.addEventListener("requestTaskActions", this._onTaskActionsRequest);
@@ -76,6 +77,7 @@ export class Board{
             try{
                 const newTaskData=await Popup.open();
                 newTaskData.status=titleToStatusMap[columnTitle];
+                newTaskData.position=targetColumn.taskList.length+1;
 
                 const savedTask=await Storage.createTask(newTaskData);
 
@@ -111,6 +113,8 @@ export class Board{
             }            
         }
 
+        this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
+        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);        
         this._onTaskDetailsRequest = (e) => {
             const task = e.detail.task;
             this.showTaskDetails(task);
@@ -153,7 +157,9 @@ export class Board{
         this._onMoveColumnRequest=(e)=>{
             const {column,direction}=e.detail;
             this.moveColumn(column,direction);
-        }       
+        }    
+        
+        this.boardEl.addEventListener("requestColumnMove",this._onMoveColumnRequest);        
     }
 
     addOnColumnDropListener(){
@@ -164,7 +170,8 @@ export class Board{
             const draggedEl=draggedColumn.element;
             const targetEl=targetColumn.element;
 
-            targetEl.classList.remove("drag-over");            
+            targetEl.classList.remove("drag-over");
+            draggedEl.classList.remove("draggable");   
 
             if (!draggedColumn || draggedColumn === targetColumn) return;
 
@@ -180,5 +187,60 @@ export class Board{
             this.boardEl.insertBefore(draggedEl,targetNext);
             this.boardEl.insertBefore(targetEl,draggedNext);
         }
+
+        this.boardEl.addEventListener("columnDrop",this._onColumnDrop);        
     }
+
+    addOnTaskDropListener(){
+        this._onTaskDrop=async (e)=>{
+        
+            const {draggedTaskId,targetColumn,sourceColumnTitle,afterElement }=e.detail;
+
+            const sourceColumn=this.columns.find(c=>c.title===sourceColumnTitle);
+            const draggedTaskIndex=sourceColumn.taskList.findIndex(t=>t.id===draggedTaskId);
+
+            const draggedTask=sourceColumn.taskList.splice(draggedTaskIndex,1)[0];
+
+            const targetEl=targetColumn.element;
+            targetEl.classList.remove("drag-over"); 
+                        
+            try{
+                const statusPayload= {status:titleToStatusMap[targetColumn.title]};
+                const updatedTaskData=await Storage.updateTask(draggedTaskId,statusPayload);
+
+                draggedTask.updateTask(updatedTaskData);
+                const insertIndex= afterElement 
+                    ? targetColumn.taskList.findIndex(t=>t.element===afterElement) 
+                    : targetColumn.taskList.length;
+
+                targetColumn.taskList.splice(insertIndex,0,draggedTask);
+
+                await this.updateTaskPositions(sourceColumn.taskList);
+                await this.updateTaskPositions(targetColumn.taskList);
+
+                if(sourceColumn.element!=targetColumn.element){
+                    sourceColumn.updateCount(false);
+                    targetColumn.updateCount(true);
+                }
+
+                Toast.show("Task successfuly updated",ToastTypes.SUCCESS);                 
+            }
+            catch(error){
+                Toast.show(error.message,ToastTypes.DANGER);
+            }    
+
+        }
+
+       this.boardEl.addEventListener("taskDrop",this._onTaskDrop);        
+    }
+
+    async updateTaskPositions(taskList){
+
+        for(const [index,task] of taskList.entries()){
+            task.position=index+1;
+            await Storage.updateTask(task.id,{position: task.position});
+        }
+
+          
+    };
 }

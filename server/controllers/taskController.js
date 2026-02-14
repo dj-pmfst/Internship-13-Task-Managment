@@ -16,10 +16,11 @@ const getTasks = async (_req, res) => {
                 est_end_date,
                 est_duration,
                 archived,
-                archived_at
+                archived_at,
+                position
             FROM tasks
             WHERE archived=false
-            ORDER BY created_at ASC`
+            ORDER BY position ASC`
         );
 
         res.json(result.rows);
@@ -43,7 +44,8 @@ const getArchivedTasks = async (_req, res) => {
                 est_end_date,
                 est_duration,
                 archived,
-                archived_at
+                archived_at,
+                position
             FROM tasks
             WHERE archived = true
             ORDER BY archived_at DESC`
@@ -55,9 +57,8 @@ const getArchivedTasks = async (_req, res) => {
 }
 
 const createTask = async (req, res) => {
-    const { title, description, assignee, status, priority, type, startDate, endDate, duration, archived  } = req.body;
+    const { title, description, assignee, status, priority, type, startDate, endDate, duration, archived,position  } = req.body;
 
-    console.log("body: ",req.body);
     const { attributes, values, error } = validateAndBuildData({
             title,
             description,
@@ -68,7 +69,8 @@ const createTask = async (req, res) => {
             startDate,
             endDate,
             duration,
-            archived
+            archived,
+            position
     });
 
     if (error) {
@@ -100,7 +102,7 @@ const createTask = async (req, res) => {
 };
 
 const updateTask = async (req, res) => {
-    const { title, description, assignee, status, priority, type, startDate, endDate, duration, archived } = req.body;
+    const { title, description, assignee, status, priority, type, startDate, endDate, duration, archived,position } = req.body;
 
     console.log("bodyyy: ",req.body);
     const { updates, values, error } = validateAndBuildData({
@@ -113,7 +115,8 @@ const updateTask = async (req, res) => {
             startDate,
             endDate,
             duration,
-            archived
+            archived,
+            position
     });
 
     if (error) {

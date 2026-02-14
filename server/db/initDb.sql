@@ -24,7 +24,9 @@ CREATE TABLE IF NOT EXISTS tasks (
     archived_at TIMESTAMPTZ DEFAULT NULL,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    position INT NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_tasks_archived_true

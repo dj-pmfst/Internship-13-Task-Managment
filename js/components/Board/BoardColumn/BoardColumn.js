@@ -1,3 +1,5 @@
+import { DragType } from "../../../enums/DragType.js";
+
 export class BoardColumn{
     constructor(element){
         this.element=element;
@@ -27,11 +29,13 @@ export class BoardColumn{
         newTask.updateTimeLeftClass();
         this.updateCount();
     }
-    
-    updateCount(){
-        this.taskCount++;
+
+    updateCount(isIncrement=true){
+        isIncrement ? this.taskCount++ : this.taskCount--;
         this.countEl.textContent=this.taskCount;
     }
+
+
     bindEvents(){
         const addBtn=this.element.querySelector(".add button");
         const leftBtn=this.element.querySelector(".move-left");
@@ -64,17 +68,81 @@ export class BoardColumn{
             this.element.dispatchEvent(event);
         }        
         this._onDragStart=(e)=>{
+
+            const fetchedDragDataString=e.dataTransfer.getData("text/plain");
+            let fetchDragData;
+
+            if(fetchedDragDataString){
+                fetchDragData=JSON.parse(fetchedDragDataString);
+                if(fetchDragData.dragType===DragType.TASK) return;                
+            }
+
             e.dataTransfer.effectAllowed="move";
-            e.dataTransfer.setData("text/plain", this.title); 
+
+            const dragData={
+                data: this.title,
+                dragType: DragType.COLUMN
+            }
+            e.dataTransfer.setData("text/plain",JSON.stringify(dragData)); 
+
         }
         this._onDragOver=(e)=>{
             e.preventDefault();
+
+            document.querySelectorAll(".drag-over").forEach(el=>el.classList.remove("drag-over"));
             e.currentTarget.classList.add("drag-over");
+
+            const dragDataStr=e.dataTransfer.getData("text/plain");
+            if (!dragDataStr) return;
+
+            const dragData = JSON.parse(dragDataStr);
+
+            console.log(dragData.dragType);
+
+            if(dragData.dragType===DragType.TASK){
+                const afterElement=this.getDragAfterElement(e.clientY);
+                const draggedElement=document.querySelector(".dragging");
+
+                if(afterElement===null)
+                    this.element.appendChild(draggedElement);
+
+                else
+                    this.element.insertBefore(draggedElement,afterElement);
+            }
         }
         this._onDragLeave=(e)=>{
             e.currentTarget.classList.remove("drag-over");
         }
         this._onDrop=(e)=>{
+
+            const dragDataStr=e.dataTransfer.getData("text/plain");
+            if (!dragDataStr) return;
+
+            const dragData = JSON.parse(dragDataStr);
+
+            let event;
+
+            if(dragData.dragType===DragType.COLUMN){
+                event=new CustomEvent("columnDrop",{
+                    bubbles: true,
+                    detail: {
+                        targetColumn: this,
+                        draggedColumnTitle: dragData.data
+                    }
+                });
+            }
+
+            else if(dragData.dragType===DragType.TASK){
+                event=new CustomEvent("taskDrop",{
+                    bubbles: true,
+                    detail: {
+                        targetColumn: this,
+                        draggedTaskId: dragData.data,
+                        sourceColumnTitle: dragData.sourceColumnTitle,
+                        afterElement: this.getDragAfterElement(e.clientY)
+                    }
+                });                   
+            }
             const draggedColumnTitle=e.dataTransfer.getData("text/plain");
             const event=new CustomEvent("columnDrop",{
                 bubbles: true,
@@ -91,7 +159,6 @@ export class BoardColumn{
         this.element.addEventListener("dragstart",this._onDragStart);
         this.element.addEventListener("dragover",this._onDragOver);
         this.element.addEventListener("drop",this._onDrop);
-        this.element.addEventListener("dragleave",this._onDragLeave);
     }
     startTaskMonitor(interval){
         this._taskMonitorInterval=setInterval(()=>{
@@ -101,5 +168,22 @@ export class BoardColumn{
     stopInterval(){
         clearInterval(this._taskMonitorInterval);
     }
-    
-};
+
+    getDragAfterElement(y){
+
+        const draggableElements = [...this.element.querySelectorAll('.task:not(.dragging)')];
+        return draggableElements.reduce((closest, child) => {
+
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+
+            if (offset < 0 && offset > closest.offset)
+                return { offset: offset, element: child };
+        
+            else return closest;
+
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+
+    }
+
+}
