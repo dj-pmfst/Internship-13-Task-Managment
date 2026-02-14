@@ -88,7 +88,9 @@ input{
     width: 250px;
     background-color: #A9A9DB;
     border-radius: 20px;
+    border-color: transparent;
     padding: 5px;
+    transition: opacity 0.2s ease,border 0.2s ease;
 }
 
 .title{
@@ -445,4 +447,9 @@ input{
 
 .hidden{
     display: none;
+}
+
+.drag-over{
+    border: 3px dotted dodgerblue;
+    opacity: 0.5;    
 }
