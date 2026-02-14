@@ -139,7 +139,8 @@ export class Board{
             const draggedEl=draggedColumn.element;
             const targetEl=targetColumn.element;
 
-            targetEl.classList.remove("drag-over");         
+            targetEl.classList.remove("drag-over");
+            draggedEl.classList.remove("draggable");   
 
             if (!draggedColumn || draggedColumn === targetColumn) return;
 
@@ -161,6 +162,7 @@ export class Board{
 
     addOnTaskDropListener(){
         this._onTaskDrop=async (e)=>{
+        
             const {draggedTaskId,targetColumn,sourceColumnTitle,afterElement }=e.detail;
 
             const sourceColumn=this.columns.find(c=>c.title===sourceColumnTitle);

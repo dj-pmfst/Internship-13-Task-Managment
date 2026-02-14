@@ -138,6 +138,7 @@ export class Task{
         }
 
         this._onDragStart=(e)=>{
+            console.log("Start");
             e.dataTransfer.effectAllowed="move";
             e.currentTarget.classList.add("dragging");
 
@@ -152,8 +153,13 @@ export class Task{
             e.dataTransfer.setData("text/plain",JSON.stringify(dragData)); 
         }
 
+        this._onDragEnd=(e)=>{
+            this.element.classList.remove("dragging");
+        }
+
         this.taskActionsBtn.addEventListener("click", this._onButtonClick);
         this.element.addEventListener("dragstart",this._onDragStart);
+        this.element.addEventListener("dragend",this._onDragEnd);
     }
     
     destroy(){

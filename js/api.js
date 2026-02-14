@@ -1,3 +1,10 @@
+import { RequestMethod } from "./enums/RequestMethod.js";
+
+
+const headers={
+    "Content-Type":"application/json"
+}
+
 export class Storage{
 
     static apiBase="/api/tasks";
@@ -6,10 +13,8 @@ export class Storage{
     static async createTask(taskData){
 
         const response=await fetch(Storage.apiBase,{
-            method: "POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
+            method: RequestMethod.POST,
+            headers,
             body: JSON.stringify(taskData)
         });
 
@@ -31,7 +36,7 @@ export class Storage{
     }
 
     static async getTasks(){
-        const response=await fetch(Storage.apiBase);
+        const response=await fetch(Storage.apiBase,{method: RequestMethod.GET});
 
         let data;
         try{
@@ -55,10 +60,8 @@ export class Storage{
             throw new Error("Task ID is missing.Cannot update task");
         
         const response=await fetch(`${Storage.apiBase}/${taskId}`,{
-            method: "PATCH",
-            headers:{
-                "Content-Type":"application/json"
-            },
+            method: RequestMethod.PATCH,
+            headers,
             body: JSON.stringify(taskData)
         });
 
