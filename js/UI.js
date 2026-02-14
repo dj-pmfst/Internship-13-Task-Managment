@@ -1,4 +1,3 @@
-
 import { Board } from "./components/Board/Board.js";
 import { board } from "./components/AllComponents/mainElements.js";
 

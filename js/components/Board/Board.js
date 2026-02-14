@@ -46,36 +46,31 @@ export class Board{
     }   
 
     bindEvents(){
-
         this.addOnTaskRequestListeners();
         this.addOnMoveRequestListener();
         this.addOnColumnDropListener();
 
-        this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
-        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);
-        this.boardEl.addEventListener("requestColumnMove",this._onMoveColumnRequest);
-        this.boardEl.addEventListener("columnDrop",this._onColumnDrop);
+        this.boardEl.addEventListener("requestNewTask", this._onTaskRequest);
+        this.boardEl.addEventListener("requestTaskActions", this._onTaskActionsRequest);
+        this.boardEl.addEventListener("requestTaskDetails", this._onTaskDetailsRequest); 
+        this.boardEl.addEventListener("requestColumnMove", this._onMoveColumnRequest);
+        this.boardEl.addEventListener("columnDrop", this._onColumnDrop);
     }
 
     moveColumn(column,direction){
         const oldIndex=this.columns.indexOf(column);
-
         const newIndex=(oldIndex+direction+this.columns.length) % this.columns.length;
 
         this.columns.splice(oldIndex,1);
         this.columns.splice(newIndex,0,column);
 
         const referenceNode= this.columns[newIndex+1]?.element || null;
-
         this.boardEl.insertBefore(column.element,referenceNode);
-
     }
 
     addOnTaskRequestListeners(){
-
         this._onTaskRequest=async (e)=>{
             const columnTitle=e.detail.columnTitle;
-
             const targetColumn=this.columns.find(col=>col.title===columnTitle);
 
             try{
@@ -89,7 +84,6 @@ export class Board{
 
                 Toast.show("New task successfuly added",ToastTypes.SUCCESS);
             }
-
             catch(error){
                 if(error instanceof UserCancelledError)
                     Toast.show(error.message,ToastTypes.INFO);
@@ -103,14 +97,12 @@ export class Board{
 
             try{
                 const updatedData=await Popup.open(task);
-                
                 const updatedTask=await Storage.updateTask(task.id,updatedData);
 
                 task.updateTask(updatedTask);
 
                 Toast.show("Task successfuly updated",ToastTypes.SUCCESS);               
             }
-
             catch(error){
                 if(error instanceof UserCancelledError)
                     Toast.show(error.message,ToastTypes.INFO);
@@ -118,6 +110,43 @@ export class Board{
                     Toast.show(error.message,ToastTypes.DANGER);
             }            
         }
+
+        this._onTaskDetailsRequest = (e) => {
+            const task = e.detail.task;
+            this.showTaskDetails(task);
+        }
+    }
+
+    showTaskDetails(task) {
+        const popup = document.querySelector('.pop-details');
+
+        document.getElementById('detail-title').textContent = task.title || 'N/A';
+        document.getElementById('detail-description').textContent = task.description || 'N/A';
+        document.getElementById('detail-start').textContent = task.startDate || 'N/A';
+        document.getElementById('detail-end').textContent = task.endDate || 'N/A';
+        document.getElementById('detail-duration').textContent = task.duration ? `${task.duration}h` : 'N/A';
+        document.getElementById('detail-priority').textContent = task.priority || 'N/A';
+        document.getElementById('detail-type').textContent = task.type || 'N/A';
+        document.getElementById('detail-assignee').textContent = task.assignee || 'N/A';
+        document.getElementById('detail-status').textContent = task.status || 'N/A';
+
+        popup.classList.add('active');
+
+        const closeBtn = popup.querySelector('.close-details');
+        const closeBottomBtn = document.getElementById('close-details-btn');
+        
+        const closePopup = () => {
+            popup.classList.remove('active');
+        };
+        
+        closeBtn.onclick = closePopup;
+        closeBottomBtn.onclick = closePopup;
+
+        popup.onclick = (e) => {
+            if (e.target === popup) {
+                closePopup();
+            }
+        };
     }
     
     addOnMoveRequestListener(){
@@ -128,10 +157,8 @@ export class Board{
     }
 
     addOnColumnDropListener(){
-
         this._onColumnDrop=(e)=>{
             const {draggedColumnTitle,targetColumn}=e.detail;
-
             const draggedColumn=this.columns.find(c=>c.title===draggedColumnTitle);
 
             const draggedEl=draggedColumn.element;
