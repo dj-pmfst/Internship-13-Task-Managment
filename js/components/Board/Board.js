@@ -182,8 +182,13 @@ export class Board{
 
                 targetColumn.taskList.splice(insertIndex,0,draggedTask);
 
-                this.updateTaskPositions(sourceColumn.taskList);
-                this.updateTaskPositions(targetColumn.taskList);
+                await this.updateTaskPositions(sourceColumn.taskList);
+                await this.updateTaskPositions(targetColumn.taskList);
+
+                if(sourceColumn.element!=targetColumn.element){
+                    sourceColumn.updateCount(false);
+                    targetColumn.updateCount(true);
+                }
 
                 Toast.show("Task successfuly updated",ToastTypes.SUCCESS);                 
             }
@@ -196,16 +201,13 @@ export class Board{
        this.boardEl.addEventListener("taskDrop",this._onTaskDrop);        
     }
 
-    updateTaskPositions(taskList){
-        taskList.forEach((task,index)=>{
-            task.position=index+1;
+    async updateTaskPositions(taskList){
 
-            try{
-                Storage.updateTask(task.id,{position: task.position});
-            }
-            catch(error){
-                Toast.show(error.message,ToastTypes.DANGER);
-            }               
-        });
-    }
+        for(const [index,task] of taskList.entries()){
+            task.position=index+1;
+            await Storage.updateTask(task.id,{position: task.position});
+        }
+
+          
+    };
 }

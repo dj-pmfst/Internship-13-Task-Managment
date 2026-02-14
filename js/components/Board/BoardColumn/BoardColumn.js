@@ -26,10 +26,11 @@ export class BoardColumn{
         this.updateCount();
     }
 
-    updateCount(){
-        this.taskCount++;
+    updateCount(isIncrement=true){
+        isIncrement ? this.taskCount++ : this.taskCount--;
         this.countEl.textContent=this.taskCount;
     }
+
 
     bindEvents(){
         const addBtn=this.element.querySelector(".add button");
