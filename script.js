@@ -1,13 +1,48 @@
+const lightModeBtn = document.querySelector('.light-mode-btn');
+const darkModeBtn = document.querySelector('.dark-mode-btn');
+const darkModeStylesheet = document.getElementById('dark-mode-stylesheet');
+
+if (localStorage.getItem('darkMode') === 'enabled') {
+    darkModeStylesheet.disabled = false;
+    lightModeBtn.style.display = 'none';
+    darkModeBtn.style.display = 'inline-block';
+}
+
+function isDarkMode() {
+    return !darkModeStylesheet.disabled;
+}
+
+function toggleDarkMode() {
+    if (darkModeStylesheet.disabled) {
+        darkModeStylesheet.disabled = false;
+        localStorage.setItem('darkMode', 'enabled');
+        lightModeBtn.style.display = 'none';
+        darkModeBtn.style.display = 'inline-block';
+    } else {
+        darkModeStylesheet.disabled = true;
+        localStorage.setItem('darkMode', 'disabled');
+        lightModeBtn.style.display = 'inline-block';
+        darkModeBtn.style.display = 'none';
+    }
+
+    if (archivedContainer.style.display === 'flex') {
+        showArchived();
+    } else {
+        showTodoLists();
+    }
+}
+
+lightModeBtn.addEventListener('click', toggleDarkMode);
+darkModeBtn.addEventListener('click', toggleDarkMode);
 
 document.querySelector('#cancel').addEventListener('click', () => {
     document.querySelector('.pop-add').classList.remove('active');
 });
 
-
 document.querySelector('#save').addEventListener('click', () => {
-
     document.querySelector('.pop-add').classList.remove('active');
 });
+
 
 const confirmPopup = document.querySelector('.pop-confirm');
 const confirmText = document.getElementById('confirm-text');
@@ -62,7 +97,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-
 const todoButton = document.querySelector('.subtitle button:first-child');
 const archiveButton = document.querySelector('.subtitle button.archive');
 const listsContainer = document.querySelector('.lists-container');
@@ -77,7 +111,16 @@ function showTodoLists() {
     todoLists.forEach(list => {
         list.style.display = 'flex';
     });
-    listsContainer.style.backgroundColor = '#C3C3E6';
+
+    if (isDarkMode()) {
+        listsContainer.style.backgroundColor = '#27327C';
+        todoButton.style.backgroundColor = '#27327C';
+        archiveButton.style.backgroundColor = '#5A7FC4';
+    } else {
+        listsContainer.style.backgroundColor = '#C3C3E6'; 
+        todoButton.style.backgroundColor = '#C3C3E6';
+        archiveButton.style.backgroundColor = '#9A9ACF';
+    }
 }
 
 function showArchived() {
@@ -90,23 +133,18 @@ function showArchived() {
         archivedContainer.style.display = 'flex';
     }
 
-    listsContainer.style.backgroundColor = '#9A9ACF';
-    archiveButton.style.backgroundColor = '#9A9ACF';
-    todoButton.style.backgroundColor = '#C3C3E6';
+    if (isDarkMode()) {
+        listsContainer.style.backgroundColor = '#5A7FC4'; 
+        archiveButton.style.backgroundColor = '#5A7FC4';
+        todoButton.style.backgroundColor = '#27327C';
+    } else {
+        listsContainer.style.backgroundColor = '#9A9ACF'; 
+        archiveButton.style.backgroundColor = '#9A9ACF';
+        todoButton.style.backgroundColor = '#C3C3E6';
+    }
 }
 
 todoButton.addEventListener('click', showTodoLists);
-
 archiveButton.addEventListener('click', showArchived);
 
 showTodoLists();
-
-todoButton.addEventListener('click', function() {
-    listsContainer.style.backgroundColor = '#C3C3E6';
-});
-
-archiveButton.addEventListener('click', function() {
-    listsContainer.style.backgroundColor = '#9A9ACF'; 
-    archiveButton.style.backgroundColor = '#9A9ACF'; 
-    todoButton.style.backgroundColor = '#C3C3E6'; 
-});

@@ -6,9 +6,12 @@ body{
     color: #211A1D;
 }
 
-input{
+input {
     background-color: transparent;
+    width: 100%;
+    box-sizing: border-box; 
     border: none;
+    font-size: 15px;
 }
 
 .header{
@@ -35,6 +38,18 @@ input{
 
 .mode-switch img{
     width: 25px;
+}
+
+.dark-mode .light-mode-btn {
+    display: none;
+}
+
+.dark-mode .dark-mode-btn {
+    display: inline-block !important;
+}
+
+.dark-mode .dark-mode-btn img {
+    filter: brightness(1.5);
 }
 
 .title__actions img{
@@ -526,15 +541,14 @@ input{
 .alertDiv {
     position: fixed;
     top: 20px;
-    left: 50%;
-    transform: translate(-50%, -20px);
+    right: 20px;
+    padding: 15px 25px;
     border-radius: 10px;
     font-family: "Fredoka", sans-serif;
     font-size: 16px;
     font-weight: 500;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-
     opacity: 0;
     transform: translateY(-20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -543,7 +557,7 @@ input{
 
 .alertDiv.show {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translateY(0);
     pointer-events: auto;
 }
 
