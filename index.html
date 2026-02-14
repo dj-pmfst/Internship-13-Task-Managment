@@ -20,8 +20,12 @@
     <div class="lists-container">        
         <div class="list">
             <div class="title">
-                Blocked
+                <span class="title__text">Blocked</span>
                 <span class="counter"></span>
+                <div class="title__actions">
+                    <button class="move-left">←</button>
+                    <button class="move-right">→</button>
+                </div>
             </div>
             <div class="task">
                 Example <span><button><img src="media/edit-black-pencil-28048.svg"></button></span>
@@ -32,8 +36,12 @@
         </div>
         <div class="list">
             <div class="title">
-                To do
+                <span class="title__text">To do</span>
                 <span class="counter"></span>
+                <div class="title__actions">
+                    <button class="move-left">←</button>
+                    <button class="move-right">→</button>
+                </div>                
             </div>
             <div class="task" id="deadline">
                 Example <span>
@@ -50,8 +58,12 @@
         </div>
         <div class="list">
             <div class="title">
-                In progress
+                <span class="title__text">In progress</span>
                 <span class="counter"></span>
+                <div class="title__actions">
+                    <button class="move-left">←</button>
+                    <button class="move-right">→</button>
+                </div>                
             </div>
             <div class="add">
                 <button><img src="media/plus-icon.svg"></button>
@@ -59,8 +71,12 @@
         </div>
         <div class="list">
             <div class="title">
-                In review
+                <span class="title__text">In review</span>
                 <span class="counter"></span>
+                <div class="title__actions">
+                    <button class="move-left">←</button>
+                    <button class="move-right">→</button>
+                </div>                
             </div>
             <div class="add">
                 <button><img src="media/plus-icon.svg"></button>
@@ -68,8 +84,12 @@
         </div>
         <div class="list">
             <div class="title">
-              Done
+              <span class="title__text">Done</span>
               <span class="counter"></span>
+                <div class="title__actions">
+                    <button class="move-left">←</button>
+                    <button class="move-right">→</button>
+                </div>              
             </div>
             <div class="add">
                 <button><img src="media/plus-icon.svg"></button>
@@ -94,35 +114,35 @@
     </div>
     <div class="pop-add">
         <div class="add-title">
-            Add title: <span id="title"><input></span>
+            Add title: <span id="title"><input id="title-input"></span>
         </div>
         <div class="add-description">
-            Add description: <span id="description"><input></span>
+            Add description: <span id="description"><input id="description-input"></span>
         </div>
         <div class="date">
             Add start and end date:
-            <div id="start"><input type="datetime-local"></div>
-            <div id="end"><input type="datetime-local"></div>
+            <div id="start"><input id="start-input" type="datetime-local"></div>
+            <div id="end"><input id="end-input" type="datetime-local"></div>
         </div>
         <div class="time">
-            Add duration: <span id="duration"><input></span>
+            Add duration: <span id="duration"><input id="duration-input"></span>
         </div>
         <div class="priority">
             <select id="priority-select">
                 <option value="low">Low</option>
-                <option value="medium" selected>Medium</option>
+                <option value="mid" selected>Medium</option>
                 <option value="high">High</option>
             </select>
         </div>
         <div class="type">
             <select id="type-select">
-                <option value="personal">Feature</option>
-                <option value="work" selected>Bugfix</option>
-                <option value="urgent">Improvement</option>
+                <option value="feature">Feature</option>
+                <option value="bugfix" selected>Bugfix</option>
+                <option value="improvement">Improvement</option>
             </select>
         </div>
         <div class="person">
-            Add person <span id="person"><input></span>
+            Add person <span id="person"><input id="person-input"></span>
         </div>
         <div class="buttons">
             <button id="save">Save</button>
@@ -139,5 +159,9 @@
             <button id="confirm-no">No</button>
         </div>
     </div>
+
+    </div>
+    <div class="alertDiv"></div>    
     <script src="script.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>

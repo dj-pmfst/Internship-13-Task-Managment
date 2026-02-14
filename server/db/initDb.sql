@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS tasks (
-    id UUID PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title TEXT NOT NULL DEFAULT 'Empty Task',
-    description TEXT,
-    assignee TEXT,
+    description TEXT DEFAULT NULL,
+    assignee TEXT DEFAULT NULL,
     
     status TEXT NOT NULL
         DEFAULT 'blocked'
@@ -16,13 +16,17 @@ CREATE TABLE IF NOT EXISTS tasks (
         DEFAULT 'feature'
         CHECK (type IN ('feature', 'bugfix', 'improvement')),
     
-    est_start_date TIMESTAMPTZ NOT NULL,
-    est_end_date TIMESTAMPTZ NOT NULL,
-    est_duration INT NOT NULL,
+    est_start_date TIMESTAMPTZ DEFAULT NULL,
+    est_end_date TIMESTAMPTZ DEFAULT NULL,
+    est_duration INT DEFAULT NULL,
     
     archived BOOLEAN NOT NULL DEFAULT FALSE,
-    archived_at TIMESTAMPTZ,
+    archived_at TIMESTAMPTZ DEFAULT NULL,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-)
+);
+
+CREATE INDEX IF NOT EXISTS idx_tasks_archived_true
+ON tasks(created_at)
+WHERE archived = true;

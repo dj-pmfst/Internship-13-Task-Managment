@@ -1,21 +1,26 @@
 import { UserCancelledError } from "../../error/error.js";
 import { popAdd } from "../AllComponents/mainElements.js";
 import { InputHelper } from "../../helpers/InputHelper.js";
+import { validateFrontendTaskData } from "../../validation/ValidateData.js";
+import { Toast } from "../Toast/Toast.js";
+import { ToastTypes } from "../../enums/ToastTypes.js";
+
 
 export class Popup{
     static open(existingTask=null){
         return new Promise((resolve,reject)=>{
             popAdd.classList.add("active");
 
-            const saveBtn=popAdd.querySelector(".save");
-            const cancelBtn=popAdd.querySelector(".cancel");
-            const editBtn=popAdd.querySelector(".edit");
+            const saveBtn=popAdd.querySelector("#save");
+            const cancelBtn=popAdd.querySelector("#cancel");
+            const editBtn=popAdd.querySelector("#edit");
 
             let onEdit;
 
             if(existingTask){
                 editBtn.classList.remove("hidden");
                 saveBtn.disabled=true;
+                editBtn.disabled=false;
 
                 InputHelper.fillData(existingTask);
                 InputHelper.setInputsDisabled(true);
@@ -43,23 +48,41 @@ export class Popup{
 
             const close=()=>{
                 popAdd.classList.remove("active");   
+
+                if(existingTask)
+                    InputHelper.clearInputs();
+                
                 cleanup();
             }
 
             const onSave=()=>{
-                const taskData=InputHelper.getNewTaskData();
+                const taskData= !existingTask ? InputHelper.getNewTaskData() : InputHelper.getUpdatedTaskData(existingTask);
+
+                if(!taskData) return;
+                
+                const validationResult=validateFrontendTaskData(taskData);
+
+                if(validationResult.error!==null) {
+                    Toast.show(validationResult.error,ToastTypes.INFO);
+                    return;
+                }
+
                 close();
+                InputHelper.clearInputs();
                 resolve(taskData);
             }            
 
             const onCancel=()=>{
                 close();
-                reject(new UserCancelledError());
+
+                const userCancelledError= !existingTask ? new UserCancelledError(): new UserCancelledError("Task edit canceled");
+                reject(userCancelledError);
             }
 
             saveBtn.addEventListener("click",onSave);
             cancelBtn.addEventListener("click",onCancel);
         });
     }
+
 
 }

@@ -1,7 +1,35 @@
+import { DateTimeHelper } from "../../../helpers/DateTimeHelper.js";
+
 export class Task{
     constructor(data){
-        Object.assign(this,data);
+        this.propertyMapping(data);
         this.init();
+    }
+
+    propertyMapping(data){
+
+        this.id=data.id;
+
+        this.title=data.title;
+        this.description=data.description;
+        this.assignee=data.assignee;
+
+        this.duration=data.est_duration;
+        this.startDate=DateTimeHelper.toDateTimeLocal(data.est_start_date);
+        this.endDate=DateTimeHelper.toDateTimeLocal(data.est_end_date);
+
+        this.priority=data.priority;
+        this.status=data.status;
+        this.type=data.type;
+
+        this.archived = data.archived;
+        this.archivedAt = data.archived_at;
+    }
+
+    static thresholds={
+        high: 0.3,
+        medium: 0.2,
+        low: 0.1
     }
 
     init(){
@@ -22,11 +50,21 @@ export class Task{
         
         this.bindEvents(); 
         this.render();
+
+        const taskActionsSpan=document.createElement("span");
+        this.taskActionsBtn=document.createElement("button");
+        const btnImage=document.createElement("img");
+        btnImage.src="media/edit-black-pencil-28048.svg";
+
+        this.taskActionsBtn.classList.add("task__actions-button");
+
+        this.taskActionsBtn.appendChild(btnImage);
+        taskActionsSpan.appendChild(this.taskActionsBtn);
+        this.element.appendChild(taskActionsSpan);
     }
 
     render(){
         this.element.innerHTML = Task.markup(this);
-        this.element.appendChild(this.actionsSpan); 
     }
 
     static markup(task){
@@ -44,10 +82,10 @@ export class Task{
         `;
     }
 
-    static tresholds={
-        high: 0.3,
-        medium: 0.2,
-        low: 0.1
+    updateTask(updatedTaskData){
+        this.propertyMapping(updatedTaskData);
+        Task.render(this);
+        this.updateTimeLeftClass();
     }
 
     getTimeLeftClass(){
@@ -61,9 +99,9 @@ export class Task{
         const timeLeft=end-now;
         const percentageLeft=timeLeft/totalDuration;
 
-        const treshold=Storage.tresholds[this.task.priority];
+        const threshold=Task.thresholds[this.priority];
 
-        return percentageLeft<=treshold ? "task--warning" : "";
+        return percentageLeft<=threshold ? "task--warning" : "";
     }
 
     updateTimeLeftClass(){
@@ -110,4 +148,3 @@ export class Task{
     destroy(){
         this.taskActionsBtn.removeEventListener("click", this._onButtonClick);
     }
-}
