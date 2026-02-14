@@ -18,6 +18,7 @@ const getTasks = async (_req, res) => {
                 archived,
                 archived_at
             FROM tasks
+            WHERE archived=false
             ORDER BY created_at ASC`
         );
 

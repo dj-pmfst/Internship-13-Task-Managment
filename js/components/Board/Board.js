@@ -6,7 +6,6 @@ import { Storage } from "../../api.js";
 import { UserCancelledError } from "../../error/error.js";
 import { ToastTypes } from "../../enums/ToastTypes.js";
 import { titleToStatusMap } from "../../helpers/Map.js";
-import { InputHelper } from "../../helpers/InputHelper.js";
 import { DateTimeHelper } from "../../helpers/DateTimeHelper.js";
 
 export class Board{
@@ -48,6 +47,32 @@ export class Board{
 
     bindEvents(){
 
+        this.addOnTaskRequestListeners();
+        this.addOnMoveRequestListener();
+        this.addOnColumnDropListener();
+
+        this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
+        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);
+        this.boardEl.addEventListener("requestColumnMove",this._onMoveColumnRequest);
+        this.boardEl.addEventListener("columnDrop",this._onColumnDrop);
+    }
+
+    moveColumn(column,direction){
+        const oldIndex=this.columns.indexOf(column);
+
+        const newIndex=(oldIndex+direction+this.columns.length) % this.columns.length;
+
+        this.columns.splice(oldIndex,1);
+        this.columns.splice(newIndex,0,column);
+
+        const referenceNode= this.columns[newIndex+1]?.element || null;
+
+        this.boardEl.insertBefore(column.element,referenceNode);
+
+    }
+
+    addOnTaskRequestListeners(){
+
         this._onTaskRequest=async (e)=>{
             const columnTitle=e.detail.columnTitle;
 
@@ -77,8 +102,6 @@ export class Board{
         this._onTaskActionsRequest= async (e)=>{
             const task=e.detail.task;
 
-            console.log("task to update: ",task);
-
             try{
                 const updatedData=await Popup.open(task);
                 
@@ -94,8 +117,40 @@ export class Board{
                     Toast.show(error.message,ToastTypes.DANGER);
             }            
         }
+    }
+    
+    addOnMoveRequestListener(){
+        this._onMoveColumnRequest=(e)=>{
+            const {column,direction}=e.detail;
+            this.moveColumn(column,direction);
+        }       
+    }
 
-        this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
-        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);
+    addOnColumnDropListener(){
+
+        this._onColumnDrop=(e)=>{
+            const {draggedColumnTitle,targetColumn}=e.detail;
+
+            const draggedColumn=this.columns.find(c=>c.title===draggedColumnTitle);
+
+            const draggedEl=draggedColumn.element;
+            const targetEl=targetColumn.element;
+
+            targetEl.classList.remove("drag-over");            
+
+            if (!draggedColumn || draggedColumn === targetColumn) return;
+
+            const oldIndex=this.columns.indexOf(draggedColumn);
+            const newIndex=this.columns.indexOf(targetColumn);
+
+            [this.columns[oldIndex], this.columns[newIndex]] =
+                [this.columns[newIndex], this.columns[oldIndex]];            
+
+            const draggedNext=draggedEl.nextSibling;
+            const targetNext=targetEl.nextSibling;
+
+            this.boardEl.insertBefore(draggedEl,targetNext);
+            this.boardEl.insertBefore(targetEl,draggedNext);
+        }
     }
 }
