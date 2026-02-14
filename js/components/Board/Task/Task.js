@@ -148,3 +148,5 @@ export class Task{
     destroy(){
         this.taskActionsBtn.removeEventListener("click", this._onButtonClick);
     }
+
+}    
