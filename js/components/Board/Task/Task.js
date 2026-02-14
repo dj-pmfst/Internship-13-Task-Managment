@@ -1,7 +1,29 @@
+import { DateTimeHelper } from "../../../helpers/DateTimeHelper.js";
+
 export class Task{
     constructor(data){
-        Object.assign(this,data);
+        this.propertyMapping(data);
         this.init();
+    }
+
+    propertyMapping(data){
+
+        this.id=data.id;
+
+        this.title=data.title;
+        this.description=data.description;
+        this.assignee=data.assignee;
+
+        this.duration=data.est_duration;
+        this.startDate=DateTimeHelper.toDateTimeLocal(data.est_start_date);
+        this.endDate=DateTimeHelper.toDateTimeLocal(data.est_end_date);
+
+        this.priority=data.priority;
+        this.status=data.status;
+        this.type=data.type;
+
+        this.archived = data.archived;
+        this.archivedAt = data.archived_at;
     }
 
     static thresholds={
@@ -54,7 +76,7 @@ export class Task{
     }
 
     updateTask(updatedTaskData){
-        Object.assign(this,updatedTaskData);
+        this.propertyMapping(updatedTaskData);
         this.render();
         this.updateTimeLeftClass();
     }

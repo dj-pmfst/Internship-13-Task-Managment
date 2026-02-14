@@ -1,3 +1,5 @@
+import { fieldToDbColumn } from "../../js/helpers/Map.js";
+
 const allowedStatus = ["blocked", "todo", "in_progress", "in_review", "done"];
 const allowedPriority = ["low", "mid", "high"];
 const allowedType = ["feature", "bugfix", "improvement"];
@@ -32,15 +34,15 @@ const fieldValidators = {
         validate: (val) => allowedType.includes(val),
         error: "Invalid type value"
     },
-    est_start_date: {
+    startDate: {
         validate: (val) => isValidDate(val),
         error: "est_start_date must be a valid date"
     },
-    est_end_date: {
+    endDate: {
         validate: (val) => isValidDate(val),
         error: "est_end_date must be a valid date"
     },
-    est_duration: {
+    duration: {
         validate: (val) => Number.isInteger(val) && val > 0,
         error: "est_duration must be a positive integer"
     }
@@ -61,7 +63,7 @@ const validateAndBuildData = (fields) => {
         }
 
         attributes.push(field);
-        updates.push(`${field} = $${updates.length + 1}`);
+        updates.push(`${fieldToDbColumn[field]} = $${updates.length + 1}`);
         values.push(validator.transform ? validator.transform(value) : value);
     }
 

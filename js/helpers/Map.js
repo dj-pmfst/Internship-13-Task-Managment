@@ -16,3 +16,17 @@ export const inputToKeyMap=Object.freeze({
         "type-select": "type",
         "person-input": "assignee",
 });
+
+export const fieldToDbColumn = {
+    title: "title",
+    description: "description",
+    assignee: "assignee",
+    status: "status",
+    priority: "priority",
+    type: "type",
+    startDate: "est_start_date",
+    endDate: "est_end_date",
+    duration: "est_duration",
+    archived: "archived"
+};
+
