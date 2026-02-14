@@ -16,7 +16,7 @@ export class BoardColumn{
 
     addTask(newTask){        
         this.element.appendChild(newTask.element);
-        this.taskList.append(newTask);
+        this.taskList.push(newTask);
 
         newTask.updateTimeLeftClass();
 
@@ -29,10 +29,11 @@ export class BoardColumn{
     }
 
     bindEvents(){
-        const addBtn=this.element.querySelector(".add");
+        const addBtn=this.element.querySelector(".add button");
 
         this._onButtonClick=()=>{
             const event=new CustomEvent("requestNewTask",{
+                bubbles: true,
                 detail: {columnTitle: this.title}
             });
 

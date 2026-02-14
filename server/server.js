@@ -11,7 +11,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
-const rootDir = path.resolve(__dirname, "");
+const rootDir = path.resolve(__dirname,"..");
+
+console.log("Root dir: ",rootDir);
 
 app.use(cors({
   methods: ["GET", "POST", "PATCH", "DELETE"],

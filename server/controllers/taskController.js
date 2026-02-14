@@ -11,14 +11,15 @@ const getTasks = async (_req, res) => {
                 status,
                 priority, 
                 type,
-                est_start_date,
-                est_end_date,
-                est_duration,
+                est_start_date AS "startDate",
+                est_end_date AS "endDate",
+                est_duration AS duration,
                 archived,
                 archived_at
             FROM tasks
             ORDER BY created_at ASC`
         );
+
         res.json(result.rows);
     } catch (error) {
         res.status(500).json({ error: "Failed to load tasks" });
