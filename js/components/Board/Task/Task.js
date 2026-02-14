@@ -33,13 +33,22 @@ export class Task{
     }
 
     init(){
-        this.element=document.createElement("div");        
+        this.element = document.createElement("div");        
         this.element.classList.add("task");
 
-        this.contentEl=document.createElement("div");
-        this.contentEl.classList.add("task__content");
-        this.element.append(this.contentEl);
+        this.actionsSpan = document.createElement("span");
+        this.actionsSpan.classList.add("task__actions");
+        this.actionsSpan.innerHTML = `
+            <button class="warning-btn" style="display: none;">
+                <img src="media/exclamation-mark-9765.svg">
+                <div class="hover-info">Deadline approaching!</div>
+            </button>
+            <button class="edit-btn"><img src="media/edit-black-pencil-28048.svg"></button>
+        `;
 
+        this.taskActionsBtn = this.actionsSpan.querySelector('.edit-btn');
+        
+        this.bindEvents(); 
         this.render();
 
         const taskActionsSpan=document.createElement("span");
@@ -52,32 +61,30 @@ export class Task{
         this.taskActionsBtn.appendChild(btnImage);
         taskActionsSpan.appendChild(this.taskActionsBtn);
         this.element.appendChild(taskActionsSpan);
-
-        this.bindEvents();
     }
 
     render(){
-        this.contentEl.innerHTML=this.markup();
+        this.element.innerHTML = Task.markup(this);
     }
 
-    markup(){
+    static markup(task){
         return `
-            <h4 class="task__title">${this.title}</h4>
-            <p class="task__description">${this.description}</p>
+            <h4 class="task__title">${task.title}</h4>
+            <p class="task__description">${task.description}</p>
             <div class="task__time-info">
-                <span> Duration: ${this.duration}h </span>
-                <span> Start: ${this.startDate} </span>
-                <span> End: ${this.endDate} </span>            
+                <span> Duration: ${task.duration}h </span>
+                <span> Start: ${task.startDate} </span>
+                <span> End: ${task.endDate} </span>            
             </div>
-            <span class="task__priority"> Priority: ${this.priority}</span>
-            <span class="task__type"> Task type: ${this.type}</span>
-            <span class="task__asignee"> Assignee: ${this.assignee}</span>        
+            <span class="task__priority"> Priority: ${task.priority}</span>
+            <span class="task__type"> Task type: ${task.type}</span>
+            <span class="task__asignee"> Asignee: ${task.asignee}</span>
         `;
     }
 
     updateTask(updatedTaskData){
         this.propertyMapping(updatedTaskData);
-        this.render();
+        Task.render(this);
         this.updateTimeLeftClass();
     }
 
@@ -106,22 +113,38 @@ export class Task{
         classes.forEach(cls=>this.element.classList.remove(cls));
 
         if(newClass) this.element.classList.add(newClass);
+
+        this.showWarningPopup(newClass);
+    }
+
+    showWarningPopup(newClass){
+        const warningBtn = this.actionsSpan.querySelector('.warning-btn');
+        const hoverInfo = warningBtn?.querySelector('.hover-info');
+        
+        if(!warningBtn) return;
+        
+        if(newClass === "task--expired"){
+            warningBtn.style.display = 'inline-block';
+            if(hoverInfo) hoverInfo.textContent = "Deadline expired!";
+        } else if(newClass === "task--warning"){
+            warningBtn.style.display = 'inline-block';
+            if(hoverInfo) hoverInfo.textContent = "Deadline approaching!";
+        } else {
+            warningBtn.style.display = 'none';
+        }
     }
 
     bindEvents(){
-
-        this._onButtonClick=()=>{
-            const event=new CustomEvent("requestTaskActions",{
+        this._onButtonClick = () => {
+            const event = new CustomEvent("requestTaskActions", {
                 bubbles: true,
                 detail: {task: this}
             });
-
             this.element.dispatchEvent(event);
         }
-        this.taskActionsBtn.addEventListener("click",this._onButtonClick);
+        this.taskActionsBtn.addEventListener("click", this._onButtonClick);
     }
-
+    
     destroy(){
-        this.taskActionsBtn.removeEventListener("click",this._onButtonClick);
+        this.taskActionsBtn.removeEventListener("click", this._onButtonClick);
     }
-}

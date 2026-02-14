@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>task management</title>
+    <title>Task management</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="media/to-do-list-13178.svg">
 </head>
 <body>
     <div class="header">
@@ -13,7 +14,7 @@
         <!-- <button class="mode-switch"><img src="media/light-on-sun-black-outline-21617.svg"></button> sakrit/aktivirat priko js -->
     </div>
     <div class="subtitle">
-        <p>To do list</p> 
+        <button>To do list</button> 
         <button class="archive">Archived</button>
     </div>
     <div class="lists-container">        
@@ -30,7 +31,7 @@
                 Example <span><button><img src="media/edit-black-pencil-28048.svg"></button></span>
             </div>
             <div class="add">
-                <button>+</button>
+                <button><img src="media/plus-icon.svg"></button>
             </div>
         </div>
         <div class="list">
@@ -42,8 +43,17 @@
                     <button class="move-right">→</button>
                 </div>                
             </div>
+            <div class="task" id="deadline">
+                Example <span>
+                    <button>
+                        <img src="media/exclamation-mark-9765.svg">
+                        <div class="hover-info">Deadline approaching!</div>
+                    </button>
+                    <button><img src="media/edit-black-pencil-28048.svg"></button>
+                </span>
+            </div>
             <div class="add">
-                <button>+</button>
+                <button><img src="media/plus-icon.svg"></button>
             </div>
         </div>
         <div class="list">
@@ -56,7 +66,7 @@
                 </div>                
             </div>
             <div class="add">
-                <button>+</button>
+                <button><img src="media/plus-icon.svg"></button>
             </div>
         </div>
         <div class="list">
@@ -69,7 +79,7 @@
                 </div>                
             </div>
             <div class="add">
-                <button>+</button>
+                <button><img src="media/plus-icon.svg"></button>
             </div>
         </div>
         <div class="list">
@@ -82,10 +92,10 @@
                 </div>              
             </div>
             <div class="add">
-                <button>+</button>
+                <button><img src="media/plus-icon.svg"></button>
             </div>
         </div>
-        <!-- <div class="archived">
+        <div class="archived">
             <div class="tasks">
                 <div class="task-archived">
                     Example <span><button class="unarchive-btn"><img src="media/upload-folder-11494.svg"></button><button class="delete-btn"><img src="media/trash-can-10416.svg"></button></span>
@@ -101,7 +111,7 @@
                 <button>Apply filter</button>
             </div>
         </div>
-    </div> -->
+    </div>
     <div class="pop-add">
         <div class="add-title">
             Add title: <span id="title"><input id="title-input"></span>

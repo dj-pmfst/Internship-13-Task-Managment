@@ -48,7 +48,7 @@ input{
     margin-right: 20px;
 }
 
-.subtitle p, .subtitle button{
+.subtitle button{
     background-color: #C3C3E6;
     font-size: 25px;
     font-weight: 500;
@@ -64,6 +64,10 @@ input{
     font-family: "Fredoka", sans-serif;
     cursor: pointer;
     margin-bottom: 0;
+}
+
+.subtitle button:last-child{
+    background-color: #9A9ACF;
 }
 
 .lists-container{
@@ -128,13 +132,63 @@ input{
     opacity: 80%;
 }
 
+#deadline{
+    background-color: #ed9b9b;
+}
+
+.task span {
+    position: relative; 
+    display: flex;
+    gap: 5px;
+}
+
+.task button {
+    position: relative; 
+}
+
+.task--warning {
+    background-color: #edd77f !important;
+}
+
+.task--expired {
+    background-color: #ed9b9b !important; 
+}
+
+.hover-info {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%); 
+    background-color: rgb(236, 186, 186);
+    border: 2px solid #A897D8;
+    border-radius: 8px;
+    padding: 6px 10px;
+    white-space: nowrap;
+    z-index: 100;
+    margin-bottom: 5px;
+    font-size: 14px;
+    pointer-events: none; 
+}
+
+.task button:hover .hover-info {
+    display: block;
+}
+
 .add button{
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 5px;
-    margin-left: 160px;
+    margin: 10px;
     width: 20px;
+}
+
+.add img{
+    width: 20px;    
+    opacity: 80%;
+    border: 3px solid #DAD2EE;
+    border-radius: 5px;
 }
 
 .pop-add {
@@ -262,7 +316,7 @@ input{
 }
 
 .archived {
-    background-color: #C3C3E6;
+    background-color: #9A9ACF;
     margin: 20px;
     border-radius: 20px;
     padding-left: 30px;
