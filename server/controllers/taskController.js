@@ -94,6 +94,51 @@ const createTask = async (req, res) => {
     }
 };
 
+const updateTask = async (req, res) => {
+    const { title, description, assignee, status, priority, type, est_start_date, est_end_date, est_duration, archived } = req.body;
+
+    const { updates, values, error } = validateAndBuildData({
+            title,
+            description,
+            assignee,
+            status,
+            priority, 
+            type,
+            est_start_date,
+            est_end_date,
+            est_duration,
+            archived
+    });
+
+    if (updates.length === 0) {
+        return res.status(400).json({ error: "No fields to update" });
+    }
+
+    if (error) {
+        return res.status(400).json({ error });
+    }
+
+    values.push(req.params.id);
+    const idIndex = updates.length + 1;
+
+    try {
+        const result = await db.query(
+            `UPDATE tasks
+                SET ${updates.join(", ",)}
+            WHERE id = $${idIndex}
+            RETURNING *`,
+            values
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: "Task not found" });
+        }
+        res.json(result.rows);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to update task" });
+    }
+};
+
 const archiveTask = async (req, res) => {
     try {
         const { archived } = req.body;
@@ -155,4 +200,4 @@ const clearTasks = async (_req, res) => {
     }
 }
 
-export { getTasks, getArchivedTasks, createTask, archiveTask, deleteTask, clearTasks };
+export { getTasks, getArchivedTasks, createTask, updateTask, archiveTask, deleteTask, clearTasks };
