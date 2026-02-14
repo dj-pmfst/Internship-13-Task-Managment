@@ -54,6 +54,14 @@ body {
     background-color: #303073;
 }
 
+.task__title button{
+    color: #eae8f2;
+}
+
+.task--expired{
+    background-color: rgb(192, 74, 74);
+}
+
 #deadline{
     background-color: rgb(192, 74, 74);
 }
@@ -151,14 +159,20 @@ body {
 .pop-confirm {
     background-color: #27327C;
     border-color: #5A7FC4;
+    color: #eae8f2;
 }
 
 .pop-confirm button {
     background-color: #5A7FC4;
+    color: #eae8f2;
 }
 
 .pop-confirm button:hover {
     background-color: #7C9FB6;
+}
+
+.confirm-message{
+    color: #eae8f2;
 }
 
 #confirm-yes {
@@ -245,4 +259,43 @@ select option {
 .alert-warning {
     background-color: #ff9800 !important;
     color: white !important;
+}
+
+.pop-details {
+    background-color: #27327C;
+    border-color: #5A7FC4;
+}
+
+.details-header {
+    border-bottom-color: #5A7FC4;
+}
+
+.details-header h2 {
+    color: #eae8f2;
+}
+
+.close-details {
+    color: #7C9FB6;
+}
+
+.close-details:hover {
+    color: #eae8f2;
+}
+
+.detail-label {
+    color: #eae8f2;
+}
+
+.detail-value {
+    background-color: #303073;
+    color: #eae8f2;
+}
+
+.pop-details button {
+    background-color: #5A7FC4;
+    color: #eae8f2;
+}
+
+.pop-details button:hover {
+    background-color: #7C9FB6;
 }
