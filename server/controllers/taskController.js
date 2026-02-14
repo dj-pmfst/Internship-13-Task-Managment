@@ -1,4 +1,5 @@
 import { db } from "../db/db.js";
+import { validateAndBuildData } from "../validators/tasks.js";
 
 const getTasks = async (_req, res) => {
     try {
@@ -51,6 +52,48 @@ const getArchivedTasks = async (_req, res) => {
         res.status(500).json({ error: "Failed to load tasks" });
     }
 }
+
+const createTask = async (req, res) => {
+    const { title, description, assignee, status, priority, type, est_start_date, est_end_date, est_duration, archived } = req.body;
+
+    const { attributes, values, error } = validateAndBuildData({
+            title,
+            description,
+            assignee,
+            status,
+            priority, 
+            type,
+            est_start_date,
+            est_end_date,
+            est_duration,
+            archived
+    });
+
+    if (attributes.length === 0) {
+        return res.status(400).json({ error: "No data available" });
+    }
+
+    if (error) {
+        return res.status(400).json({ error });
+    }
+
+    const placeholders = attributes.map((_, i) => `$${i + 1}`)
+
+    try {
+        const result = await db.query(
+            `INSERT INTO
+                tasks (${attributes.join(", ")})
+            VALUES
+                (${placeholders.join(", ")})
+            RETURNING *`,
+            values
+        );
+
+        res.status(201).json(result.rows);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to create task" });
+    }
+};
 
 const archiveTask = async (req, res) => {
     try {
@@ -113,4 +156,4 @@ const clearTasks = async (_req, res) => {
     }
 }
 
-export { getTasks, getArchivedTasks, archiveTask, deleteTask, clearTasks };
+export { getTasks, getArchivedTasks, createTask, archiveTask, deleteTask, clearTasks };
