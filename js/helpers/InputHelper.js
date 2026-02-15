@@ -15,7 +15,7 @@ export class InputHelper{
             let value=input.value;
 
             if(key==="duration")
-                value=parseInt(value,10);
+                value=Number(newValue);
 
             if(input.type==="datetime-local"){
                 value=DateTimeHelper.toDateTimeLocal(value);
@@ -36,7 +36,7 @@ export class InputHelper{
             let newValue=input.value
 
             if(key==="duration"){
-                newValue=parseInt(newValue,10);            
+                newValue=Number(newValue);            
             }
 
             if(dateKeys.includes(key)){

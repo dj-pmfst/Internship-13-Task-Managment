@@ -6,14 +6,14 @@ export function validateFrontendTaskData(fields){
         if (value === undefined) continue;
 
         const validator = fieldValidators[field];
+        const result = validator.validate(value);
 
-        if (!validator.validate(value)) {
-            return { error: validator.error };
+        if (!result.valid) {
+            return { error: result.error };
         }
+
+        const dateRangeError=DateTimeHelper.isDateRangeValid(fields.startDate,fields.endDate);
+        if(dateRangeError.error) return dateRangeError;          
     }
-
-    const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
-    if(dateRangeError.error) return dateRangeError;    
-
     return { error: null };
 }

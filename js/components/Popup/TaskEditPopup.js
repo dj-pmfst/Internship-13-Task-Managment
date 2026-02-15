@@ -74,6 +74,8 @@ export class TaskEditPopup{
             return;
         }
 
+        console.log("taskData: ",taskData);
+
         TaskEditPopup.close();
         InputHelper.clearInputs();
 
