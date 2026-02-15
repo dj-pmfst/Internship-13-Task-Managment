@@ -44,4 +44,18 @@ const confirmPopupElements={
     confirmNo: document.getElementById('confirm-no')
 }
 
-export { board,alertDiv,inputs,modeSwitchElements,archiveElements,todoElements,confirmPopupElements, taskEditPopupElements };
+const taskDetailsPopupElements = {
+    popup: document.querySelector('.pop-details'),
+    closeBtn: document.querySelector('.pop-details .close-details'),
+    title: document.getElementById('detail-title'),
+    description: document.getElementById('detail-description'),
+    start: document.getElementById('detail-start'),
+    end: document.getElementById('detail-end'),
+    duration: document.getElementById('detail-duration'),
+    priority: document.getElementById('detail-priority'),
+    type: document.getElementById('detail-type'),
+    assignee: document.getElementById('detail-assignee'),
+    status: document.getElementById('detail-status')
+};
+
+export { board,alertDiv,inputs,modeSwitchElements,archiveElements,todoElements,confirmPopupElements, taskEditPopupElements, taskDetailsPopupElements };

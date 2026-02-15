@@ -8,6 +8,7 @@ import { ToastTypes } from "../../enums/ToastTypes.js";
 import { titleToStatusMap } from "../../helpers/Map.js";
 import { DateTimeHelper } from "../../helpers/DateTimeHelper.js";
 import { ConfirmPopup } from "../Popup/ConfirmPopup.js";
+import { TaskDetailsPopup } from "../Popup/TaskDetailsPopup.js";
 
 export class Board{
     constructor(boardEl){
@@ -187,35 +188,7 @@ export class Board{
     }
 
     showTaskDetails(task) {
-        const popup = document.querySelector('.pop-details');
-
-        document.getElementById('detail-title').textContent = task.title || 'N/A';
-        document.getElementById('detail-description').textContent = task.description || 'N/A';
-        document.getElementById('detail-start').textContent = task.startDate || 'N/A';
-        document.getElementById('detail-end').textContent = task.endDate || 'N/A';
-        document.getElementById('detail-duration').textContent = task.duration ? `${task.duration}h` : 'N/A';
-        document.getElementById('detail-priority').textContent = task.priority || 'N/A';
-        document.getElementById('detail-type').textContent = task.type || 'N/A';
-        document.getElementById('detail-assignee').textContent = task.assignee || 'N/A';
-        document.getElementById('detail-status').textContent = task.status || 'N/A';
-
-        popup.classList.add('active');
-
-        const closeBtn = popup.querySelector('.close-details');
-        const closeBottomBtn = document.getElementById('close-details-btn');
-        
-        const closePopup = () => {
-            popup.classList.remove('active');
-        };
-        
-        closeBtn.onclick = closePopup;
-        closeBottomBtn.onclick = closePopup;
-
-        popup.onclick = (e) => {
-            if (e.target === popup) {
-                closePopup();
-            }
-        };
+        TaskDetailsPopup.show(task);
     }
     
     addOnMoveRequestListener(){
