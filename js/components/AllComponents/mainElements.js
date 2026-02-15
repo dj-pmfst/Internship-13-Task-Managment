@@ -1,4 +1,5 @@
 const board=document.querySelector(".lists-container");
+const archiveBoard=document.querySelector(".archived");
 const alertDiv=document.querySelector(".alertDiv");
 const popAdd = document.querySelector(".pop-add");
 
@@ -60,4 +61,4 @@ const taskDetailsPopupElements = {
     status: document.getElementById('detail-status')
 };
 
-export { board,alertDiv,inputs,modeSwitchElements,archiveElements,todoElements,confirmPopupElements, taskEditPopupElements, taskDetailsPopupElements };
+export { board,archiveBoard,alertDiv,inputs,modeSwitchElements,archiveElements,todoElements,confirmPopupElements, taskEditPopupElements, taskDetailsPopupElements };

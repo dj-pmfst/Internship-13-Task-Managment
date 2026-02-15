@@ -6,14 +6,20 @@ export class TaskDetailsPopup{
     static elements = { ...taskDetailsPopupElements };
     static isOpen=false;
     static resolver=null;
+    static _listenersBound=false
    
-    static{
+    static init(){
+
+        if(TaskDetailsPopup._listenersBound) return;
+
         TaskDetailsPopup.elements.closeBtn.addEventListener("click",()=>TaskDetailsPopup.resolve(TaskDetailAction.CANCEL));
         TaskDetailsPopup.elements.deleteBtn.addEventListener("click",()=>TaskDetailsPopup.resolve(TaskDetailAction.DELETE));
-        TaskDetailsPopup.elements.archiveBtn.addEventListener("click",()=>TaskDetailsPopup.resolve(TaskDetailAction.ARCHIVE));        
+        TaskDetailsPopup.elements.archiveBtn.addEventListener("click",()=>TaskDetailsPopup.resolve(TaskDetailAction.ARCHIVE));   
+        
+        TaskDetailsPopup._listenersBound=true;
     }
 
-    static show(task){
+    static show(task,isArchived=false){
         if (TaskDetailsPopup.isOpen) {
             return Promise.resolve("cancel");
         }
@@ -31,6 +37,15 @@ export class TaskDetailsPopup{
         e.assignee.textContent = task.assignee || 'N/A';
         e.status.textContent = task.status || 'N/A';
         
+        if(isArchived){
+            e.deleteBtn.style.display="none";
+            e.archiveBtn.style.display="none";            
+        }
+        else{
+            e.deleteBtn.style.display="inline-block";
+            e.archiveBtn.style.display="inline-block";           
+        }
+
         e.popup.classList.add("active");
 
         return new Promise(resolve=>{
@@ -53,3 +68,5 @@ export class TaskDetailsPopup{
         TaskDetailsPopup.resolver=null;
     }
 }
+
+TaskDetailsPopup.init();

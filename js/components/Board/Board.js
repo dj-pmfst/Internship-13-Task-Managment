@@ -34,12 +34,9 @@ export class Board{
             taskList.forEach(task=>{
                 task.startDate=DateTimeHelper.toDateTimeLocal(task.startDate,true);
                 task.endDate=DateTimeHelper.toDateTimeLocal(task.endDate,true);
-            });
 
-            taskList.forEach(task=>{
                 const targetColumn= this.columns.find(col=>titleToStatusMap[col.title]===task.status);
-                
-                targetColumn?.addTask(new Task(task));
+                targetColumn?.addTask(new Task(task));                
             });
 
         }
@@ -47,6 +44,12 @@ export class Board{
             Toast.show(error.message,ToastTypes.DANGER);
         }
     }   
+
+    clearBoard(){
+        this.columns.forEach(c=>{
+            c.clear();
+        });
+    }
 
     bindEvents(){
         this.addOnTaskRequestListeners();
@@ -238,7 +241,7 @@ export class Board{
         
         if (isConfirmed) {
             try {
-                await Storage.archiveTask(task.id); 
+                await Storage.archiveTask(task.id,{ archived: true }); 
     
                 const column = this.columns.find(col => 
                     col.taskList.some(t => t.id === task.id)

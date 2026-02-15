@@ -44,11 +44,10 @@ const getArchivedTasks = async (_req, res) => {
                 est_end_date,
                 est_duration,
                 archived,
-                archived_at,
-                position
+                archived_at
             FROM tasks
             WHERE archived = true
-            ORDER BY position DESC`
+            ORDER BY archived_at DESC`
         );
         res.json(result.rows);
     } catch (error) {
