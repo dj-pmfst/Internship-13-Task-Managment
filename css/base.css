@@ -1,0 +1,17 @@
+body {
+    font-family: "Fredoka", sans-serif;
+    background-color: #D1C8E1;
+    color: #211A1D;
+}
+
+input {
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box; 
+    border: none;
+    font-size: 15px;
+}
+
+button {
+    font-family: "Fredoka", sans-serif;
+}

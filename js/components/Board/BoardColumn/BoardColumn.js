@@ -35,11 +35,20 @@ export class BoardColumn{
         this.countEl.textContent=this.taskCount;
     }
 
-
     bindEvents(){
         const addBtn=this.element.querySelector(".add button");
         const leftBtn=this.element.querySelector(".move-left");
         const rightBtn=this.element.querySelector(".move-right");
+        const titleText=this.element.querySelector(".title__text"); 
+
+        const titleMenu = document.querySelector(".title__menu");
+        const archiveAllBtn = titleMenu.querySelector(".menu-archive-all");
+        const deleteAllBtn = titleMenu.querySelector(".menu-delete-all");
+
+        if (!BoardColumn.currentColumn) {
+            BoardColumn.currentColumn = null;
+        }
+
         this._onAddButtonClick=()=>{
             const event=new CustomEvent("requestNewTask",{
                 bubbles: true,
@@ -47,6 +56,7 @@ export class BoardColumn{
             });
             this.element.dispatchEvent(event);
         }
+        
         this._onLeftButtonClick=()=>{
             const event=new CustomEvent("requestColumnMove",{
                 bubbles: true,
@@ -57,6 +67,7 @@ export class BoardColumn{
             });
             this.element.dispatchEvent(event);
         }
+        
         this._onRightButtonClick=()=>{
             const event=new CustomEvent("requestColumnMove",{
                 bubbles: true,
@@ -66,9 +77,57 @@ export class BoardColumn{
                 }
             });
             this.element.dispatchEvent(event);
-        }        
-        this._onDragStart=(e)=>{
+        }
 
+        this._onTitleClick = (e) => {
+            e.stopPropagation();
+
+            const rect = titleText.getBoundingClientRect();
+            const isVisible = titleMenu.style.display === 'flex' && BoardColumn.currentColumn === this;
+            
+            if (isVisible) {
+                titleMenu.style.display = 'none';
+                BoardColumn.currentColumn = null;
+            } else {
+                titleMenu.style.display = 'flex';
+                titleMenu.style.top = `${rect.bottom + 5}px`;
+                titleMenu.style.left = `${rect.left}px`;
+                BoardColumn.currentColumn = this;
+            }
+        }
+
+        this._onArchiveAll = () => {
+            if (BoardColumn.currentColumn) {
+                const event = new CustomEvent("requestArchiveAll", {
+                    bubbles: true,
+                    detail: { column: BoardColumn.currentColumn }
+                });
+                BoardColumn.currentColumn.element.dispatchEvent(event);
+                titleMenu.style.display = 'none';
+                BoardColumn.currentColumn = null;
+            }
+        }
+
+        this._onDeleteAll = () => {
+            if (BoardColumn.currentColumn) {
+                const event = new CustomEvent("requestDeleteAll", {
+                    bubbles: true,
+                    detail: { column: BoardColumn.currentColumn }
+                });
+                BoardColumn.currentColumn.element.dispatchEvent(event);
+                titleMenu.style.display = 'none';
+                BoardColumn.currentColumn = null;
+            }
+        }
+        
+        this._onDocumentClick = (e) => {
+            if (!titleMenu.contains(e.target) && !titleText.contains(e.target)) {
+                titleMenu.style.display = 'none';
+                BoardColumn.currentColumn = null;
+            }
+        }
+
+        this._onDragStart=(e)=>{
             const fetchedDragDataString=e.dataTransfer.getData("text/plain");
             let fetchDragData;
 
@@ -84,8 +143,8 @@ export class BoardColumn{
                 dragType: DragType.COLUMN
             }
             e.dataTransfer.setData("text/plain",JSON.stringify(dragData)); 
-
         }
+        
         this._onDragOver=(e)=>{
             e.preventDefault();
 
@@ -97,29 +156,29 @@ export class BoardColumn{
 
             const dragData = JSON.parse(dragDataStr);
 
-            console.log(dragData.dragType);
-
             if(dragData.dragType===DragType.TASK){
                 const afterElement=this.getDragAfterElement(e.clientY);
                 const draggedElement=document.querySelector(".dragging");
+                const addDiv=this.element.querySelector(".add");
 
-                if(afterElement===null)
-                    this.element.appendChild(draggedElement);
-
-                else
+                if(afterElement)
                     this.element.insertBefore(draggedElement,afterElement);
+                else if(addDiv)
+                    this.element.insertBefore(draggedElement,addDiv);
+                else
+                    this.element.appendChild(draggedElement);
             }
         }
+        
         this._onDragLeave=(e)=>{
             e.currentTarget.classList.remove("drag-over");
         }
+        
         this._onDrop=(e)=>{
-
             const dragDataStr=e.dataTransfer.getData("text/plain");
             if (!dragDataStr) return;
 
             const dragData = JSON.parse(dragDataStr);
-
             let event;
 
             if(dragData.dragType===DragType.COLUMN){
@@ -131,7 +190,6 @@ export class BoardColumn{
                     }
                 });
             }
-
             else if(dragData.dragType===DragType.TASK){
                 event=new CustomEvent("taskDrop",{
                     bubbles: true,
@@ -147,13 +205,36 @@ export class BoardColumn{
             this.element.dispatchEvent(event);
         }
         
-        addBtn.addEventListener("click",this._onAddButtonClick);
-        leftBtn.addEventListener("click",this._onLeftButtonClick);
-        rightBtn.addEventListener("click",this._onRightButtonClick);
-        this.element.addEventListener("dragstart",this._onDragStart);
-        this.element.addEventListener("dragover",this._onDragOver);
-        this.element.addEventListener("dragleave",this._onDragLeave);
-        this.element.addEventListener("drop",this._onDrop);
+        addBtn.addEventListener("click", this._onAddButtonClick);
+        leftBtn.addEventListener("click", this._onLeftButtonClick);
+        rightBtn.addEventListener("click", this._onRightButtonClick);
+        titleText.addEventListener("click", this._onTitleClick);
+
+        if (!BoardColumn._globalListenersAdded) {
+            archiveAllBtn.addEventListener("click", () => {
+                if (BoardColumn.currentColumn) {
+                    BoardColumn.currentColumn._onArchiveAll();
+                }
+            });
+            deleteAllBtn.addEventListener("click", () => {
+                if (BoardColumn.currentColumn) {
+                    BoardColumn.currentColumn._onDeleteAll();
+                }
+            });
+            document.addEventListener("click", (e) => {
+                const titleText = e.target.closest(".title__text");
+                if (!titleMenu.contains(e.target) && !titleText) {
+                    titleMenu.style.display = 'none';
+                    BoardColumn.currentColumn = null;
+                }
+            });
+            BoardColumn._globalListenersAdded = true;
+        }
+        
+        this.element.addEventListener("dragstart", this._onDragStart);
+        this.element.addEventListener("dragover", this._onDragOver);
+        this.element.addEventListener("dragleave", this._onDragLeave);
+        this.element.addEventListener("drop", this._onDrop);
     }
 
     startTaskMonitor(interval){
@@ -161,25 +242,22 @@ export class BoardColumn{
             this.taskList.forEach(task=>task.updateTimeLeftClass());
         },interval);
     }
+    
     stopInterval(){
         clearInterval(this._taskMonitorInterval);
     }
 
     getDragAfterElement(y){
-
         const draggableElements = [...this.element.querySelectorAll('.task:not(.dragging)')];
         return draggableElements.reduce((closest, child) => {
-
             const box = child.getBoundingClientRect();
             const offset = y - box.top - box.height / 2;
 
             if (offset < 0 && offset > closest.offset)
                 return { offset: offset, element: child };
-        
             else return closest;
 
         }, { offset: Number.NEGATIVE_INFINITY }).element;
-
     }
 
 }

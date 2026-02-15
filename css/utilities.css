@@ -1,0 +1,51 @@
+.hidden {
+    display: none;
+}
+
+.drag-over {
+    border: 3px dotted dodgerblue;
+    opacity: 0.5;    
+}
+
+.alertDiv {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-family: "Fredoka", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.alertDiv.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.alert-success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.alert-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.alert-info {
+    background-color: #2196F3;
+    color: white;
+}
+
+.alert-warning {
+    background-color: #ff9800;
+    color: white;
+}
