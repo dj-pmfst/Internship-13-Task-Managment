@@ -14,4 +14,21 @@ const inputs={
     asignee:popAdd.querySelector("#person-input")
 }
 
-export {board,alertDiv,popAdd,inputs};
+const modeSwitchElements={
+    lightModeBtn: document.querySelector('.light-mode-btn'),
+    darkModeBtn:document.querySelector('.dark-mode-btn'),
+    darkModeStylesheet: document.getElementById('dark-mode-stylesheet')
+}
+
+const archiveElements={
+    archiveButton:document.querySelector('.subtitle button.archive'),
+    archivedContainer: document.querySelector('.archived')
+}
+
+const todoElements={
+    todoButton: document.querySelector('.subtitle button:first-child'),
+    listsContainer: document.querySelector('.lists-container'),
+    todoLists: document.querySelectorAll('.list')
+}
+
+export { board,alertDiv,popAdd,inputs,modeSwitchElements,archiveElements,todoElements };
