@@ -15,7 +15,7 @@ export class InputHelper{
             let value=input.value;
 
             if(key==="duration")
-                value=Number(newValue);
+                value=Number(value);
 
             if(input.type==="datetime-local"){
                 value=DateTimeHelper.toDateTimeLocal(value);
