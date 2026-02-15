@@ -11,10 +11,9 @@ export function validateFrontendTaskData(fields){
         if (!result.valid) {
             return { error: result.error };
         }
+
+        const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
+        if(dateRangeError.error) return dateRangeError;          
     }
-
-    const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
-    if(dateRangeError.error) return dateRangeError;    
-
     return { error: null };
 }

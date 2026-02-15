@@ -1,5 +1,6 @@
 import { db } from "../db/db.js";
 import { validateAndBuildData } from "../validators/tasks.js";
+import { DateTimeHelper } from "../../js/helpers/DateTimeHelper.js";
 
 const getTasks = async (_req, res) => {
     try {
@@ -72,13 +73,12 @@ const createTask = async (req, res) => {
             position
     });
 
-    if (startDate && new Date(val).getTime()>=new Date().getTime()){
-        return res.status(400).json({ error: "Start date cannot be in the past" });
-    }
-
     if (error) {
         return res.status(400).json({ error });
     }
+
+    const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
+    if(dateRangeError.error) return dateRangeError;  
 
     if (attributes?.length === 0) {
         return res.status(400).json({ error: "No data available" });
@@ -165,6 +165,9 @@ const updateTask = async (req, res) => {
     if (error) {
         return res.status(400).json({ error });
     }
+
+    const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
+    if(dateRangeError.error) return dateRangeError;      
 
     if (updates?.length === 0) {
         return res.status(400).json({ error: "No fields to update" });

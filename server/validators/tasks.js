@@ -1,4 +1,3 @@
-import { DateTimeHelper } from "../../js/helpers/DateTimeHelper.js";
 import { ErrorMessage } from "../../js/helpers/ErrorMessage.js";
 import { fieldToDbColumn } from "../../js/helpers/Map.js";
 import { ValidationFunctions } from "../../js/helpers/ValidationFunctions.js";
@@ -117,9 +116,6 @@ const validateAndBuildData = (fields) => {
         updates.push(`${fieldToDbColumn[field]} = $${updates.length + 1}`);
         values.push(validator.transform ? validator.transform(value) : value);
     }
-
-    const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
-    if(dateRangeError.error) return dateRangeError;
 
     return { attributes, updates, values };
 };
