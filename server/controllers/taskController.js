@@ -29,29 +29,49 @@ const getTasks = async (_req, res) => {
     }
 }
 
-const getArchivedTasks = async (_req, res) => {
+const getArchivedTasks = async (req, res) => {
     try {
-        const result = await db.query(
-            `SELECT
-                id, 
-                title,
-                description,
-                assignee,
-                status,
-                priority, 
-                type,
-                est_start_date,
-                est_end_date,
-                est_duration,
-                archived,
-                archived_at
-            FROM tasks
-            WHERE archived = true
-            ORDER BY archived_at DESC`
-        );
+        const { start, end } = req.query;
+        
+        let query = `SELECT
+            id, 
+            title,
+            description,
+            assignee,
+            status,
+            priority, 
+            type,
+            est_start_date,
+            est_end_date,
+            est_duration,
+            archived,
+            archived_at
+        FROM tasks
+        WHERE archived = true`;
+        
+        const queryParams = [];
+
+        if (start) {
+            queryParams.push(start);
+            query += ` AND archived_at >= $${queryParams.length}`;
+        }
+        
+        if (end) {
+            queryParams.push(end);
+            query += ` AND archived_at <= $${queryParams.length}`;
+        }
+        
+        query += ` ORDER BY archived_at DESC`;
+        
+        console.log('Query:', query);
+        console.log('Params:', queryParams);
+        
+        const result = await db.query(query, queryParams);
+        
         res.json(result.rows);
     } catch (error) {
-        res.status(500).json({ error: "Failed to load tasks" });
+        console.error('Error fetching archived tasks:', error);
+        res.status(500).json({ error: "Failed to load archived tasks" });
     }
 }
 

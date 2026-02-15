@@ -392,63 +392,36 @@ export class Board{
         }
     }
 
-    async loadArchivedTasks() {
+    async loadArchivedTasks(startDate = null, endDate = null) {
         try {
-            const archivedTasks = await Storage.getArchivedTasks();
+            const archivedTasks = await Storage.getArchivedTasks(startDate, endDate);
             this.allArchivedTasks = archivedTasks;
             this.renderArchivedTasks(this.allArchivedTasks);
         } catch (error) {
             Toast.show(error.message, ToastTypes.DANGER);
         }
     }
-
+    
     applyArchivedFilter() {
         const startDate = this.filterStartInput.value;
         const endDate = this.filterEndInput.value;
-    
-        console.log('Start:', startDate, 'End:', endDate);
-    
-        if (!startDate && !endDate) {
-            this.renderArchivedTasks(this.allArchivedTasks);
-            Toast.show("Filter cleared", ToastTypes.INFO);
-            return;
+
+        let startISO = null;
+        let endISO = null;
+        
+        if (startDate) {
+            startISO = new Date(startDate).toISOString();
+        }
+        
+        if (endDate) {
+            endISO = new Date(endDate).toISOString();
         }
     
-        const filteredTasks = this.allArchivedTasks.filter(task => {
-            if (!task.archived_at) return false;
-
-            const taskDate = new Date(task.archived_at);
-
-            const year = taskDate.getFullYear();
-            const month = String(taskDate.getMonth() + 1).padStart(2, '0');
-            const day = String(taskDate.getDate()).padStart(2, '0');
-            const hours = String(taskDate.getHours()).padStart(2, '0');
-            const minutes = String(taskDate.getMinutes()).padStart(2, '0');
-            const taskLocalStr = `${year}-${month}-${day}T${hours}:${minutes}`;
-            
-            console.log('Task:', task.title, 'archived:', taskLocalStr);
-            
-            let passes = true;
-            
-            if (startDate) {
-                passes = passes && (taskLocalStr >= startDate);
-                console.log(`  ${taskLocalStr} >= ${startDate}? ${taskLocalStr >= startDate}`);
-            }
-            
-            if (endDate) {
-                passes = passes && (taskLocalStr <= endDate);
-                console.log(`  ${taskLocalStr} <= ${endDate}? ${taskLocalStr <= endDate}`);
-            }
-            
-            console.log('  Passes:', passes);
-            return passes;
-        });
-    
-        console.log('Filtered:', filteredTasks.length);
-        this.renderArchivedTasks(filteredTasks);
-        Toast.show(`Showing ${filteredTasks.length} archived task(s)`, ToastTypes.INFO);
+        console.log('Filtering with:', { startISO, endISO });
+        
+        this.loadArchivedTasks(startISO, endISO);
     }
-
+    
     async clearArchivedFilter() {
         this.filterStartInput.value = '';
         this.filterEndInput.value = '';
