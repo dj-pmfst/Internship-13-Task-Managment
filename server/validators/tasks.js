@@ -80,9 +80,6 @@ const validateAndBuildData = (fields) => {
     const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
     if(dateRangeError.error) return dateRangeError;
 
-    console.log("New date: ",new Date(fields.startDate).getTime()<=new Date().getTime());
-    console.log("Novi: ",new Date());
-
     return { attributes, updates, values };
 };
 
