@@ -136,8 +136,20 @@ export class ArchivedTasksBoard{
             await this.handleDeleteTask(targetTask);
         }
 
+        this._onTaskDetailsRequest = async (e) => {
+            const task = e.detail.task;
+
+            try{
+                await this.showTaskDetails(task);
+            }
+            catch(error){
+                    Toast.show(error.message,ToastTypes.DANGER);
+            }        
+        }        
+
         this.boardEl.addEventListener("requestTaskUnarchive", this._onTaskUnarchiveRequest);
         this.boardEl.addEventListener("requestTaskDelete", this._onTaskDeleteRequest);
+        this.boardEl.addEventListener("requestArchivedTaskDetails",this._onTaskDetailsRequest);          
     }
 
     async handleUnarchiveTask(task){
@@ -187,4 +199,5 @@ export class ArchivedTasksBoard{
     async showTaskDetails(task){
         return await TaskDetailsPopup.show(task,true);
     }
+    
 }
