@@ -102,12 +102,17 @@ export class BoardColumn{
             if(dragData.dragType===DragType.TASK){
                 const afterElement=this.getDragAfterElement(e.clientY);
                 const draggedElement=document.querySelector(".dragging");
+                const addDiv=this.element.querySelector(".add");
 
-                if(afterElement===null)
-                    this.element.appendChild(draggedElement);
-
-                else
+                if(afterElement)
                     this.element.insertBefore(draggedElement,afterElement);
+
+                else if(addDiv)
+                    this.element.insertBefore(draggedElement,addDiv);
+                
+                else
+                    this.element.appendChild(draggedElement);
+ 
             }
         }
         this._onDragLeave=(e)=>{
