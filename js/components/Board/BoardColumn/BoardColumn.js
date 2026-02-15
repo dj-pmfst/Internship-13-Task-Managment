@@ -148,7 +148,7 @@ export class BoardColumn{
                     }
                 });                   
             }
-            
+
             this.element.dispatchEvent(event);
         }
         
@@ -157,6 +157,7 @@ export class BoardColumn{
         rightBtn.addEventListener("click",this._onRightButtonClick);
         this.element.addEventListener("dragstart",this._onDragStart);
         this.element.addEventListener("dragover",this._onDragOver);
+        this.element.addEventListener("dragleave",this._onDragLeave);
         this.element.addEventListener("drop",this._onDrop);
     }
 
