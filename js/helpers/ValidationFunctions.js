@@ -20,7 +20,13 @@ export class ValidationFunctions{
     static validateDate=(val,propName)=>{
         if(!isValidDate(val))
             return {valid: false, error: ErrorMessage.invalidDate(propName)}
-        
+
+        const inputTime = new Date(val).getTime();
+        const now = Date.now();
+
+        if (inputTime<now)
+            return {valid: false, error: ErrorMessage.dateInPast(propName)};
+       
         return {valid: true}
     }
 

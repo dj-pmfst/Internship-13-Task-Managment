@@ -6,25 +6,17 @@ export class ErrorMessage{
 
     static mustBeBoolean=(propName)=>`${propName} must be boolean`;
 
-    static mustBePositive(prop) {
-        return `${prop} must be greater than 0`;
-    }
+    static mustBePositive=(prop)=>`${prop} must be greater than 0`;
 
-    static invalidEnum(prop) {
-        return `Invalid ${prop} value`;
-    }
+    static invalidEnum=(propName)=>`Invalid ${propName} value`;
 
-    static invalidDate(prop) {
-        return `${prop} must be valid date`;
-    }
+    static invalidDate=(prop)=>`${prop} must be valid date`;
+    
+    static dateInPast=(prop)=>`${prop} can't be in the past`;
 
-    static minLength(propName, minLength) {
-        return `${propName} must be at least ${minLength} characters long`;
-    }    
+    static minLength=(propName, minLength)=> `${propName} must be at least ${minLength} characters long`;
 
-    static maxValue(propName,maxValue){
-        return `${propName} exceeded max value of ${maxValue}`;        
-    }
+    static maxValue=(propName,maxValue)=>`${propName} exceeded max value of ${maxValue}`;       
 }
 
 

@@ -77,7 +77,7 @@ const createTask = async (req, res) => {
         return res.status(400).json({ error });
     }
 
-    const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
+    const dateRangeError=DateTimeHelper.isDateRangeValid(startDate,endDate);
     if(dateRangeError.error) return dateRangeError;  
 
     if (attributes?.length === 0) {
@@ -166,7 +166,7 @@ const updateTask = async (req, res) => {
         return res.status(400).json({ error });
     }
 
-    const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
+    const dateRangeError=DateTimeHelper.isDateRangeValid(startDate,endDate);
     if(dateRangeError.error) return dateRangeError;      
 
     if (updates?.length === 0) {

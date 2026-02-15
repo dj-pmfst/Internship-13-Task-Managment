@@ -12,7 +12,7 @@ export function validateFrontendTaskData(fields){
             return { error: result.error };
         }
 
-        const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
+        const dateRangeError=DateTimeHelper.isDateRangeValid(fields.startDate,fields.endDate);
         if(dateRangeError.error) return dateRangeError;          
     }
     return { error: null };
