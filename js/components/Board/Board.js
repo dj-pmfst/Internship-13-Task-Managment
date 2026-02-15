@@ -329,6 +329,7 @@ export class Board{
 
         for(const [index,task] of taskList.entries()){
             task.position=index+1;
+            console.log("new position: ",task.position);
             await Storage.updateTask(task.id,{position: task.position});
         }
 

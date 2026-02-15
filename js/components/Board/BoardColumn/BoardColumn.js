@@ -236,7 +236,7 @@ export class BoardColumn{
         this.element.addEventListener("dragleave", this._onDragLeave);
         this.element.addEventListener("drop", this._onDrop);
     }
-    
+
     startTaskMonitor(interval){
         this._taskMonitorInterval=setInterval(()=>{
             this.taskList.forEach(task=>task.updateTimeLeftClass());
@@ -259,4 +259,6 @@ export class BoardColumn{
 
         }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
+
 }
+
