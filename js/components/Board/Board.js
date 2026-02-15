@@ -34,12 +34,9 @@ export class Board{
             taskList.forEach(task=>{
                 task.startDate=DateTimeHelper.toDateTimeLocal(task.startDate,true);
                 task.endDate=DateTimeHelper.toDateTimeLocal(task.endDate,true);
-            });
 
-            taskList.forEach(task=>{
                 const targetColumn= this.columns.find(col=>titleToStatusMap[col.title]===task.status);
-                
-                targetColumn?.addTask(new Task(task));
+                targetColumn?.addTask(new Task(task));                
             });
 
         }
