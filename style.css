@@ -118,6 +118,7 @@ input {
 }
 
 .title{
+    position: relative;
     padding: 5px;
     margin: 10px;
     border: 5px solid #A897D8;
@@ -130,6 +131,15 @@ input {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+.title__text {
+    cursor: pointer; 
+    user-select: none; 
+}
+
+.title__text:hover {
+    opacity: 0.8;
 }
 
 
@@ -701,4 +711,46 @@ input {
 
 #archive{
     margin-left: 15px;
+}
+
+.title__menu {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+    background-color: #DAD2EE;
+    border: 3px solid #A897D8;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 150px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.title__menu button {
+    background-color: #A9A9DB;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-family: "Fredoka", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-align: left;
+}
+
+.title__menu button:hover {
+    background-color: #9A9ACF;
+}
+
+.menu-delete-all {
+    background-color: #d88a97 !important;
+}
+
+.menu-delete-all:hover {
+    background-color: #c97684 !important;
 }

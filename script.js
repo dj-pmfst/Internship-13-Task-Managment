@@ -90,7 +90,7 @@ document.addEventListener('click', (e) => {
 
     if (e.target.closest('.unarchive-btn')) {
         const taskElement = e.target.closest('.task-archived');
-        showConfirmation('Are you sure you want to unarchive this task?', () => {
+        showConfirmation('Are you sure you want to (un)archive this task?', () => {
             taskElement.remove();
             console.log('Task unarchived!');
         });

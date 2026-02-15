@@ -50,12 +50,16 @@ export class Board{
         this.addOnMoveRequestListener();
         this.addOnColumnDropListener();
         this.addOnTaskDropListener();
+        this.addOnArchiveAllListener(); 
+        this.addOnDeleteAllListener();
 
         this.boardEl.addEventListener("requestNewTask", this._onTaskRequest);
         this.boardEl.addEventListener("requestTaskActions", this._onTaskActionsRequest);
         this.boardEl.addEventListener("requestTaskDetails", this._onTaskDetailsRequest); 
         this.boardEl.addEventListener("requestColumnMove", this._onMoveColumnRequest);
         this.boardEl.addEventListener("columnDrop", this._onColumnDrop);
+        this.boardEl.addEventListener("requestArchiveAll", this._onArchiveAll); 
+        this.boardEl.addEventListener("requestDeleteAll", this._onDeleteAll);
     }
 
     moveColumn(column,direction){
@@ -118,6 +122,84 @@ export class Board{
         this._onTaskDetailsRequest = (e) => {
             const task = e.detail.task;
             this.showTaskDetails(task);
+        }
+    }
+
+    addOnArchiveAllListener(){
+        this._onArchiveAll = async (e) => {
+            const column = e.detail.column;
+            
+            if(column.taskList.length === 0){
+                Toast.show("No tasks to archive", ToastTypes.INFO);
+                return;
+            }
+
+            const confirmPopup = document.querySelector('.pop-confirm');
+            document.getElementById('confirm-text').textContent = 
+                `Archive all ${column.taskList.length} tasks from "${column.title}"?`;
+            confirmPopup.classList.add('active');
+            
+            document.getElementById('confirm-yes').onclick = async () => {
+                try {
+                    for (const task of column.taskList) {
+                        await Storage.updateTask(task.id, { archived: true });
+                        task.element.remove();
+                    }
+                    
+                    column.taskList = [];
+                    column.taskCount = 0;
+                    column.countEl.textContent = 0;
+                    
+                    confirmPopup.classList.remove('active');
+                    Toast.show("All tasks archived successfully", ToastTypes.SUCCESS);
+                } catch (error) {
+                    confirmPopup.classList.remove('active');
+                    Toast.show(error.message, ToastTypes.DANGER);
+                }
+            };
+            
+            document.getElementById('confirm-no').onclick = () => {
+                confirmPopup.classList.remove('active');
+            };
+        }
+    }
+    
+    addOnDeleteAllListener(){
+        this._onDeleteAll = async (e) => {
+            const column = e.detail.column;
+            
+            if(column.taskList.length === 0){
+                Toast.show("No tasks to delete", ToastTypes.INFO);
+                return;
+            }
+
+            const confirmPopup = document.querySelector('.pop-confirm');
+            document.getElementById('confirm-text').textContent = 
+                `DELETE all ${column.taskList.length} tasks from "${column.title}"? This cannot be undone!`;
+            confirmPopup.classList.add('active');
+            
+            document.getElementById('confirm-yes').onclick = async () => {
+                try {
+                    for (const task of column.taskList) {
+                        await Storage.deleteTask(task.id);
+                        task.element.remove();
+                    }
+                    
+                    column.taskList = [];
+                    column.taskCount = 0;
+                    column.countEl.textContent = 0;
+                    
+                    confirmPopup.classList.remove('active');
+                    Toast.show("All tasks deleted successfully", ToastTypes.SUCCESS);
+                } catch (error) {
+                    confirmPopup.classList.remove('active');
+                    Toast.show(error.message, ToastTypes.DANGER);
+                }
+            };
+            
+            document.getElementById('confirm-no').onclick = () => {
+                confirmPopup.classList.remove('active');
+            };
         }
     }
 

@@ -160,55 +160,57 @@
             <button id="confirm-no">No</button>
         </div>
     </div>
-<div class="pop-details">
-    <div class="details-header">
-        <h2 id="details-title">Task Details</h2>
-        <button class="close-details">×</button>
+    <div class="pop-details">
+        <div class="details-header">
+            <h2 id="details-title">Task Details</h2>
+            <button class="close-details">×</button>
+        </div>
+        <div class="details-content">
+            <div class="detail-item">
+                <span class="detail-label">Title:</span>
+                <span class="detail-value" id="detail-title"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Description:</span>
+                <span class="detail-value" id="detail-description"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Start Date:</span>
+                <span class="detail-value" id="detail-start"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">End Date:</span>
+                <span class="detail-value" id="detail-end"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Duration:</span>
+                <span class="detail-value" id="detail-duration"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Priority:</span>
+                <span class="detail-value" id="detail-priority"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Type:</span>
+                <span class="detail-value" id="detail-type"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Assignee:</span>
+                <span class="detail-value" id="detail-assignee"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Status:</span>
+                <span class="detail-value" id="detail-status"></span>
+            </div>
+        </div>
+        <div class="buttons">
+            <button id="delete-btn">Delete</button>
+            <button id="archive">Archive</button>
+        </div>
     </div>
-    <div class="details-content">
-        <div class="detail-item">
-            <span class="detail-label">Title:</span>
-            <span class="detail-value" id="detail-title"></span>
-        </div>
-        <div class="detail-item">
-            <span class="detail-label">Description:</span>
-            <span class="detail-value" id="detail-description"></span>
-        </div>
-        <div class="detail-item">
-            <span class="detail-label">Start Date:</span>
-            <span class="detail-value" id="detail-start"></span>
-        </div>
-        <div class="detail-item">
-            <span class="detail-label">End Date:</span>
-            <span class="detail-value" id="detail-end"></span>
-        </div>
-        <div class="detail-item">
-            <span class="detail-label">Duration:</span>
-            <span class="detail-value" id="detail-duration"></span>
-        </div>
-        <div class="detail-item">
-            <span class="detail-label">Priority:</span>
-            <span class="detail-value" id="detail-priority"></span>
-        </div>
-        <div class="detail-item">
-            <span class="detail-label">Type:</span>
-            <span class="detail-value" id="detail-type"></span>
-        </div>
-        <div class="detail-item">
-            <span class="detail-label">Assignee:</span>
-            <span class="detail-value" id="detail-assignee"></span>
-        </div>
-        <div class="detail-item">
-            <span class="detail-label">Status:</span>
-            <span class="detail-value" id="detail-status"></span>
-        </div>
-    </div>
-    <div class="buttons">
-        <button id="delete-btn">Delete</button>
-        <button id="archive">Archive</button>
-    </div>
-</div>
-
+    <div class="title__menu" style="display: none;">
+        <button class="menu-archive-all">Archive All</button>
+        <button class="menu-delete-all">Delete All</button>
     </div>
     <div class="alertDiv"></div>    
     <script src="script.js"></script>
