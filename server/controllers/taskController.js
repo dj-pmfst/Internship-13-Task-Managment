@@ -64,26 +64,22 @@ const getArchivedTasks = async (req, res) => {
         
         const queryParams = [];
         
-        if (start) {
+        if(start){
             queryParams.push(start);
             query += ` AND archived_at >= $${queryParams.length}`;
         }
         
-        if (end) {
+        if(end){
             queryParams.push(end);
-            query += ` AND archived_at <= $${queryParams.length}`;
+            query+=` AND archived_at <= $${queryParams.length}`;
         }
         
-        query += ` ORDER BY archived_at DESC`;
-        
-        console.log('Query:', query);
-        console.log('Params:', queryParams);
-        
+        query+=` ORDER BY archived_at DESC`;
+                
         const result = await db.query(query, queryParams);
         
         res.json(result.rows);
     } catch (error) {
-        console.error('Error fetching archived tasks:', error);
         res.status(500).json({ error: "Failed to load archived tasks" });
     }
 }
@@ -134,48 +130,6 @@ const createTask = async (req, res) => {
         console.log(error);
     }
 };
-
-const filterArchivedTasks= async (req,res)=>{
-
-    const { startDate, endDate }= req.query;
-
-    const {conditions, values, error}=validateAndBuildData({
-        startDate,
-        endDate
-    });
-
-    if (error) {
-        return res.status(400).json({ error });
-    }    
-
-    try{
-        const result = await db.query(
-            `SELECT
-                id, 
-                title,
-                description,
-                assignee,
-                status,
-                priority, 
-                type,
-                est_start_date,
-                est_end_date,
-                est_duration,
-                archived,
-                archived_at
-                FROM tasks
-                WHERE est_start_date>=$1 AND est_end_date<=$2
-                ORDER BY archived_at DESC`,
-                values
-            );    
-        res.json(result.rows);
-    } 
-    catch (error) {
-        res.status(500).json({ error: "Failed to filter archived tasks" });
-        console.log(error);
-    }
-
-}
 
 const updateTask = async (req, res) => {
     const { title, description, assignee, status, priority, type, startDate, endDate, duration, archived,position } = req.body;
@@ -286,4 +240,4 @@ const clearTasks = async (_req, res) => {
         res.status(500).json({ error: "Failed to clear tasks" });
     }
 }
-export { getTasks, getArchivedTasks, createTask, updateTask, archiveTask, deleteTask, clearTasks, filterArchivedTasks };
+export { getTasks, getArchivedTasks, createTask, updateTask, archiveTask, deleteTask, clearTasks };
