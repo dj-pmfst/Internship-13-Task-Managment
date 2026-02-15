@@ -48,7 +48,7 @@ const getArchivedTasks = async (_req, res) => {
                 position
             FROM tasks
             WHERE archived = true
-            ORDER BY archived_at DESC`
+            ORDER BY position DESC`
         );
         res.json(result.rows);
     } catch (error) {

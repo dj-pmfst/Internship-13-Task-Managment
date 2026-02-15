@@ -167,11 +167,20 @@ export class Task{
         }
     }
     
+    remove(){
+        this.destroy();
+        this.element.remove();
+    }
     destroy(){
         this.taskActionsBtn.removeEventListener("click", this._onButtonClick);
+
         const titleButton = this.element.querySelector('.task__title button');
         if (titleButton && this._onTitleClick) {
             titleButton.removeEventListener("click", this._onTitleClick);
         }
+
+        this.element.removeEventListener("dragstart",this._onDragStart);
+        this.element.removeEventListener("dragend",this._onDragEnd);
+
     }
 }

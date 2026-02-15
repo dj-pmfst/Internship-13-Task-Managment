@@ -311,3 +311,8 @@
 #archive {
     margin-left: 15px;
 }
+
+button:disabled{
+    cursor: not-allowed;
+    pointer-events: none;
+}

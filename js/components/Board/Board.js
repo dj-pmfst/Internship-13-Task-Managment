@@ -7,6 +7,9 @@ import { UserCancelledError } from "../../error/error.js";
 import { ToastTypes } from "../../enums/ToastTypes.js";
 import { titleToStatusMap } from "../../helpers/Map.js";
 import { DateTimeHelper } from "../../helpers/DateTimeHelper.js";
+import { ConfirmPopup } from "../Popup/ConfirmPopup.js";
+import { TaskDetailsPopup } from "../Popup/TaskDetailsPopup.js";
+import { TaskDetailAction } from "../../enums/TaskDetailAction.js";
 
 export class Board{
     constructor(boardEl){
@@ -118,10 +121,35 @@ export class Board{
         }
 
         this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
-        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);        
-        this._onTaskDetailsRequest = (e) => {
+        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);   
+
+        this._onTaskDetailsRequest = async (e) => {
             const task = e.detail.task;
-            this.showTaskDetails(task);
+
+            try{
+                const action=await this.showTaskDetails(task);
+
+                switch(action){
+                    case TaskDetailAction.DELETE:
+                        await Storage.deleteTask(task.id);
+                        task.remove();
+                        Toast.show("Task successfuly deleted",ToastTypes.SUCCESS);                           
+                        break;
+
+                    case TaskDetailAction.ARCHIVE:
+                        await Storage.archiveTask(task.id,{ archived:true });
+                        task.remove();
+                        Toast.show("Task successfuly archived",ToastTypes.SUCCESS);                          
+                        break;
+                    
+                    case TaskDetailAction.CANCEL:
+                        break;
+                }
+            }
+
+            catch(error){
+                    Toast.show(error.message,ToastTypes.DANGER);
+            }
         }
     }
 
@@ -134,34 +162,25 @@ export class Board{
                 return;
             }
 
-            const confirmPopup = document.querySelector('.pop-confirm');
-            document.getElementById('confirm-text').textContent = 
-                `Archive all ${column.taskList.length} tasks from "${column.title}"?`;
-            confirmPopup.classList.add('active');
+            const text=`Archive all ${column.taskList.length} tasks from "${column.title}"?`;
+            const isConfirmed=await ConfirmPopup.show(text);
             
-            document.getElementById('confirm-yes').onclick = async () => {
-                try {
+            if(isConfirmed){
+                try{
                     for (const task of column.taskList) {
-                        await Storage.updateTask(task.id, { archived: true });
-                        task.element.remove();
+                        await Storage.archiveTask(task.id, { archived: true });
+                        task.remove();                     
                     }
-                    
-                    column.taskList = [];
-                    column.taskCount = 0;
-                    column.countEl.textContent = 0;
-                    
-                    confirmPopup.classList.remove('active');
-                    Toast.show("All tasks archived successfully", ToastTypes.SUCCESS);
-                } catch (error) {
-                    confirmPopup.classList.remove('active');
-                    Toast.show(error.message, ToastTypes.DANGER);
+
+                    column.reset();
+                    Toast.show("All tasks archived successfully", ToastTypes.SUCCESS);                                       
                 }
-            };
-            
-            document.getElementById('confirm-no').onclick = () => {
-                confirmPopup.classList.remove('active');
-            };
-        }
+                catch (error) {
+                    ConfirmPopup.popup.classList.remove('active');
+                    Toast.show(error.message, ToastTypes.DANGER);
+                }   
+            }              
+        } 
     }
     
     addOnDeleteAllListener(){
@@ -173,66 +192,29 @@ export class Board{
                 return;
             }
 
-            const confirmPopup = document.querySelector('.pop-confirm');
-            document.getElementById('confirm-text').textContent = 
-                `DELETE all ${column.taskList.length} tasks from "${column.title}"? This cannot be undone!`;
-            confirmPopup.classList.add('active');
+            const text=`DELETE all ${column.taskList.length} tasks from "${column.title}"? This cannot be undone!`;
+            const isConfirmed=await ConfirmPopup.show(text);
             
-            document.getElementById('confirm-yes').onclick = async () => {
+            if(isConfirmed){
                 try {
                     for (const task of column.taskList) {
                         await Storage.deleteTask(task.id);
-                        task.element.remove();
+                        task.remove();
                     }
                     
-                    column.taskList = [];
-                    column.taskCount = 0;
-                    column.countEl.textContent = 0;
-                    
-                    confirmPopup.classList.remove('active');
+                    column.reset();
                     Toast.show("All tasks deleted successfully", ToastTypes.SUCCESS);
+
                 } catch (error) {
-                    confirmPopup.classList.remove('active');
+                    ConfirmPopup.popup.classList.remove('active');
                     Toast.show(error.message, ToastTypes.DANGER);
                 }
-            };
-            
-            document.getElementById('confirm-no').onclick = () => {
-                confirmPopup.classList.remove('active');
-            };
+            }
         }
     }
 
-    showTaskDetails(task) {
-        const popup = document.querySelector('.pop-details');
-
-        document.getElementById('detail-title').textContent = task.title || 'N/A';
-        document.getElementById('detail-description').textContent = task.description || 'N/A';
-        document.getElementById('detail-start').textContent = task.startDate || 'N/A';
-        document.getElementById('detail-end').textContent = task.endDate || 'N/A';
-        document.getElementById('detail-duration').textContent = task.duration ? `${task.duration}h` : 'N/A';
-        document.getElementById('detail-priority').textContent = task.priority || 'N/A';
-        document.getElementById('detail-type').textContent = task.type || 'N/A';
-        document.getElementById('detail-assignee').textContent = task.assignee || 'N/A';
-        document.getElementById('detail-status').textContent = task.status || 'N/A';
-
-        popup.classList.add('active');
-
-        const closeBtn = popup.querySelector('.close-details');
-        const closeBottomBtn = document.getElementById('close-details-btn');
-        
-        const closePopup = () => {
-            popup.classList.remove('active');
-        };
-        
-        closeBtn.onclick = closePopup;
-        closeBottomBtn.onclick = closePopup;
-
-        popup.onclick = (e) => {
-            if (e.target === popup) {
-                closePopup();
-            }
-        };
+    async showTaskDetails(task) {
+        return await TaskDetailsPopup.show(task);
     }
     
     addOnMoveRequestListener(){
