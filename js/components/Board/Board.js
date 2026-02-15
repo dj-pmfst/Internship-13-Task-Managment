@@ -7,6 +7,7 @@ import { UserCancelledError } from "../../error/error.js";
 import { ToastTypes } from "../../enums/ToastTypes.js";
 import { titleToStatusMap } from "../../helpers/Map.js";
 import { DateTimeHelper } from "../../helpers/DateTimeHelper.js";
+import { ConfirmPopup } from "../Popup/ConfirmPopup.js";
 
 export class Board{
     constructor(boardEl){
@@ -134,34 +135,27 @@ export class Board{
                 return;
             }
 
-            const confirmPopup = document.querySelector('.pop-confirm');
-            document.getElementById('confirm-text').textContent = 
-                `Archive all ${column.taskList.length} tasks from "${column.title}"?`;
-            confirmPopup.classList.add('active');
+            const text=`Archive all ${column.taskList.length} tasks from "${column.title}"?`;
+            const isConfirmed=await ConfirmPopup.show(text);
             
-            document.getElementById('confirm-yes').onclick = async () => {
-                try {
+            if(isConfirmed){
+                try{
                     for (const task of column.taskList) {
                         await Storage.updateTask(task.id, { archived: true });
-                        task.element.remove();
+                        task.element.remove();                       
                     }
-                    
+
+                    Toast.show("All tasks archived successfully", ToastTypes.SUCCESS);      
                     column.taskList = [];
                     column.taskCount = 0;
-                    column.countEl.textContent = 0;
-                    
-                    confirmPopup.classList.remove('active');
-                    Toast.show("All tasks archived successfully", ToastTypes.SUCCESS);
-                } catch (error) {
-                    confirmPopup.classList.remove('active');
-                    Toast.show(error.message, ToastTypes.DANGER);
+                    column.countEl.textContent = 0;                                   
                 }
-            };
-            
-            document.getElementById('confirm-no').onclick = () => {
-                confirmPopup.classList.remove('active');
-            };
-        }
+                catch (error) {
+                    ConfirmPopup.popup.classList.remove('active');
+                    Toast.show(error.message, ToastTypes.DANGER);
+                }   
+            }              
+        } 
     }
     
     addOnDeleteAllListener(){
