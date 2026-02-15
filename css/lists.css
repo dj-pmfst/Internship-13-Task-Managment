@@ -1,4 +1,4 @@
-.lists-container {
+.lists-container{
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -9,20 +9,20 @@
     border-bottom-right-radius: 20px;
     height: auto;
     max-width: 100vw;
-    padding-top: 20px;
-    padding-bottom: 20px;
 }
 
-.list {
+.list{
     display: flex;
     flex-direction: column;
-    height: auto;
+    height:auto;
     width: 250px;
     background-color: #A9A9DB;
     border-radius: 20px;
     border-color: transparent;
     padding: 5px;
-    transition: opacity 0.2s ease, border 0.2s ease;
+    transition: opacity 0.2s ease,border 0.2s ease;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .title {
@@ -200,17 +200,21 @@
 
 .archived {
     background-color: #9A9ACF;
-    margin: 20px;
-    border-radius: 20px;
-    padding-left: 30px;
-    padding-right: 30px;
+    margin: 0; 
+    border-radius: 0; 
+    padding: 30px; 
+    padding-top: 50px;
     min-height: 200px;
     font-size: 18px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 100%; 
+    height: 100%;
     gap: 40px;
+    box-sizing: border-box; 
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .tasks {
