@@ -162,4 +162,28 @@ export class Storage{
 
         return data;
     }
+
+    static async filterArchivedTasks(startDate,endDate){
+        if(!taskId)
+            throw new Error("Task ID is missing.Cannot delete task");
+        
+        const response=await fetch(`${Storage.apiBase}/archived/filter`,{
+            method: RequestMethod.GET,
+        });
+
+        let data;
+        try{
+            data=await response.json();
+        }
+        catch{
+            console.warn(Storage.invalidJSON);
+        }
+
+        if(!response.ok){
+            const message=data?.error || `HTTP error ${response.status}`;
+            throw new Error(message);
+        }
+
+        return data;        
+    }
 }

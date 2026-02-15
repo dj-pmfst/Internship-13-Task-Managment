@@ -23,11 +23,11 @@ export class DateTimeHelper{
 
     } 
 
-    static isDateRangeValid(fields){
+    static isDateRangeValid(startDate,endDate){
 
-        if(fields.startDate && fields.endDate){
-            const start=new Date(fields.startDate);
-            const end=new Date(fields.endDate);
+        if(startDate && endDate){
+            const start=new Date(startDate);
+            const end=new Date(endDate);
 
             if(start.getTime()===end.getTime)
                 return { error: "Start date and end date cannot be the same"};

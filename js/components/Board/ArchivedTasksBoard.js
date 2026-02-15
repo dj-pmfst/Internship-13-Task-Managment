@@ -5,6 +5,7 @@ import { ToastTypes } from "../../enums/ToastTypes.js";
 import { DateTimeHelper } from "../../helpers/DateTimeHelper.js";
 import { ConfirmPopup } from "../Popup/ConfirmPopup.js";
 import { titleToStatusMap } from "../../helpers/Map.js";
+import { TaskDetailsPopup } from "../Popup/TaskDetailsPopup.js";
 
 export class ArchivedTasksBoard{
 
@@ -181,5 +182,9 @@ export class ArchivedTasksBoard{
                 Toast.show(error.message, ToastTypes.DANGER);
             }       
         }
-    }    
+    } 
+    
+    async showTaskDetails(task){
+        return await TaskDetailsPopup.show(task,true);
+    }
 }

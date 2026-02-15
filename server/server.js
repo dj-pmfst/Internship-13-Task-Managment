@@ -4,7 +4,7 @@ import cors from "cors";
 import { fileURLToPath } from "url";
 import express from "express";
 import { initDb } from "./db/db.js";
-import { archiveTask, clearTasks, createTask, deleteTask, getArchivedTasks, getTasks, updateTask } from "./controllers/taskController.js";
+import { archiveTask, clearTasks, createTask, deleteTask, filterArchivedTasks, getArchivedTasks, getTasks, updateTask } from "./controllers/taskController.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,6 +33,7 @@ app.use(express.static(rootDir));
 
 app.get("/api/tasks", getTasks);
 app.get("/api/tasks/archived", getArchivedTasks);
+app.get("/api/tasks/archived/filter",filterArchivedTasks);
 app.post("/api/tasks", createTask);
 app.patch("/api/tasks/:id", updateTask);
 app.patch("/api/tasks/:id/archive", archiveTask);

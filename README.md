@@ -15,11 +15,6 @@ Build a **Task Management Board** inspired by **Trello / GitHub Projects** using
 - Visual indicators for upcoming deadlines
 - Dark / Light mode
 
-## Bonus
-
-- User authentication with hashed passwords
-- Protected app access (JWT or cookies)
-
 ## Tech Stack
 
 - HTML, CSS, JavaScript

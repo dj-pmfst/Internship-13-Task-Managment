@@ -15,7 +15,7 @@ export class InputHelper{
             let value=input.value;
 
             if(key==="duration")
-                value=parseInt(value,10);
+                value=Number(newValue);
 
             if(input.type==="datetime-local"){
                 value=DateTimeHelper.toDateTimeLocal(value);
@@ -36,11 +36,10 @@ export class InputHelper{
             let newValue=input.value
 
             if(key==="duration"){
-                console.log("new value: ",newValue);
-                newValue=parseInt(newValue,10);
+                newValue=Number(newValue);            
             }
 
-            else if(dateKeys.includes(key)){
+            if(dateKeys.includes(key)){
                 const oldValue=DateTimeHelper.toDateTimeLocal(existingTask[key]);
                 newValue=DateTimeHelper.toDateTimeLocal(newValue);
 

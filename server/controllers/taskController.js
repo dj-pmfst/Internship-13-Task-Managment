@@ -1,5 +1,6 @@
 import { db } from "../db/db.js";
 import { validateAndBuildData } from "../validators/tasks.js";
+import { DateTimeHelper } from "../../js/helpers/DateTimeHelper.js";
 
 const getTasks = async (_req, res) => {
     try {
@@ -108,11 +109,13 @@ const createTask = async (req, res) => {
         return res.status(400).json({ error });
     }
 
+    const dateRangeError=DateTimeHelper.isDateRangeValid(startDate,endDate);
+    if(dateRangeError.error) return dateRangeError;  
+
     if (attributes?.length === 0) {
         return res.status(400).json({ error: "No data available" });
     }
 
-    console.log("attributes: ",attributes);
     const placeholders = attributes.map((_, i) => `$${i + 1}`)
 
     try {
@@ -132,11 +135,52 @@ const createTask = async (req, res) => {
     }
 };
 
+const filterArchivedTasks= async (req,res)=>{
+
+    const { startDate, endDate }= req.query;
+
+    const {conditions, values, error}=validateAndBuildData({
+        startDate,
+        endDate
+    });
+
+    if (error) {
+        return res.status(400).json({ error });
+    }    
+
+    try{
+        const result = await db.query(
+            `SELECT
+                id, 
+                title,
+                description,
+                assignee,
+                status,
+                priority, 
+                type,
+                est_start_date,
+                est_end_date,
+                est_duration,
+                archived,
+                archived_at
+                FROM tasks
+                WHERE est_start_date>=$1 AND est_end_date<=$2
+                ORDER BY archived_at DESC`,
+                values
+            );    
+        res.json(result.rows);
+    } 
+    catch (error) {
+        res.status(500).json({ error: "Failed to filter archived tasks" });
+        console.log(error);
+    }
+
+}
+
 const updateTask = async (req, res) => {
     const { title, description, assignee, status, priority, type, startDate, endDate, duration, archived,position } = req.body;
 
-    console.log("bodyyy: ",req.body);
-    const { updates, values, error } = validateAndBuildData({
+    const { updates,values,error } = validateAndBuildData({
             title,
             description,
             assignee,
@@ -153,6 +197,9 @@ const updateTask = async (req, res) => {
     if (error) {
         return res.status(400).json({ error });
     }
+
+    const dateRangeError=DateTimeHelper.isDateRangeValid(startDate,endDate);
+    if(dateRangeError.error) return dateRangeError;      
 
     if (updates?.length === 0) {
         return res.status(400).json({ error: "No fields to update" });
@@ -239,5 +286,4 @@ const clearTasks = async (_req, res) => {
         res.status(500).json({ error: "Failed to clear tasks" });
     }
 }
-
-export { getTasks, getArchivedTasks, createTask, updateTask, archiveTask, deleteTask, clearTasks };
+export { getTasks, getArchivedTasks, createTask, updateTask, archiveTask, deleteTask, clearTasks, filterArchivedTasks };
