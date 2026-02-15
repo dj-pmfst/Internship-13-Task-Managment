@@ -57,7 +57,13 @@ export class ArchivedTasksBoard{
             await this.handleUnarchiveTask(targetTask);
         }
 
+        this._onTaskDeleteRequest=async (e)=>{
+            const targetTask=e.detail.task;
+            await this.handleDeleteTask(targetTask);
+        }
+
         this.boardEl.addEventListener("requestTaskUnarchive",this._onTaskUnarchiveRequest);
+        this.boardEl.addEventListener("requestTaskDelete",this._onTaskDeleteRequest);
 
     }
 
@@ -85,6 +91,25 @@ export class ArchivedTasksBoard{
                 Toast.show(error.message, ToastTypes.DANGER);
             }                   
         }
- 
     }
+
+    async handleDeleteTask(task){
+
+        const text = `Delete task "${task.title}"? This cannot be undone!`;
+        const isConfirmed = await ConfirmPopup.show(text);
+        
+        if (isConfirmed) {
+            try {
+                await Storage.deleteTask(task.id);
+    
+                const taskIndex = this.taskList.findIndex(t => t.id === task.id);
+                this.taskList.splice(taskIndex, 1);
+                task.remove();
+                
+                Toast.show("Task deleted successfully", ToastTypes.SUCCESS);
+            } catch (error) {
+                Toast.show(error.message, ToastTypes.DANGER);
+            }       
+        }
+    }    
 }

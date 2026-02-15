@@ -40,6 +40,7 @@ export class BaseTask{
     }
 
     getTimeLeftClass(){
+
         const now = new Date();
         const start = new Date(this.startDate);
         const end = new Date(this.endDate);
