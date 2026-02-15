@@ -126,21 +126,10 @@ export class Board{
             try{
                 const action=await this.showTaskDetails(task);
 
-                switch(action){
-                    case TaskDetailAction.DELETE:
-                        await Storage.deleteTask(task.id);
-                        task.remove();
-                        Toast.show("Task successfuly deleted",ToastTypes.SUCCESS);                           
-                        break;
-
-                    case TaskDetailAction.ARCHIVE:
-                        await Storage.archiveTask(task.id,{ archived:true });
-                        task.remove();
-                        Toast.show("Task successfuly archived",ToastTypes.SUCCESS);                          
-                        break;
-                    
-                    case TaskDetailAction.CANCEL:
-                        break;
+                if (action === TaskDetailAction.DELETE) {
+                    await this.handleDeleteTask(task);
+                } else if (action === TaskDetailAction.ARCHIVE) {
+                    await this.handleArchiveTask(task);
                 }
             }
 
@@ -212,6 +201,58 @@ export class Board{
 
     async showTaskDetails(task) {
         return await TaskDetailsPopup.show(task);
+    }
+
+    async handleDeleteTask(task) {
+        const text = `Delete task "${task.title}"? This cannot be undone!`;
+        const isConfirmed = await ConfirmPopup.show(text);
+        
+        if (isConfirmed) {
+            try {
+                await Storage.deleteTask(task.id);
+    
+                const column = this.columns.find(col => 
+                    col.taskList.some(t => t.id === task.id)
+                );
+                
+                if (column) {
+                    const taskIndex = column.taskList.findIndex(t => t.id === task.id);
+                    const deletedTask = column.taskList.splice(taskIndex, 1)[0];
+                    deletedTask.remove(); 
+                    column.updateCount(false);
+                }
+                
+                Toast.show("Task deleted successfully", ToastTypes.SUCCESS);
+            } catch (error) {
+                Toast.show(error.message, ToastTypes.DANGER);
+            }
+        }
+    }
+    
+    async handleArchiveTask(task) {
+        const text = `Archive task "${task.title}"?`;
+        const isConfirmed = await ConfirmPopup.show(text);
+        
+        if (isConfirmed) {
+            try {
+                await Storage.archiveTask(task.id); 
+    
+                const column = this.columns.find(col => 
+                    col.taskList.some(t => t.id === task.id)
+                );
+                
+                if (column) {
+                    const taskIndex = column.taskList.findIndex(t => t.id === task.id);
+                    const archivedTask = column.taskList.splice(taskIndex, 1)[0];
+                    archivedTask.remove(); 
+                    column.updateCount(false);
+                }
+                
+                Toast.show("Task archived successfully", ToastTypes.SUCCESS);
+            } catch (error) {
+                Toast.show(error.message, ToastTypes.DANGER);
+            }
+        }
     }
     
     addOnMoveRequestListener(){
