@@ -207,82 +207,55 @@ export class Board{
     }
 
     async handleDeleteTask(task) {
-        const confirmPopup = document.querySelector('.pop-confirm');
-        document.getElementById('confirm-text').textContent = 
-            `Delete task "${task.title}"? This cannot be undone!`;
-        confirmPopup.classList.add('active');
-
-        return new Promise((resolve) => {
-            document.getElementById('confirm-yes').onclick = async () => {
-                try {
-                    await Storage.deleteTask(task.id);
-                    const column = this.columns.find(col => 
-                        col.taskList.some(t => t.id === task.id)
-                    );
-                    
-                    if (column) {
-                        const taskIndex = column.taskList.findIndex(t => t.id === task.id);
-                        const deletedTask = column.taskList.splice(taskIndex, 1)[0];
-                        deletedTask.element.remove();
-                        deletedTask.destroy();
-                        column.updateCount(false);
-                    }
-                    
-                    confirmPopup.classList.remove('active');
-                    Toast.show("Task deleted successfully", ToastTypes.SUCCESS);
-                    resolve();
-                } catch (error) {
-                    confirmPopup.classList.remove('active');
-                    Toast.show(error.message, ToastTypes.DANGER);
-                    resolve();
+        const text = `Delete task "${task.title}"? This cannot be undone!`;
+        const isConfirmed = await ConfirmPopup.show(text);
+        
+        if (isConfirmed) {
+            try {
+                await Storage.deleteTask(task.id);
+    
+                const column = this.columns.find(col => 
+                    col.taskList.some(t => t.id === task.id)
+                );
+                
+                if (column) {
+                    const taskIndex = column.taskList.findIndex(t => t.id === task.id);
+                    const deletedTask = column.taskList.splice(taskIndex, 1)[0];
+                    deletedTask.remove(); 
+                    column.updateCount(false);
                 }
-            };
-            
-            document.getElementById('confirm-no').onclick = () => {
-                confirmPopup.classList.remove('active');
-                resolve();
-            };
-        });
+                
+                Toast.show("Task deleted successfully", ToastTypes.SUCCESS);
+            } catch (error) {
+                Toast.show(error.message, ToastTypes.DANGER);
+            }
+        }
     }
     
     async handleArchiveTask(task) {
-        const confirmPopup = document.querySelector('.pop-confirm');
-        document.getElementById('confirm-text').textContent = 
-            `Archive task "${task.title}"?`;
-        confirmPopup.classList.add('active');
-
-        return new Promise((resolve) => {
-            document.getElementById('confirm-yes').onclick = async () => {
-                try {
-                    await Storage.updateTask(task.id, { archived: true });
-
-                    const column = this.columns.find(col => 
-                        col.taskList.some(t => t.id === task.id)
-                    );
-                    
-                    if (column) {
-                        const taskIndex = column.taskList.findIndex(t => t.id === task.id);
-                        const archivedTask = column.taskList.splice(taskIndex, 1)[0];
-                        archivedTask.element.remove();
-                        archivedTask.destroy();
-                        column.updateCount(false);
-                    }
-                    
-                    confirmPopup.classList.remove('active');
-                    Toast.show("Task archived successfully", ToastTypes.SUCCESS);
-                    resolve();
-                } catch (error) {
-                    confirmPopup.classList.remove('active');
-                    Toast.show(error.message, ToastTypes.DANGER);
-                    resolve();
+        const text = `Archive task "${task.title}"?`;
+        const isConfirmed = await ConfirmPopup.show(text);
+        
+        if (isConfirmed) {
+            try {
+                await Storage.archiveTask(task.id); 
+    
+                const column = this.columns.find(col => 
+                    col.taskList.some(t => t.id === task.id)
+                );
+                
+                if (column) {
+                    const taskIndex = column.taskList.findIndex(t => t.id === task.id);
+                    const archivedTask = column.taskList.splice(taskIndex, 1)[0];
+                    archivedTask.remove(); 
+                    column.updateCount(false);
                 }
-            };
-            
-            document.getElementById('confirm-no').onclick = () => {
-                confirmPopup.classList.remove('active');
-                resolve();
-            };
-        });
+                
+                Toast.show("Task archived successfully", ToastTypes.SUCCESS);
+            } catch (error) {
+                Toast.show(error.message, ToastTypes.DANGER);
+            }
+        }
     }
     
     addOnMoveRequestListener(){
