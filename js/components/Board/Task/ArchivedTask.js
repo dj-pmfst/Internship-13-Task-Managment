@@ -70,4 +70,15 @@ export class ArchivedTask extends BaseTask{
         this.deleteButton.addEventListener("click",this._onDeleteButtonClick);
     }
 
+    remove(){
+        this.destroy();
+        this.element.remove();
+    }
+    
+    destroy(){
+        this.titleButton.removeEventListener("click", this._onTitleClick);
+        this.unarchiveButton.removeEventListener("click",this._onArchiveButtonClick);
+        this.deleteButton.removeEventListener("click",this._onDeleteButtonClick);
+    }
+
 }

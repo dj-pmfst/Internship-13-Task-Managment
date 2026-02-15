@@ -45,6 +45,12 @@ export class Board{
         }
     }   
 
+    clearBoard(){
+        this.columns.forEach(c=>{
+            c.clear();
+        });
+    }
+
     bindEvents(){
         this.addOnTaskRequestListeners();
         this.addOnMoveRequestListener();
@@ -235,7 +241,7 @@ export class Board{
         
         if (isConfirmed) {
             try {
-                await Storage.archiveTask(task.id); 
+                await Storage.archiveTask(task.id,{ archived: true }); 
     
                 const column = this.columns.find(col => 
                     col.taskList.some(t => t.id === task.id)

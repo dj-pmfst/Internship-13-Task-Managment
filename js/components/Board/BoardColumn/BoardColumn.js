@@ -267,5 +267,10 @@ export class BoardColumn{
         this.countEl.textContent = 0;        
     }
 
+    clear(){
+        this.taskList.forEach(task=>task.remove());
+        this.reset();
+    }
+
 }
 

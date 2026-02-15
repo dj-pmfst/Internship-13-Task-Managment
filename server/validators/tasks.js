@@ -50,6 +50,11 @@ const fieldValidators = {
     position: {
         validate: (val)=> Number.isInteger(val) && val>0,
         error: "Position must be a positive integer"
+    },
+
+    archived: {
+        validate: (val)=> typeof val==="boolean",
+        error: "Archived must be a boolean value"   
     }
 }
 
