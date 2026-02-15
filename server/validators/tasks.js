@@ -7,8 +7,6 @@ const allowedStatus = ["blocked", "todo", "in_progress", "in_review", "done"];
 const allowedPriority = ["low", "mid", "high"];
 const allowedType = ["feature", "bugfix", "improvement"];
 
-const isValidDate = (val) => !isNaN(Date.parse(val));
-
 const titleMinLength=1;
 const MAX_DURATION = 2147483647;
 

@@ -1,5 +1,7 @@
 import { ErrorMessage } from "./ErrorMessage.js";
 
+const isValidDate = (val) => !isNaN(Date.parse(val));
+
 export class ValidationFunctions{
     
     static validatePositiveInteger=(val,propName,maxValue)=>{
