@@ -332,6 +332,5 @@ export class Board{
             await Storage.updateTask(task.id,{position: task.position});
         }
 
-          
     };
 }
