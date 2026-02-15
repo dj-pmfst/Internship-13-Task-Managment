@@ -9,6 +9,7 @@ import { titleToStatusMap } from "../../helpers/Map.js";
 import { DateTimeHelper } from "../../helpers/DateTimeHelper.js";
 import { ConfirmPopup } from "../Popup/ConfirmPopup.js";
 import { TaskDetailsPopup } from "../Popup/TaskDetailsPopup.js";
+import { TaskDetailAction } from "../../enums/TaskDetailAction.js";
 
 export class Board{
     constructor(boardEl){
@@ -120,10 +121,35 @@ export class Board{
         }
 
         this.boardEl.addEventListener("requestNewTask",this._onTaskRequest);
-        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);        
-        this._onTaskDetailsRequest = (e) => {
+        this.boardEl.addEventListener("requestTaskActions",this._onTaskActionsRequest);   
+
+        this._onTaskDetailsRequest = async (e) => {
             const task = e.detail.task;
-            this.showTaskDetails(task);
+
+            try{
+                const action=await this.showTaskDetails(task);
+
+                switch(action){
+                    case TaskDetailAction.DELETE:
+                        await Storage.deleteTask(task.id);
+                        task.remove();
+                        Toast.show("Task successfuly deleted",ToastTypes.SUCCESS);                           
+                        break;
+
+                    case TaskDetailAction.ARCHIVE:
+                        await Storage.archiveTask(task.id,{ archived:true });
+                        task.remove();
+                        Toast.show("Task successfuly archived",ToastTypes.SUCCESS);                          
+                        break;
+                    
+                    case TaskDetailAction.CANCEL:
+                        break;
+                }
+            }
+
+            catch(error){
+                    Toast.show(error.message,ToastTypes.DANGER);
+            }
         }
     }
 
@@ -187,8 +213,8 @@ export class Board{
         }
     }
 
-    showTaskDetails(task) {
-        TaskDetailsPopup.show(task);
+    async showTaskDetails(task) {
+        return await TaskDetailsPopup.show(task);
     }
     
     addOnMoveRequestListener(){

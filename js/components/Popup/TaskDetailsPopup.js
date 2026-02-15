@@ -14,7 +14,7 @@ export class TaskDetailsPopup{
     }
 
     static show(task){
-        if (TaskEditPopup.isOpen) {
+        if (TaskDetailsPopup.isOpen) {
             return Promise.resolve("cancel");
         }
 
