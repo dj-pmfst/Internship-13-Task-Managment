@@ -215,6 +215,15 @@ export class Board{
 
                 targetColumn.taskList.splice(insertIndex,0,draggedTask);
 
+                const addDiv = targetColumn.element.querySelector('.add');
+                if (afterElement) {
+                    targetColumn.element.insertBefore(draggedTask.element, afterElement);
+                } else if (addDiv) {
+                    targetColumn.element.insertBefore(draggedTask.element, addDiv);
+                } else {
+                    targetColumn.element.appendChild(draggedTask.element);
+                }
+
                 await this.updateTaskPositions(sourceColumn.taskList);
                 await this.updateTaskPositions(targetColumn.taskList);
 

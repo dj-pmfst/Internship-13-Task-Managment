@@ -143,13 +143,7 @@ export class BoardColumn{
                     }
                 });                   
             }
-            const draggedColumnTitle=e.dataTransfer.getData("text/plain");
-            const event=new CustomEvent("columnDrop",{
-                bubbles: true,
-                detail: {
-                    targetColumn: this,
-                    draggedColumnTitle}
-            });
+
             this.element.dispatchEvent(event);
         }
         
@@ -158,6 +152,7 @@ export class BoardColumn{
         rightBtn.addEventListener("click",this._onRightButtonClick);
         this.element.addEventListener("dragstart",this._onDragStart);
         this.element.addEventListener("dragover",this._onDragOver);
+        this.element.addEventListener("dragleave",this._onDragLeave);
         this.element.addEventListener("drop",this._onDrop);
     }
     startTaskMonitor(interval){
