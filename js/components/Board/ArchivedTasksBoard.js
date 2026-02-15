@@ -5,6 +5,7 @@ import { ToastTypes } from "../../enums/ToastTypes.js";
 import { DateTimeHelper } from "../../helpers/DateTimeHelper.js";
 import { ConfirmPopup } from "../Popup/ConfirmPopup.js";
 import { titleToStatusMap } from "../../helpers/Map.js";
+import { TaskDetailsPopup } from "../Popup/TaskDetailsPopup.js";
 
 export class ArchivedTasksBoard{
 
@@ -62,10 +63,22 @@ export class ArchivedTasksBoard{
             await this.handleDeleteTask(targetTask);
         }
 
+        this._onTaskDetailsRequest = async (e) => {
+            const task = e.detail.task;
+
+            try{
+                await this.showTaskDetails(task);
+            }
+            catch(error){
+                    Toast.show(error.message,ToastTypes.DANGER);
+            }        
+        }
+
         this.boardEl.addEventListener("requestTaskUnarchive",this._onTaskUnarchiveRequest);
         this.boardEl.addEventListener("requestTaskDelete",this._onTaskDeleteRequest);
+        this.boardEl.addEventListener("requestArchivedTaskDetails",this._onTaskDetailsRequest);        
+    } 
 
-    }
 
     async handleUnarchiveTask(task){
 
@@ -111,5 +124,9 @@ export class ArchivedTasksBoard{
                 Toast.show(error.message, ToastTypes.DANGER);
             }       
         }
-    }    
+    } 
+    
+    async showTaskDetails(task){
+        return await TaskDetailsPopup.show(task,true);
+    }
 }
