@@ -47,13 +47,11 @@ export class Task{
         this.taskActionsBtn = this.actionsSpan.querySelector('.edit-btn');
         
         this.render();
-        this.element.appendChild(this.actionsSpan); 
         this.element.draggable=true;       
         this.bindEvents(); 
     }
 
     render(){
-        const previousContent = this.element.innerHTML;
         this.element.innerHTML = Task.markup(this);
         this.element.appendChild(this.actionsSpan); 
 
@@ -71,7 +69,6 @@ export class Task{
 
     updateTask(updatedTaskData){
         this.propertyMapping(updatedTaskData);
-        this.render();
         this.updateTimeLeftClass();
     }
 

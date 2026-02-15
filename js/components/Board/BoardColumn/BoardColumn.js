@@ -159,6 +159,7 @@ export class BoardColumn{
             if(dragData.dragType===DragType.TASK){
                 const afterElement=this.getDragAfterElement(e.clientY);
                 const draggedElement=document.querySelector(".dragging");
+                
                 const addDiv=this.element.querySelector(".add");
 
                 if(afterElement)
