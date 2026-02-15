@@ -1,7 +1,6 @@
 const board=document.querySelector(".lists-container");
 const alertDiv=document.querySelector(".alertDiv");
-
-const popAdd=document.querySelector(".pop-add");
+const popAdd = document.querySelector(".pop-add");
 
 const inputs={
     title:popAdd.querySelector("#title-input"),
@@ -14,4 +13,35 @@ const inputs={
     asignee:popAdd.querySelector("#person-input")
 }
 
-export {board,alertDiv,popAdd,inputs};
+const modeSwitchElements={
+    lightModeBtn: document.querySelector('.light-mode-btn'),
+    darkModeBtn:document.querySelector('.dark-mode-btn'),
+    darkModeStylesheet: document.getElementById('dark-mode-stylesheet')
+}
+
+const archiveElements={
+    archiveButton:document.querySelector('.subtitle button.archive'),
+    archivedContainer: document.querySelector('.archived')
+}
+
+const todoElements={
+    todoButton: document.querySelector('.subtitle button:first-child'),
+    listsContainer: document.querySelector('.lists-container'),
+    todoLists: document.querySelectorAll('.list')
+}
+
+const taskEditPopupElements={
+    popAdd,
+    saveBtn: popAdd.querySelector("#save"),
+    cancelBtn: popAdd.querySelector("#cancel"),
+    editBtn: popAdd.querySelector("#edit"),
+}
+
+const confirmPopupElements={
+    confirmPopup: document.querySelector('.pop-confirm'),
+    confirmText: document.getElementById('confirm-text'),
+    confirmYes: document.getElementById('confirm-yes'),
+    confirmNo: document.getElementById('confirm-no')
+}
+
+export { board,alertDiv,inputs,modeSwitchElements,archiveElements,todoElements,confirmPopupElements, taskEditPopupElements };

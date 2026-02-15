@@ -1,4 +1,4 @@
-import { Popup } from "../Popup/Popup.js";
+import { TaskEditPopup } from "../Popup/TaskEditPopup.js";
 import { Toast } from "../Toast/Toast.js";
 import { BoardColumn } from "./BoardColumn/BoardColumn.js";
 import { Task } from "./Task/Task.js";
@@ -79,7 +79,7 @@ export class Board{
             const targetColumn=this.columns.find(col=>col.title===columnTitle);
 
             try{
-                const newTaskData=await Popup.open();
+                const newTaskData=await TaskEditPopup.open();
                 newTaskData.status=titleToStatusMap[columnTitle];
                 newTaskData.position=targetColumn.taskList.length+1;
 
@@ -102,7 +102,7 @@ export class Board{
             const task=e.detail.task;
 
             try{
-                const updatedData=await Popup.open(task);
+                const updatedData=await TaskEditPopup.open(task);
                 const updatedTask=await Storage.updateTask(task.id,updatedData);
 
                 task.updateTask(updatedTask);
