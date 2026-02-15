@@ -52,23 +52,35 @@ export class Storage{
         return data;
     }
 
-    static async getArchivedTasks(){
-        const response=await fetch(`${Storage.apiBase}/archived`,{method: RequestMethod.GET});
+    static async getArchivedTasks(startDate = null, endDate = null){
+        let url = `${Storage.apiBase}/archived`;
 
+        const params = new URLSearchParams();
+        if (startDate) params.append('start', startDate);
+        if (endDate) params.append('end', endDate);
+        
+        if (params.toString()) {
+            url += `?${params.toString()}`;
+        }
+        
+        console.log('Fetching archived tasks from:', url); 
+        
+        const response = await fetch(url, {method: RequestMethod.GET});
+    
         let data;
         try{
-            data=await response.json();
+            data = await response.json();
         }
         catch{
             console.warn(Storage.invalidJSON);
         }
         if(!response.ok){
-            const message=data?.error || `HTTP error ${response.status}`;
+            const message = data?.error || `HTTP error ${response.status}`;
             throw new Error(data.error || "Failed to get archived tasks");            
         }
-
+    
         return data;
-    }    
+    } 
 
 
     static async updateTask(taskId,taskData){

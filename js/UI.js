@@ -22,16 +22,15 @@ export class UI{
     }
 
     bindEvents(){
-        archiveElements.archiveButton.addEventListener("click",async ()=>{
+        archiveElements.archiveButton.addEventListener("click", async () => {
             if(this.needsRefresh.archive){
                 console.log("Arhiv");
-                await this.loadArchivedTasks();
-                SwitchView.showArchived();
-
-                this.needsRefresh.todo=true;
-                this.needsRefresh.archive=false;                   
+                SwitchView.showArchived(); 
+                await this.loadArchivedTasks(); 
+                
+                this.needsRefresh.todo = true;
+                this.needsRefresh.archive = false;                   
             }
-
         });
         todoElements.todoButton.addEventListener("click",async ()=>{
             if(this.needsRefresh.todo){

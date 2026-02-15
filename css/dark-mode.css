@@ -34,7 +34,7 @@ body {
 }
 
 .subtitle button:last-child {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 .lists-container {
@@ -42,12 +42,12 @@ body {
 }
 
 .list {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 .title {
     background-color: #303073;
-    border-color: #5A7FC4;
+    border-color: #5776af;
 }
 
 .task {
@@ -78,14 +78,14 @@ body {
 
 .pop-add {
     background-color: #27327C;
-    border-color: #5A7FC4;
+    border-color: #5776af;
 }
 
 .add-title span,
 .add-description span,
 .person span {
     background-color: #5A7FC4;
-    border-color: #5A7FC4;
+    border-color: #5776af;
 }
 
 .add-title span:focus,
@@ -96,21 +96,21 @@ body {
 
 .date > div,
 .time span {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 .priority,
 .type {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 .priority select,
 .type select {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 .pop-add button {
-    background-color: #5A7FC4;
+    background-color: #5776af;
     color: #eae8f2;
 }
 
@@ -120,7 +120,7 @@ body {
 
 #save,
 #cancel {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 #save:hover,
@@ -129,7 +129,7 @@ body {
 }
 
 .archived {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 .task-archived {
@@ -144,7 +144,7 @@ body {
 }
 
 .filters button {
-    background-color: #5A7FC4;
+    background-color: #5776af;
     color: #eae8f2;
 }
 
@@ -153,17 +153,17 @@ body {
 }
 
 .date-input {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 .pop-confirm {
     background-color: #27327C;
-    border-color: #5A7FC4;
+    border-color: #5776af;
     color: #eae8f2;
 }
 
 .pop-confirm button {
-    background-color: #5A7FC4;
+    background-color: #5776af;
     color: #eae8f2;
 }
 
@@ -176,7 +176,7 @@ body {
 }
 
 #confirm-yes {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 #confirm-yes:hover {
@@ -188,7 +188,7 @@ body {
 }
 
 #confirm-no:hover {
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 input {
@@ -229,12 +229,12 @@ input[type="datetime-local"] {
 
 select {
     color: #eae8f2;
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 select option {
     color: #eae8f2;
-    background-color: #5A7FC4;
+    background-color: #5776af;
 }
 
 .alertDiv {
@@ -263,11 +263,11 @@ select option {
 
 .pop-details {
     background-color: #27327C;
-    border-color: #5A7FC4;
+    border-color: #5776af;
 }
 
 .details-header {
-    border-bottom-color: #5A7FC4;
+    border-bottom-color: #5776af;
 }
 
 .details-header h2 {
@@ -292,7 +292,7 @@ select option {
 }
 
 .pop-details button {
-    background-color: #5A7FC4;
+    background-color: #5776af;
     color: #eae8f2;
 }
 
@@ -302,11 +302,11 @@ select option {
 
 .title__menu {
     background-color: #27327C;
-    border-color: #5A7FC4;
+    border-color: #5776af;
 }
 
 .title__menu button {
-    background-color: #5A7FC4;
+    background-color: #5776af;
     color: #eae8f2;
 }
 
