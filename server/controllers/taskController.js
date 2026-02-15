@@ -32,6 +32,18 @@ const getTasks = async (_req, res) => {
 const getArchivedTasks = async (req, res) => {
     try {
         const { start, end } = req.query;
+
+        if (start || end) {
+            if (start && isNaN(Date.parse(start))) {
+                return res.status(400).json({ error: "Invalid start date format" });
+            }
+            if (end && isNaN(Date.parse(end))) {
+                return res.status(400).json({ error: "Invalid end date format" });
+            }
+            if (start && end && new Date(start) > new Date(end)) {
+                return res.status(400).json({ error: "Start date cannot be after end date" });
+            }
+        }
         
         let query = `SELECT
             id, 
@@ -50,7 +62,7 @@ const getArchivedTasks = async (req, res) => {
         WHERE archived = true`;
         
         const queryParams = [];
-
+        
         if (start) {
             queryParams.push(start);
             query += ` AND archived_at >= $${queryParams.length}`;

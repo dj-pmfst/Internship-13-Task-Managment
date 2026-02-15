@@ -10,7 +10,6 @@ import { DateTimeHelper } from "../../helpers/DateTimeHelper.js";
 import { ConfirmPopup } from "../Popup/ConfirmPopup.js";
 import { TaskDetailsPopup } from "../Popup/TaskDetailsPopup.js";
 import { TaskDetailAction } from "../../enums/TaskDetailAction.js";
-import { ArchivedTask } from "./Task/ArchivedTask.js";
 
 export class Board{
     constructor(boardEl){
@@ -362,86 +361,4 @@ export class Board{
         }
 
     };
-
-    initArchivedView() {
-        this.archivedContainer = document.querySelector('.archived');
-        this.archivedTasksContainer = this.archivedContainer?.querySelector('.tasks');
-        
-        if (!this.archivedContainer) return; 
-
-        const dateInputs = this.archivedContainer.querySelectorAll('.date-input');
-        this.filterStartInput = dateInputs[0];
-        this.filterEndInput = dateInputs[1];
-        
-        const filterButtons = this.archivedContainer.querySelectorAll('.filters button');
-        this.applyFilterBtn = filterButtons[0];
-        this.clearFilterBtn = filterButtons[1];
-        
-        this.allArchivedTasks = [];
-
-        if (this.applyFilterBtn) {
-            this.applyFilterBtn.addEventListener('click', () => {
-                this.applyArchivedFilter();
-            });
-        }
-        
-        if (this.clearFilterBtn) {
-            this.clearFilterBtn.addEventListener('click', () => {
-                this.clearArchivedFilter();
-            });
-        }
-    }
-
-    async loadArchivedTasks(startDate = null, endDate = null) {
-        try {
-            const archivedTasks = await Storage.getArchivedTasks(startDate, endDate);
-            this.allArchivedTasks = archivedTasks;
-            this.renderArchivedTasks(this.allArchivedTasks);
-        } catch (error) {
-            Toast.show(error.message, ToastTypes.DANGER);
-        }
-    }
-    
-    applyArchivedFilter() {
-        const startDate = this.filterStartInput.value;
-        const endDate = this.filterEndInput.value;
-
-        let startISO = null;
-        let endISO = null;
-        
-        if (startDate) {
-            startISO = new Date(startDate).toISOString();
-        }
-        
-        if (endDate) {
-            endISO = new Date(endDate).toISOString();
-        }
-    
-        console.log('Filtering with:', { startISO, endISO });
-        
-        this.loadArchivedTasks(startISO, endISO);
-    }
-    
-    async clearArchivedFilter() {
-        this.filterStartInput.value = '';
-        this.filterEndInput.value = '';
-        await this.loadArchivedTasks();
-        Toast.show("Filter cleared", ToastTypes.INFO);
-    }
-
-    renderArchivedTasks(tasks) {
-        if (!this.archivedTasksContainer) return;
-        
-        this.archivedTasksContainer.innerHTML = '';
-    
-        if (tasks.length === 0) {
-            this.archivedTasksContainer.innerHTML = '<p style="padding: 20px; text-align: center;">No archived tasks found</p>';
-            return;
-        }
-    
-        tasks.forEach(taskData => {
-            const task = new ArchivedTask(taskData);
-            this.archivedTasksContainer.appendChild(task.element);
-        });
-    }
 }
