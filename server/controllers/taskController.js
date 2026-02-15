@@ -72,6 +72,10 @@ const createTask = async (req, res) => {
             position
     });
 
+    if (startDate && new Date(val).getTime()>=new Date().getTime()){
+        return res.status(400).json({ error: "Start date cannot be in the past" });
+    }
+
     if (error) {
         return res.status(400).json({ error });
     }
@@ -144,7 +148,7 @@ const filterArchivedTasks= async (req,res)=>{
 const updateTask = async (req, res) => {
     const { title, description, assignee, status, priority, type, startDate, endDate, duration, archived,position } = req.body;
 
-    const { updates, error } = validateAndBuildData({
+    const { updates,values,error } = validateAndBuildData({
             title,
             description,
             assignee,

@@ -1,60 +1,103 @@
 import { DateTimeHelper } from "../../js/helpers/DateTimeHelper.js";
+import { ErrorMessage } from "../../js/helpers/ErrorMessage.js";
 import { fieldToDbColumn } from "../../js/helpers/Map.js";
+import { ValidationFunctions } from "../../js/helpers/ValidationFunctions.js";
 
 const allowedStatus = ["blocked", "todo", "in_progress", "in_review", "done"];
 const allowedPriority = ["low", "mid", "high"];
 const allowedType = ["feature", "bugfix", "improvement"];
 
-const isValidDate = (val) => !isNaN(Date.parse(val)) && (new Date(val).getTime()>=new Date().getTime());
+const isValidDate = (val) => !isNaN(Date.parse(val));
+
+const titleMinLength=1;
+const MAX_DURATION = 2147483647;
 
 const fieldValidators = {
     title: {
-        validate: (val) => typeof val === "string" && val.trim().length > 0,
+        validate: (val) =>{
+            if(typeof val !== "string" ) 
+                return {valid: false, error: ErrorMessage.mustBeString("title")};
+
+            if(val.trim().length<=titleMinLength) 
+                return {valid: false, error: ErrorMessage.minLength("title",titleMinLength)};
+
+            return {valid: true}
+        },
         transform: (val) => val.trim(),
-        error: "Title must be a non-empty string"
-    },
-    description: {
-        validate: (val) => typeof val === "string",
-        transform: (val) => val.trim(),
-        error: "Description must be a string"
-    },
-    assignee: {
-        validate: (val) => typeof val === "string",
-        transform: (val) => val.trim(),
-        error: "Assignee must be a string"
-    },
-    status: {
-        validate: (val) => allowedStatus.includes(val),
-        error: "Invalid status value"
-    },
-    priority: {
-        validate: (val) => allowedPriority.includes(val),
-        error: "Invalid priority value" 
-    },
-    type: {
-        validate: (val) => allowedType.includes(val),
-        error: "Invalid type value"
-    },
-    startDate: {
-        validate: (val) => isValidDate(val),
-        error: "Start date must be a valid date and cannot be in the past"
-    },
-    endDate: {
-        validate: (val) => isValidDate(val),
-        error: "End date must be a valid date and cannot be in the past"
-    },
-    duration: {
-        validate: (val) => Number.isInteger(val) && val > 0,
-        error: "Duration must be a positive integer"
-    },
-    position: {
-        validate: (val)=> Number.isInteger(val) && val>0,
-        error: "Position must be a positive integer"
     },
 
+    description: {
+        validate: (val) =>{
+            return ValidationFunctions.validateString(val,"description");
+        },
+        transform: (val) => val.trim()
+    },
+
+    assignee: {
+        validate: (val) =>{
+            return ValidationFunctions.validateString(val,"assignee");
+        },
+        transform: (val) => val.trim()
+    },
+
+    status: {
+        validate: (val) =>{
+            if(!allowedStatus.includes(val))
+                return {valid: false, error: ErrorMessage.invalidEnum("status")}
+
+            return {valid: true}
+        }
+    },
+
+    priority: {
+        validate: (val) =>{
+            if(!allowedPriority.includes(val))
+                return {valid: false, error: ErrorMessage.invalidEnum("priority")}
+
+            return {valid: true}
+        }
+    },
+
+    type: {
+        validate: (val) =>{
+            if(!allowedType.includes(val))
+                return {valid: false, error: ErrorMessage.invalidEnum("type")}
+
+            return {valid: true}
+        } 
+    },
+
+    startDate: {
+        validate: (val) =>{
+            return ValidationFunctions.validateDate(val,"start date");
+        }
+    },
+    
+    endDate: {
+        validate: (val) =>{
+            return ValidationFunctions.validateDate(val,"end date");
+        }
+    },
+
+    duration: {
+        validate: (val) =>{
+            return ValidationFunctions.validatePositiveInteger(val,"duration",MAX_DURATION);
+        }
+    },
+
+    position: {
+        validate: (val) =>{
+            return ValidationFunctions.validatePositiveInteger(val,"position",MAX_DURATION);
+        }
+    },
+        
     archived: {
-        validate: (val)=> typeof val==="boolean",
-        error: "Archived must be a boolean value"   
+        validate: (val)=>{
+            if(typeof val!=="boolean")
+                return {valid: false, error:ErrorMessage.mustBeBoolean("archived")}; 
+            
+            return {valid:true}
+        }
     }
 }
 
@@ -67,11 +110,11 @@ const validateAndBuildData = (fields) => {
         if (value === undefined) continue;
 
         const validator = fieldValidators[field];
+        const result = validator.validate(value);
 
-        if (!validator.validate(value)) {
-            return { error: validator.error };
+        if (!result.valid) {
+            return { error: result.error };
         }
-
         attributes.push(fieldToDbColumn[field]);
         updates.push(`${fieldToDbColumn[field]} = $${updates.length + 1}`);
         values.push(validator.transform ? validator.transform(value) : value);
