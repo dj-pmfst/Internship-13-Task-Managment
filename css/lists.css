@@ -217,6 +217,12 @@
     border-bottom-right-radius: 20px;
 }
 
+.archived .tasks {
+    max-height: 400px; 
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .tasks {
     flex: 1; 
     display: flex;

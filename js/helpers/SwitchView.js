@@ -40,7 +40,7 @@ export class SwitchView{
         if(toDark){
             listsContainer.style.backgroundColor = '#27327C';
             todoButton.style.backgroundColor = '#27327C';
-            archiveButton.style.backgroundColor = '#5A7FC4';
+            archiveButton.style.backgroundColor = '#5776af';
         }
 
         else{
