@@ -141,14 +141,12 @@ export class Board{
             if(isConfirmed){
                 try{
                     for (const task of column.taskList) {
-                        await Storage.updateTask(task.id, { archived: true });
-                        task.element.remove();                       
+                        await Storage.archiveTask(task.id, { archived: true });
+                        task.remove();                     
                     }
 
-                    Toast.show("All tasks archived successfully", ToastTypes.SUCCESS);      
-                    column.taskList = [];
-                    column.taskCount = 0;
-                    column.countEl.textContent = 0;                                   
+                    column.reset();
+                    Toast.show("All tasks archived successfully", ToastTypes.SUCCESS);                                       
                 }
                 catch (error) {
                     ConfirmPopup.popup.classList.remove('active');
@@ -167,33 +165,24 @@ export class Board{
                 return;
             }
 
-            const confirmPopup = document.querySelector('.pop-confirm');
-            document.getElementById('confirm-text').textContent = 
-                `DELETE all ${column.taskList.length} tasks from "${column.title}"? This cannot be undone!`;
-            confirmPopup.classList.add('active');
+            const text=`DELETE all ${column.taskList.length} tasks from "${column.title}"? This cannot be undone!`;
+            const isConfirmed=await ConfirmPopup.show(text);
             
-            document.getElementById('confirm-yes').onclick = async () => {
+            if(isConfirmed){
                 try {
                     for (const task of column.taskList) {
                         await Storage.deleteTask(task.id);
-                        task.element.remove();
+                        task.remove();
                     }
                     
-                    column.taskList = [];
-                    column.taskCount = 0;
-                    column.countEl.textContent = 0;
-                    
-                    confirmPopup.classList.remove('active');
+                    column.reset();
                     Toast.show("All tasks deleted successfully", ToastTypes.SUCCESS);
+
                 } catch (error) {
-                    confirmPopup.classList.remove('active');
+                    ConfirmPopup.popup.classList.remove('active');
                     Toast.show(error.message, ToastTypes.DANGER);
                 }
-            };
-            
-            document.getElementById('confirm-no').onclick = () => {
-                confirmPopup.classList.remove('active');
-            };
+            }
         }
     }
 

@@ -81,4 +81,56 @@ export class Storage{
         return data;
 
     }    
+
+    static async archiveTask(taskId,archivePayload){
+
+        if(!taskId)
+            throw new Error("Task ID is missing.Cannot archive task");
+        
+        const response=await fetch(`${Storage.apiBase}/${taskId}/archive`,{
+            method: RequestMethod.PATCH,
+            headers,
+            body: JSON.stringify(archivePayload)
+        });
+
+        let data;
+        try{
+            data=await response.json();
+        }
+        catch{
+            console.warn(Storage.invalidJSON);
+        }
+
+        if(!response.ok){
+            const message=data?.error || `HTTP error ${response.status}`;
+            throw new Error(message);
+        }
+
+        return data;        
+    }
+
+    static async deleteTask(taskId){
+
+        if(!taskId)
+            throw new Error("Task ID is missing.Cannot delete task");
+        
+        const response=await fetch(`${Storage.apiBase}/${taskId}`,{
+            method: RequestMethod.DELETE,
+        });
+
+        let data;
+        try{
+            data=await response.json();
+        }
+        catch{
+            console.warn(Storage.invalidJSON);
+        }
+
+        if(!response.ok){
+            const message=data?.error || `HTTP error ${response.status}`;
+            throw new Error(message);
+        }
+
+        return data;
+    }
 }

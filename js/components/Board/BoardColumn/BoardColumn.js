@@ -260,5 +260,11 @@ export class BoardColumn{
         }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
+    reset(){
+        this.taskList = [];
+        this.taskCount = 0;
+        this.countEl.textContent = 0;        
+    }
+
 }
 
