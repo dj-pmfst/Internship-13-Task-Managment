@@ -20,7 +20,6 @@ export class Board{
     init(){
         this.initColumns();
         this.bindEvents();
-        this.initArchivedView();
     }
 
     initColumns(){
