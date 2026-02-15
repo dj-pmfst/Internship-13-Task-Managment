@@ -9,7 +9,7 @@ export class ValidationFunctions{
             return {valid: false, error:ErrorMessage.mustBeInteger(propName)};
 
         if(val<=0)
-            return { valid: false, error: ErrorMessage.minLength(propName,0)};
+            return { valid: false, error: ErrorMessage.mustBePositive(propName)};
 
         if(val>maxValue)
             return { valid: false, error: ErrorMessage.maxLength(propName,0)};
