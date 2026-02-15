@@ -1,26 +1,27 @@
+import { DateTimeHelper } from "../../js/helpers/DateTimeHelper.js";
 import { fieldToDbColumn } from "../../js/helpers/Map.js";
 
 const allowedStatus = ["blocked", "todo", "in_progress", "in_review", "done"];
 const allowedPriority = ["low", "mid", "high"];
 const allowedType = ["feature", "bugfix", "improvement"];
 
-const isValidDate = (val) => !isNaN(Date.parse(val));
+const isValidDate = (val) => !isNaN(Date.parse(val)) && (new Date(val).getTime()>=new Date().getTime());
 
 const fieldValidators = {
     title: {
         validate: (val) => typeof val === "string" && val.trim().length > 0,
         transform: (val) => val.trim(),
-        error: "title must be a non-empty string"
+        error: "Title must be a non-empty string"
     },
     description: {
         validate: (val) => typeof val === "string",
         transform: (val) => val.trim(),
-        error: "description must be a string"
+        error: "Description must be a string"
     },
     assignee: {
         validate: (val) => typeof val === "string",
         transform: (val) => val.trim(),
-        error: "assignee must be a string"
+        error: "Assignee must be a string"
     },
     status: {
         validate: (val) => allowedStatus.includes(val),
@@ -36,19 +37,19 @@ const fieldValidators = {
     },
     startDate: {
         validate: (val) => isValidDate(val),
-        error: "est_start_date must be a valid date"
+        error: "Start date must be a valid date and cannot be in the past"
     },
     endDate: {
         validate: (val) => isValidDate(val),
-        error: "est_end_date must be a valid date"
+        error: "End date must be a valid date and cannot be in the past"
     },
     duration: {
         validate: (val) => Number.isInteger(val) && val > 0,
-        error: "est_duration must be a positive integer"
+        error: "Duration must be a positive integer"
     },
     position: {
         validate: (val)=> Number.isInteger(val) && val>0,
-        error: "position must be a positive integer"
+        error: "Position must be a positive integer"
     }
 }
 
@@ -70,6 +71,12 @@ const validateAndBuildData = (fields) => {
         updates.push(`${fieldToDbColumn[field]} = $${updates.length + 1}`);
         values.push(validator.transform ? validator.transform(value) : value);
     }
+
+    const dateRangeError=DateTimeHelper.isDateRangeValid(fields);
+    if(dateRangeError.error) return dateRangeError;
+
+    console.log("New date: ",new Date(fields.startDate).getTime()<=new Date().getTime());
+    console.log("Novi: ",new Date());
 
     return { attributes, updates, values };
 };

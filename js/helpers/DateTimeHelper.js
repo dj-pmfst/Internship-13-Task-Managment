@@ -22,4 +22,20 @@ export class DateTimeHelper{
         : `${map.year}-${map.month}-${map.day}T${map.hour}:${map.minute}`;    
 
     } 
+
+    static isDateRangeValid(fields){
+
+        if(fields.startDate && fields.endDate){
+            const start=new Date(fields.startDate);
+            const end=new Date(fields.endDate);
+
+            if(start.getTime()===end.getTime)
+                return { error: "Start date and end date cannot be the same"};
+
+            else if(start>end)
+                return { error: "Start date cannot be after end date"};
+        }    
+        
+    return { error: null };
+    }
 }

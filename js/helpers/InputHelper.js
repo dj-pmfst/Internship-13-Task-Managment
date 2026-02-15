@@ -26,7 +26,11 @@ export class InputHelper{
     }
 
     static getUpdatedTaskData=(existingTask)=>{
-        return InputHelper.inputList.reduce((acc,input)=>{
+
+        const dateKeys=["startDate","endDate"];
+        let isDateChanged={[dateKeys[0]]: false, [dateKeys[1]]: false}
+
+        let updatedTask= InputHelper.inputList.reduce((acc,input)=>{
 
             const key=inputToKeyMap[input.id];
             let newValue=input.value
@@ -36,18 +40,29 @@ export class InputHelper{
                 newValue=parseInt(newValue,10);
             }
 
-
-            if(input.type==="datetime-local"){
+            else if(dateKeys.includes(key)){
                 const oldValue=DateTimeHelper.toDateTimeLocal(existingTask[key]);
                 newValue=DateTimeHelper.toDateTimeLocal(newValue);
-                if(oldValue===newValue) return acc;
+
+                if(oldValue!==newValue){
+                    acc[key]=newValue;
+                    isDateChanged[key]=true;
+                }
             }
 
-            if(existingTask[key]!==newValue)
+            else if(existingTask[key]!==newValue)
                 acc[key]=newValue;
 
             return acc;
         },{});
+
+        if(isDateChanged.startDate && !isDateChanged.endDate)
+            updatedTask.endDate=DateTimeHelper.toDateTimeLocal(existingTask.endDate);
+
+        if(!isDateChanged.startDate && isDateChanged.endDate)
+            updatedTask.startDate=DateTimeHelper.toDateTimeLocal(existingTask.startDate);
+
+        return updatedTask;
     }
 
     static fillData=(existingTask)=>{

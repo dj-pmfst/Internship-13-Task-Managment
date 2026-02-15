@@ -70,7 +70,7 @@ export class TaskEditPopup{
         const validationResult=validateFrontendTaskData(taskData);
 
         if(validationResult.error!==null) {
-            Toast.show(validationResult.error,ToastTypes.INFO);
+            Toast.show(validationResult.error,ToastTypes.DANGER);
             return;
         }
 
