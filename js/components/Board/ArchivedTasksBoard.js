@@ -59,7 +59,6 @@ export class ArchivedTasksBoard{
 
         this.boardEl.addEventListener("requestTaskUnarchive",this._onTaskUnarchiveRequest);
 
-
     }
 
     async handleUnarchiveTask(task){

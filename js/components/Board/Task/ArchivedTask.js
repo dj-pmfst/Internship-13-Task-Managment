@@ -58,7 +58,7 @@ export class ArchivedTask extends BaseTask{
         }   
         
         this._onTitleClick = () => {
-            const event = new CustomEvent("requestTaskDetails", {
+            const event = new CustomEvent("requestArchivedTaskDetails", {
                 bubbles: true,
                 detail: {task: this}
             });
