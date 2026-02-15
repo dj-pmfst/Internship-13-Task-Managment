@@ -1,7 +1,6 @@
 const board=document.querySelector(".lists-container");
 const alertDiv=document.querySelector(".alertDiv");
-
-const popAdd=document.querySelector(".pop-add");
+const popAdd = document.querySelector(".pop-add");
 
 const inputs={
     title:popAdd.querySelector("#title-input"),
@@ -31,4 +30,18 @@ const todoElements={
     todoLists: document.querySelectorAll('.list')
 }
 
-export { board,alertDiv,popAdd,inputs,modeSwitchElements,archiveElements,todoElements };
+const taskEditPopupElements={
+    popAdd,
+    saveBtn: popAdd.querySelector("#save"),
+    cancelBtn: popAdd.querySelector("#cancel"),
+    editBtn: popAdd.querySelector("#edit"),
+}
+
+const confirmPopupElements={
+    confirmPopup: document.querySelector('.pop-confirm'),
+    confirmText: document.getElementById('confirm-text'),
+    confirmYes: document.getElementById('confirm-yes'),
+    confirmNo: document.getElementById('confirm-no')
+}
+
+export { board,alertDiv,inputs,modeSwitchElements,archiveElements,todoElements,confirmPopupElements, taskEditPopupElements };

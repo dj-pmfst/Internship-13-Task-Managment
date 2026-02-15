@@ -8,19 +8,6 @@
     }
 })();
 
-// document.querySelector('#cancel').addEventListener('click', () => {
-//     document.querySelector('.pop-add').classList.remove('active');
-// });
-
-// document.querySelector('#save').addEventListener('click', () => {
-//     document.querySelector('.pop-add').classList.remove('active');
-// });
-
-
-// const confirmPopup = document.querySelector('.pop-confirm');
-// const confirmText = document.getElementById('confirm-text');
-// const confirmYes = document.getElementById('confirm-yes');
-// const confirmNo = document.getElementById('confirm-no');
 
 // let confirmAction = null;
 
@@ -69,30 +56,3 @@
 //         });
 //     }
 // });
-
-
-// function showArchived() {
-//     const todoLists = document.querySelectorAll('.list');
-//     todoLists.forEach(list => {
-//         list.style.display = 'none';
-//     });
-    
-//     if (archivedContainer) {
-//         archivedContainer.style.display = 'flex';
-//     }
-
-//     if (isDarkMode()) {
-//         listsContainer.style.backgroundColor = '#5A7FC4'; 
-//         archiveButton.style.backgroundColor = '#5A7FC4';
-//         todoButton.style.backgroundColor = '#27327C';
-//     } else {
-//         listsContainer.style.backgroundColor = '#9A9ACF'; 
-//         archiveButton.style.backgroundColor = '#9A9ACF';
-//         todoButton.style.backgroundColor = '#C3C3E6';
-//     }
-// }
-
-// todoButton.addEventListener('click', showTodoLists);
-// archiveButton.addEventListener('click', showArchived);
-
-// showTodoLists();
