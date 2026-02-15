@@ -3,7 +3,7 @@
 }
 
 .drag-over {
-    border: 3px dotted dodgerblue;
+    outline: 3px dotted dodgerblue;
     opacity: 0.5;    
 }
 
