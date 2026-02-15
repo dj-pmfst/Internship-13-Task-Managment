@@ -8,12 +8,11 @@ import { archiveTask, clearTasks, createTask, deleteTask, getArchivedTasks, getT
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const app = express();
 const port = process.env.PORT || 3000;
-const rootDir = path.resolve(__dirname,"..");
+const rootDir = path.resolve(__dirname, "..");
 
-console.log("Root dir: ",rootDir);
+console.log("Root dir: ", rootDir);
 
 app.use(cors({
   methods: ["GET", "POST", "PATCH", "DELETE"],
@@ -21,6 +20,15 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+app.use('/css', express.static(path.join(rootDir, 'css'), {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css; charset=utf-8');
+    }
+  }
+}));
+
 app.use(express.static(rootDir));
 
 app.get("/api/tasks", getTasks);
@@ -34,7 +42,7 @@ app.delete("/api/tasks", clearTasks);
 const startServer = async () => {
     await initDb();
     app.listen(port, () => {
-        console.log(`Connected to DB, server listening on port ${port}`);
+        console.log(`Connected to DB, server listening on port ${port}`); 
     });
 }
 

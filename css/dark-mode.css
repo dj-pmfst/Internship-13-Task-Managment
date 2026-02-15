@@ -299,3 +299,25 @@ select option {
 .pop-details button:hover {
     background-color: #7C9FB6;
 }
+
+.title__menu {
+    background-color: #27327C;
+    border-color: #5A7FC4;
+}
+
+.title__menu button {
+    background-color: #5A7FC4;
+    color: #eae8f2;
+}
+
+.title__menu button:hover {
+    background-color: #7C9FB6;
+}
+
+.menu-delete-all {
+    background-color: #8a4a54 !important;
+}
+
+.menu-delete-all:hover {
+    background-color: #9d5560 !important;
+}
