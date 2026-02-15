@@ -47,6 +47,8 @@ const confirmPopupElements={
 const taskDetailsPopupElements = {
     popup: document.querySelector('.pop-details'),
     closeBtn: document.querySelector('.pop-details .close-details'),
+    deleteBtn: document.querySelector(".pop-details #delete-btn"),
+    archiveBtn: document.querySelector(".pop-details #archive"),
     title: document.getElementById('detail-title'),
     description: document.getElementById('detail-description'),
     start: document.getElementById('detail-start'),
